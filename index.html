@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chic Novelist Studio - UI Mockup V1.2</title>
+    <title>Chic Novelist Studio - UI Mockup V1.3</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -73,7 +73,11 @@
             <div class="flex items-center space-x-3">
                 <div class="flex flex-col">
                     <span class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">GitHub Connected</span>
-                    <h1 class="text-xs md:text-sm font-semibold tracking-wide text-slate-100">深夜特急のレプリカント - 第3章</h1>
+                    <!-- Clickable Work Title to Open Novel Selector Modal -->
+                    <button id="openWorkSelectorBtn" class="text-left group flex items-center space-x-1.5 focus:outline-none" title="作品の切り替え・新規登録">
+                        <h1 id="currentWorkTitleDisplay" class="text-xs md:text-sm font-semibold tracking-wide text-slate-100 group-hover:text-white transition">深夜特急のレプリカント - 第3章</h1>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 group-hover:text-slate-200 transition"></i>
+                    </button>
                 </div>
                 <!-- Target Toggle Button -->
                 <button id="toggleTargetBtn" title="文字目標の表示切替" class="px-2 py-1 rounded bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white transition border border-dark-600/50 text-[11px] flex items-center space-x-1">
@@ -97,7 +101,7 @@
             <div id="goalOverall" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
                 <div class="flex justify-between mb-1">
                     <span class="text-slate-400">全体目標</span>
-                    <span class="font-mono text-slate-200">12,450 / <span class="text-slate-400">50,000字</span></span>
+                    <span class="font-mono text-slate-200">12,450 / <span id="overallGoalText" class="text-slate-400">50,000字</span></span>
                 </div>
                 <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
                     <div class="bg-slate-400 h-1.5 rounded-full" style="width: 25%;"></div>
@@ -135,12 +139,12 @@
                 <div class="px-2.5 py-0.5 bg-dark-700/80 border border-dark-600 rounded text-[11px] font-semibold text-slate-300 shrink-0">
                     第3章
                 </div>
-                <input type="text" value="雨音のプロムナード" class="bg-transparent border-b border-dark-600/60 focus:border-slate-400 outline-none text-sm md:text-base font-semibold text-slate-100 py-0.5 transition w-full" placeholder="章タイトルを入力...">
+                <input type="text" id="chapterTitleInput" value="雨音のプロムナード" class="bg-transparent border-b border-dark-600/60 focus:border-slate-400 outline-none text-sm md:text-base font-semibold text-slate-100 py-0.5 transition w-full" placeholder="章タイトルを入力...">
             </div>
             <!-- Synopsis Field (Compact) -->
             <div class="relative">
                 <span class="absolute -top-2 left-2.5 px-1 bg-dark-800 text-[9px] text-slate-400 font-medium uppercase tracking-wider border border-dark-700 rounded">あらすじ</span>
-                <textarea rows="1" class="w-full bg-dark-900/60 border border-dark-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-slate-500 transition resize-none" placeholder="章のあらすじやプロットの指針を記入...">主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。</textarea>
+                <textarea id="synopsisInput" rows="1" class="w-full bg-dark-900/60 border border-dark-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-slate-500 transition resize-none" placeholder="章のあらすじやプロットの指針を記入...">主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。</textarea>
             </div>
         </div>
 
@@ -193,7 +197,7 @@
 
     <!-- Version Footer -->
     <footer class="py-3 text-center border-t border-dark-800 text-[11px] text-slate-500 font-mono tracking-wider">
-        Chic Novelist Studio &mdash; V1.2
+        Chic Novelist Studio &mdash; V1.3
     </footer>
 
     <!-- Settings Modal -->
@@ -227,21 +231,71 @@
                     </div>
                 </div>
 
-                <!-- Tool button lock setting -->
+                <!-- Button lock settings -->
                 <div class="flex flex-col space-y-2 pt-2 border-t border-dark-700">
-                    <span class="text-slate-400 font-medium uppercase tracking-wider text-[10px]">ツール操作</span>
-                    <label class="flex items-center justify-between bg-dark-900/50 p-2.5 rounded border border-dark-700/60 cursor-pointer hover:border-slate-600 transition">
-                        <div class="flex flex-col">
-                            <span class="text-slate-200 font-medium">ツールボタン位置固定</span>
-                            <span class="text-[10px] text-slate-400">左下のツールボタンのドラッグ移動を無効化します</span>
-                        </div>
-                        <input type="checkbox" id="chkLockToolBtn" class="rounded bg-dark-700 border-dark-600 text-slate-500 focus:ring-0">
-                    </label>
+                    <span class="text-slate-400 font-medium uppercase tracking-wider text-[10px]">ボタン位置固定</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center justify-between bg-dark-900/50 p-2.5 rounded border border-dark-700/60 cursor-pointer hover:border-slate-600 transition">
+                            <span class="text-slate-200 font-medium">ツールボタン固定</span>
+                            <input type="checkbox" id="chkLockToolBtn" class="rounded bg-dark-700 border-dark-600 text-slate-500 focus:ring-0">
+                        </label>
+                        <label class="flex items-center justify-between bg-dark-900/50 p-2.5 rounded border border-dark-700/60 cursor-pointer hover:border-slate-600 transition">
+                            <span class="text-slate-200 font-medium">ルビボタン固定</span>
+                            <input type="checkbox" id="chkLockRubyBtn" class="rounded bg-dark-700 border-dark-600 text-slate-500 focus:ring-0">
+                        </label>
+                    </div>
                 </div>
             </div>
 
             <div class="flex justify-end pt-2">
                 <button id="saveSettingsBtn" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">設定を保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Work Selector & Registration Modal -->
+    <div id="workSelectorModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-lg w-full p-5 shadow-2xl flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-dark-700 pb-3">
+                <div class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
+                    <i class="fa-solid fa-book-bookmark text-slate-400"></i>
+                    <span>作品の選択・新規登録</span>
+                </div>
+                <button id="closeWorkSelectorBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <!-- Tab Switcher -->
+            <div class="flex space-x-2 border-b border-dark-700 pb-2 text-xs">
+                <button id="tabListBtn" class="px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition">作品一覧・切替</button>
+                <button id="tabNewBtn" class="px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition">新規作品登録</button>
+            </div>
+
+            <!-- Work List View -->
+            <div id="workListView" class="flex flex-col space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs">
+                <!-- Dynamically populated work items -->
+            </div>
+
+            <!-- New Work Registration Form (Hidden by default) -->
+            <div id="workNewView" class="hidden flex flex-col space-y-3 text-xs">
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">作品名 <span class="text-rose-400">*</span></label>
+                    <input type="text" id="newTitleInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 虚空のアンソロジー">
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">サブタイトル（章名など）</label>
+                    <input type="text" id="newSubTitleInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 第1章 始まりの街">
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">あらすじ</label>
+                    <textarea id="newSynopsisInput" rows="2" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 resize-none" placeholder="作品や章のあらすじ..."></textarea>
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">目標文字数</label>
+                    <input type="number" id="newGoalInput" value="50000" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono">
+                </div>
+                <div class="flex justify-end pt-2">
+                    <button id="registerWorkBtn" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">登録して切り替える</button>
+                </div>
             </div>
         </div>
     </div>
@@ -256,7 +310,7 @@
 
     <!-- Ruby Button (Default bottom-right) -->
     <div id="rubyBtnContainer" class="draggable-btn fixed z-50 select-none" style="right: 24px; bottom: 24px;">
-        <button id="rubyBtn" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95" title="ルビ付与（ドラッグで移動可能）">
+        <button id="rubyBtn" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95" title="ルビ付与">
             <i class="fa-solid fa-font text-xs"></i>
         </button>
     </div>
@@ -325,6 +379,158 @@
             if (!e.defaultPrevented) showNotice('ルビ付与パネル・自動振替機能');
         });
 
+        // --- Works Management & Selector Logic ---
+        const defaultWorks = [
+            {
+                id: 'work_1',
+                title: '深夜特急のレプリカント - 第3章',
+                chapterTitle: '雨音のプロムナード',
+                synopsis: '主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。',
+                goal: 50000
+            },
+            {
+                id: 'work_2',
+                title: '星屑のグリモワール - 序幕',
+                chapterTitle: '図書館の地下書庫',
+                synopsis: '禁断の魔導書を発見した見習い魔術師の運命が動き出す。',
+                goal: 30000
+            }
+        ];
+
+        function getStoredWorks() {
+            const stored = localStorage.getItem('novelist_works_list');
+            if (!stored) {
+                localStorage.setItem('novelist_works_list', JSON.stringify(defaultWorks));
+                return defaultWorks;
+            }
+            return JSON.parse(stored);
+        }
+
+        function getCurrentWorkId() {
+            return localStorage.getItem('novelist_current_work_id') || 'work_1';
+        }
+
+        function loadCurrentWorkData() {
+            const works = getStoredWorks();
+            const currentId = getCurrentWorkId();
+            const work = works.find(w => w.id === currentId) || works[0];
+
+            document.getElementById('currentWorkTitleDisplay').textContent = work.title;
+            document.getElementById('chapterTitleInput').value = work.chapterTitle || '';
+            document.getElementById('synopsisInput').value = work.synopsis || '';
+            document.getElementById('overallGoalText').textContent = work.goal.toLocaleString() + '字';
+        }
+
+        loadCurrentWorkData();
+
+        // Work Selector Modal Elements
+        const workSelectorModal = document.getElementById('workSelectorModal');
+        const openWorkSelectorBtn = document.getElementById('openWorkSelectorBtn');
+        const closeWorkSelectorBtn = document.getElementById('closeWorkSelectorBtn');
+        const tabListBtn = document.getElementById('tabListBtn');
+        const tabNewBtn = document.getElementById('tabNewBtn');
+        const workListView = document.getElementById('workListView');
+        const workNewView = document.getElementById('workNewView');
+
+        openWorkSelectorBtn.addEventListener('click', () => {
+            renderWorkList();
+            workSelectorModal.classList.remove('hidden');
+        });
+
+        closeWorkSelectorBtn.addEventListener('click', () => {
+            workSelectorModal.classList.add('hidden');
+        });
+
+        workSelectorModal.addEventListener('click', (e) => {
+            if (e.target === workSelectorModal) {
+                workSelectorModal.classList.add('hidden');
+            }
+        });
+
+        tabListBtn.addEventListener('click', () => {
+            tabListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition';
+            tabNewBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition';
+            workListView.classList.remove('hidden');
+            workNewView.classList.add('hidden');
+        });
+
+        tabNewBtn.addEventListener('click', () => {
+            tabNewBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition';
+            tabListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition';
+            workNewView.classList.remove('hidden');
+            workListView.classList.add('hidden');
+        });
+
+        function renderWorkList() {
+            const works = getStoredWorks();
+            const currentId = getCurrentWorkId();
+            workListView.innerHTML = '';
+
+            works.forEach(work => {
+                const isSelected = work.id === currentId;
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-lg border flex items-center justify-between transition ${isSelected ? 'bg-dark-700/80 border-slate-500 shadow-sm' : 'bg-dark-900/50 border-dark-700/60 hover:border-slate-600'}`;
+                item.innerHTML = `
+                    <div class="flex flex-col space-y-1 overflow-hidden pr-2">
+                        <span class="font-semibold text-slate-200 truncate">${work.title}</span>
+                        <span class="text-[10px] text-slate-400 truncate">あらすじ: ${work.synopsis || 'なし'}</span>
+                    </div>
+                    <button class="px-3 py-1 rounded bg-dark-600 hover:bg-slate-500 text-slate-100 font-medium shrink-0 transition select-work-btn" data-id="${work.id}">
+                        ${isSelected ? '選択中' : '切り替え'}
+                    </button>
+                `;
+                workListView.appendChild(item);
+            });
+
+            // Attach event listeners to select buttons
+            document.querySelectorAll('.select-work-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    localStorage.setItem('novelist_current_work_id', id);
+                    loadCurrentWorkData();
+                    workSelectorModal.classList.add('hidden');
+                    showNotice('作品を切り替えました');
+                });
+            });
+        }
+
+        // Register new work
+        document.getElementById('registerWorkBtn').addEventListener('click', () => {
+            const title = document.getElementById('newTitleInput').value.trim();
+            const subTitle = document.getElementById('newSubTitleInput').value.trim();
+            const synopsis = document.getElementById('newSynopsisInput').value.trim();
+            const goal = parseInt(document.getElementById('newGoalInput').value) || 50000;
+
+            if (!title) {
+                showNotice('作品名を入力してください');
+                return;
+            }
+
+            const works = getStoredWorks();
+            const newId = 'work_' + Date.now();
+            const newWork = {
+                id: newId,
+                title: title,
+                chapterTitle: subTitle,
+                synopsis: synopsis,
+                goal: goal
+            };
+
+            works.push(newWork);
+            localStorage.setItem('novelist_works_list', JSON.stringify(works));
+            localStorage.setItem('novelist_current_work_id', newId);
+
+            loadCurrentWorkData();
+            workSelectorModal.classList.add('hidden');
+            showNotice('新しい作品を登録しました');
+
+            // Clear inputs
+            document.getElementById('newTitleInput').value = '';
+            document.getElementById('newSubTitleInput').value = '';
+            document.getElementById('newSynopsisInput').value = '';
+            document.getElementById('newGoalInput').value = '50000';
+        });
+
         // --- Settings & Word Count Display Logic ---
         const settingsModal = document.getElementById('settingsModal');
         const closeSettingsBtn = document.getElementById('closeSettingsBtn');
@@ -334,26 +540,30 @@
         const chkChapter = document.getElementById('chkChapter');
         const chkEpisode = document.getElementById('chkEpisode');
         const chkLockToolBtn = document.getElementById('chkLockToolBtn');
+        const chkLockRubyBtn = document.getElementById('chkLockRubyBtn');
         
         const goalOverall = document.getElementById('goalOverall');
         const goalChapter = document.getElementById('goalChapter');
         const goalEpisode = document.getElementById('goalEpisode');
         const toolBtnContainer = document.getElementById('toolBtnContainer');
+        const rubyBtnContainer = document.getElementById('rubyBtnContainer');
 
-        // Load settings from localStorage
         function loadSettings() {
             const overallVisible = localStorage.getItem('goal_overall_visible') !== 'false';
             const chapterVisible = localStorage.getItem('goal_chapter_visible') !== 'false';
             const episodeVisible = localStorage.getItem('goal_episode_visible') !== 'false';
             const isToolLocked = localStorage.getItem('tool_btn_locked') === 'true';
+            const isRubyLocked = localStorage.getItem('ruby_btn_locked') === 'true';
 
             chkOverall.checked = overallVisible;
             chkChapter.checked = chapterVisible;
             chkEpisode.checked = episodeVisible;
             chkLockToolBtn.checked = isToolLocked;
+            chkLockRubyBtn.checked = isRubyLocked;
 
             applyGoalVisibility(overallVisible, chapterVisible, episodeVisible);
             applyToolLock(isToolLocked);
+            applyRubyLock(isRubyLocked);
         }
 
         function applyGoalVisibility(overall, chapter, episode) {
@@ -361,15 +571,14 @@
             goalChapter.style.display = chapter ? 'flex' : 'none';
             goalEpisode.style.display = episode ? 'flex' : 'none';
 
-            // Adjust grid columns dynamically based on active count
             const count = [overall, chapter, episode].filter(Boolean).length;
             const gridContainer = document.getElementById('targetGridContainer');
             gridContainer.className = `max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-${Math.max(1, count)} gap-2.5`;
         }
 
-        let isLockedCurrent = false;
+        let isToolLockedCurrent = false;
         function applyToolLock(locked) {
-            isLockedCurrent = locked;
+            isToolLockedCurrent = locked;
             if (locked) {
                 toolBtnContainer.classList.add('locked');
                 toolBtnContainer.style.left = '24px';
@@ -381,9 +590,22 @@
             }
         }
 
+        let isRubyLockedCurrent = false;
+        function applyRubyLock(locked) {
+            isRubyLockedCurrent = locked;
+            if (locked) {
+                rubyBtnContainer.classList.add('locked');
+                rubyBtnContainer.style.right = '24px';
+                rubyBtnContainer.style.bottom = '24px';
+                rubyBtnContainer.style.top = 'auto';
+                rubyBtnContainer.style.left = 'auto';
+            } else {
+                rubyBtnContainer.classList.remove('locked');
+            }
+        }
+
         loadSettings();
 
-        // Open tool button -> open settings modal
         document.getElementById('toolBtn').addEventListener('click', (e) => {
             if (!e.defaultPrevented) {
                 settingsModal.classList.remove('hidden');
@@ -405,22 +627,24 @@
             localStorage.setItem('goal_chapter_visible', chkChapter.checked);
             localStorage.setItem('goal_episode_visible', chkEpisode.checked);
             localStorage.setItem('tool_btn_locked', chkLockToolBtn.checked);
+            localStorage.setItem('ruby_btn_locked', chkLockRubyBtn.checked);
 
             applyGoalVisibility(chkOverall.checked, chkChapter.checked, chkEpisode.checked);
             applyToolLock(chkLockToolBtn.checked);
+            applyRubyLock(chkLockRubyBtn.checked);
 
             settingsModal.classList.add('hidden');
             showNotice('設定を保存しました');
         });
 
-        // Draggable Functionality for Floating Buttons (with lock check)
+        // Draggable Functionality for Floating Buttons (with individual lock check)
         function makeDraggable(elm, isLockedCheck) {
             let startX = 0, startY = 0, initialX = 0, initialY = 0;
             let isDragging = false;
             let hasMoved = false;
 
             function dragStart(e) {
-                if (isLockedCheck()) return; // Skip if locked
+                if (isLockedCheck()) return;
                 isDragging = true;
                 hasMoved = false;
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -497,8 +721,8 @@
             elm.addEventListener('touchstart', dragStart, { passive: false });
         }
 
-        makeDraggable(document.getElementById('toolBtnContainer'), () => isLockedCurrent);
-        makeDraggable(document.getElementById('rubyBtnContainer'), () => false);
+        makeDraggable(document.getElementById('toolBtnContainer'), () => isToolLockedCurrent);
+        makeDraggable(document.getElementById('rubyBtnContainer'), () => isRubyLockedCurrent);
     </script>
 </body>
 </html>
