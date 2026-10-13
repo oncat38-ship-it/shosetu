@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chic Novelist Studio - UI Mockup V1.5</title>
+    <title>Chic Novelist Studio - UI Mockup V1.6</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -110,11 +110,11 @@
             <!-- Chapter Progress -->
             <div id="goalChapter" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
                 <div class="flex justify-between mb-1">
-                    <span class="text-slate-400">章目標（第3章）</span>
-                    <span class="font-mono text-slate-200">3,200 / <span class="text-slate-400">5,000字</span></span>
+                    <span id="chapterGoalLabel" class="text-slate-400">第3章目標</span>
+                    <span class="font-mono text-slate-200"><span id="chapterCurrentText">0</span> / <span id="chapterGoalLimitText" class="text-slate-400">5,000字</span></span>
                 </div>
                 <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
-                    <div class="bg-slate-500 h-1.5 rounded-full" style="width: 64%;"></div>
+                    <div id="chapterBar" class="bg-slate-500 h-1.5 rounded-full" style="width: 0%;"></div>
                 </div>
             </div>
             <!-- Episode Progress -->
@@ -133,21 +133,22 @@
     <!-- Main Content Area -->
     <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col space-y-3">
 
-        <!-- Chapter & Title Header (Separated Chapter Frame) -->
+        <!-- Chapter & Title Header (Clickable Chapter Button & Expanded Synopsis) -->
         <div class="bg-dark-800/60 border border-dark-700/70 rounded-xl px-3.5 py-2.5 shadow-sm flex flex-col space-y-2">
             <div class="flex items-center space-x-3">
-                <!-- Independent Chapter Frame -->
-                <div class="flex items-center space-x-1.5 bg-dark-700/80 border border-dark-600 rounded px-2 py-0.5 shrink-0">
+                <!-- Clickable Chapter Selector Button -->
+                <button id="openChapterSelectorBtn" class="flex items-center space-x-1.5 bg-dark-700/80 hover:bg-dark-700 border border-dark-600 rounded px-2.5 py-1 shrink-0 text-slate-200 text-xs font-semibold transition group" title="章の切り替え・管理">
                     <i class="fa-solid fa-bookmark text-[10px] text-slate-400"></i>
-                    <input type="text" id="chapterNumberInput" value="第3章" class="bg-transparent border-none text-[11px] font-semibold text-slate-200 focus:outline-none w-12 text-center" placeholder="章番号">
-                </div>
+                    <span id="currentChapterDisplay">第3章</span>
+                    <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 group-hover:text-slate-200 transition"></i>
+                </button>
                 <!-- Chapter / Episode Title Input -->
                 <input type="text" id="chapterTitleInput" value="雨音のプロムナード" class="bg-transparent border-b border-dark-600/60 focus:border-slate-400 outline-none text-sm md:text-base font-semibold text-slate-100 py-0.5 transition w-full" placeholder="話・サブタイトルを入力...">
             </div>
-            <!-- Synopsis Field -->
-            <div class="relative">
-                <span class="absolute -top-2 left-2.5 px-1 bg-dark-800 text-[9px] text-slate-400 font-medium uppercase tracking-wider border border-dark-700 rounded">あらすじ</span>
-                <textarea id="synopsisInput" rows="1" class="w-full bg-dark-900/60 border border-dark-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-slate-500 transition resize-none" placeholder="章のあらすじやプロットの指針を記入...">主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。</textarea>
+            <!-- Synopsis Field (Expanded to minimum 2 rows) -->
+            <div class="relative pt-1">
+                <span class="absolute top-0 left-2.5 px-1 bg-dark-800 text-[9px] text-slate-400 font-medium uppercase tracking-wider border border-dark-700 rounded">あらすじ</span>
+                <textarea id="synopsisInput" rows="2" class="w-full bg-dark-900/60 border border-dark-700 rounded-lg px-2.5 py-2 text-xs text-slate-300 focus:outline-none focus:border-slate-500 transition resize-none leading-relaxed" placeholder="章のあらすじやプロットの指針を記入...">主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。</textarea>
             </div>
         </div>
 
@@ -200,7 +201,7 @@
 
     <!-- Version Footer -->
     <footer class="py-3 text-center border-t border-dark-800 text-[11px] text-slate-500 font-mono tracking-wider">
-        Chic Novelist Studio &mdash; V1.5
+        Chic Novelist Studio &mdash; V1.6
     </footer>
 
     <!-- Settings Modal -->
@@ -215,7 +216,6 @@
             </div>
             
             <div class="flex flex-col space-y-4 text-xs">
-                <!-- Word count display toggles -->
                 <div class="flex flex-col space-y-2">
                     <span class="text-slate-400 font-medium uppercase tracking-wider text-[10px]">文字数目標の表示項目</span>
                     <div class="grid grid-cols-3 gap-2">
@@ -234,7 +234,6 @@
                     </div>
                 </div>
 
-                <!-- Button lock settings -->
                 <div class="flex flex-col space-y-2 pt-2 border-t border-dark-700">
                     <span class="text-slate-400 font-medium uppercase tracking-wider text-[10px]">ボタン位置固定</span>
                     <div class="grid grid-cols-2 gap-2">
@@ -267,18 +266,13 @@
                 <button id="closeWorkSelectorBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- Tab Switcher -->
             <div id="workModalTabs" class="flex space-x-2 border-b border-dark-700 pb-2 text-xs">
                 <button id="tabListBtn" class="px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition">作品一覧・切替</button>
                 <button id="tabNewBtn" class="px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition">新規作品登録</button>
             </div>
 
-            <!-- Work List View -->
-            <div id="workListView" class="flex flex-col space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs">
-                <!-- Dynamically populated work items -->
-            </div>
+            <div id="workListView" class="flex flex-col space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs"></div>
 
-            <!-- New / Edit Work Form -->
             <div id="workFormView" class="hidden flex flex-col space-y-3 text-xs">
                 <input type="hidden" id="editingWorkId" value="">
                 <div class="flex flex-col space-y-1">
@@ -291,7 +285,7 @@
                 </div>
                 <div class="flex flex-col space-y-1">
                     <label class="text-slate-400 font-medium">あらすじ</label>
-                    <textarea id="formSynopsisInput" rows="2" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 resize-none" placeholder="作品全体のあらすじ..."></textarea>
+                    <textarea id="formSynopsisInput" rows="2" class="w-full bg-dark-900 border border-dark-700 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-slate-500 resize-none leading-relaxed" placeholder="作品全体のあらすじ..."></textarea>
                 </div>
                 <div class="flex flex-col space-y-1">
                     <label class="text-slate-400 font-medium">目標文字数</label>
@@ -308,15 +302,56 @@
         </div>
     </div>
 
+    <!-- Chapter Selector & Registration / Editing Modal -->
+    <div id="chapterSelectorModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-lg w-full p-5 shadow-2xl flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-dark-700 pb-3">
+                <div id="chapterModalTitle" class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
+                    <i class="fa-solid fa-bookmark text-slate-400"></i>
+                    <span>章の選択・新規登録</span>
+                </div>
+                <button id="closeChapterSelectorBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div id="chapterModalTabs" class="flex space-x-2 border-b border-dark-700 pb-2 text-xs">
+                <button id="tabChapterListBtn" class="px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition">章一覧・切替</button>
+                <button id="tabChapterNewBtn" class="px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition">新規章登録</button>
+            </div>
+
+            <div id="chapterListView" class="flex flex-col space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs"></div>
+
+            <div id="chapterFormView" class="hidden flex flex-col space-y-3 text-xs">
+                <input type="hidden" id="editingChapterId" value="">
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">章タイトル <span class="text-rose-400">*</span></label>
+                    <input type="text" id="formChapterTitleInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 第3章 雨音のプロムナード">
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">あらすじ</label>
+                    <textarea id="formChapterSynopsisInput" rows="2" class="w-full bg-dark-900 border border-dark-700 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-slate-500 resize-none leading-relaxed" placeholder="章のあらすじやプロット指針..."></textarea>
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">目標文字数</label>
+                    <input type="number" id="formChapterGoalInput" value="5000" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono">
+                </div>
+                <div class="flex items-center justify-between pt-2">
+                    <button id="deleteChapterBtn" type="button" class="hidden px-3 py-2 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 transition border border-rose-800/50">この章を削除</button>
+                    <div class="flex space-x-2 ml-auto">
+                        <button id="cancelChapterFormBtn" type="button" class="px-3 py-2 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-300 transition">キャンセル</button>
+                        <button id="saveChapterFormBtn" type="button" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">保存する</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Draggable Floating Action Buttons -->
-    <!-- Tool Button (Default bottom-left) -->
     <div id="toolBtnContainer" class="draggable-btn fixed z-50 select-none" style="left: 24px; bottom: 24px;">
         <button id="toolBtn" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95" title="ツール・設定">
             <i class="fa-solid fa-toolbox text-xs"></i>
         </button>
     </div>
 
-    <!-- Ruby Button (Default bottom-right) -->
     <div id="rubyBtnContainer" class="draggable-btn fixed z-50 select-none" style="right: 24px; bottom: 24px;">
         <button id="rubyBtn" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95" title="ルビ付与">
             <i class="fa-solid fa-font text-xs"></i>
@@ -325,7 +360,6 @@
 
     <!-- Interactive Scripts -->
     <script>
-        // Notification toast helper
         function showNotice(message) {
             const toast = document.createElement('div');
             toast.className = 'fixed top-14 right-4 z-50 bg-dark-800 border border-slate-600 text-slate-200 px-3.5 py-2 rounded-lg shadow-xl text-xs flex items-center space-x-2 transition-all duration-300';
@@ -337,7 +371,7 @@
             }, 2200);
         }
 
-        // Focus Mode Toggle (Hides target section & floating buttons)
+        // Focus Mode Toggle
         const targetSection = document.getElementById('targetSection');
         const focusModeBtn = document.getElementById('focusModeBtn');
         const focusIcon = document.getElementById('focusIcon');
@@ -375,58 +409,28 @@
             if (!e.defaultPrevented) showNotice('ルビ付与パネル・自動振替機能');
         });
 
-        // --- Real-time Character Count Logic ---
-        const mainEditor = document.getElementById('mainEditor');
-        const episodeCurrentText = document.getElementById('episodeCurrentText');
-        const episodeGoalText = document.getElementById('episodeGoalText');
-        const episodeBar = document.getElementById('episodeBar');
-        
-        const overallCurrentText = document.getElementById('overallCurrentText');
-        const overallGoalText = document.getElementById('overallGoalText');
-        const overallBar = document.getElementById('overallBar');
-
-        function updateCharacterCount() {
-            const text = mainEditor.value;
-            const count = text.length;
-            episodeCurrentText.textContent = count.toLocaleString();
-
-            const epGoal = 1500;
-            const epPercent = Math.min(100, Math.round((count / epGoal) * 100));
-            episodeBar.style.width = epPercent + '%';
-
-            const overallTotal = 11600 + count;
-            overallCurrentText.textContent = overallTotal.toLocaleString();
-            
-            const works = getStoredWorks();
-            const currentWork = works.find(w => w.id === getCurrentWorkId()) || works[0];
-            const goalVal = currentWork.goal || 50000;
-            overallGoalText.textContent = goalVal.toLocaleString() + '字';
-            
-            const overallPercent = Math.min(100, Math.round((overallTotal / goalVal) * 100));
-            overallBar.style.width = overallPercent + '%';
-        }
-
-        mainEditor.addEventListener('input', updateCharacterCount);
-
-        // --- Works Management & Selector Logic ---
+        // --- Data Management (Works & Chapters) ---
         const defaultWorks = [
             {
                 id: 'work_1',
                 title: '深夜特急のレプリカント',
                 subtitle: '第1部・覚醒編',
-                chapterNumber: '第3章',
-                chapterTitle: '雨音のプロムナード',
-                synopsis: '主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。',
-                goal: 50000
-            },
-            {
-                id: 'work_2',
-                title: '星屑のグリモワール',
-                subtitle: '外伝・始まりの図書館',
-                chapterNumber: '序幕',
-                chapterTitle: '地下書庫の出会い',
-                synopsis: '禁断の魔導書を発見した見習い魔術師の運命が動き出す。',
-                goal: 30000
+                synopsis: '主人公がネオン街の裏路地で情報屋と接触するサイバーパンク小説。',
+                goal: 50000,
+                chapters: [
+                    {
+                        id: 'chap_1',
+                        title: '第3章 雨音のプロムナード',
+                        synopsis: '主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。',
+                        goal: 5000
+                    },
+                    {
+                        id: 'chap_2',
+                        title: '第4章 虚空のハイウェイ',
+                        synopsis: '追手から逃れるため、雨の高速道路をバイクで駆け抜けるチェイスシーン。',
+                        goal: 6000
+                    }
+                ]
             }
         ];
 
@@ -443,22 +447,82 @@
             return localStorage.getItem('novelist_current_work_id') || 'work_1';
         }
 
+        function getCurrentChapterId(workId) {
+            const key = 'novelist_current_chapter_id_' + workId;
+            return localStorage.getItem(key);
+        }
+
         function loadCurrentWorkData() {
             const works = getStoredWorks();
-            const currentId = getCurrentWorkId();
-            const work = works.find(w => w.id === currentId) || works[0];
+            const currentWorkId = getCurrentWorkId();
+            let work = works.find(w => w.id === currentWorkId) || works[0];
 
             document.getElementById('currentWorkTitleDisplay').textContent = work.title;
             document.getElementById('currentWorkSubTitleDisplay').textContent = work.subtitle || '';
-            document.getElementById('chapterNumberInput').value = work.chapterNumber || '第1章';
-            document.getElementById('chapterTitleInput').value = work.chapterTitle || '';
-            document.getElementById('synopsisInput').value = work.synopsis || '';
+
+            // Chapters handling
+            if (!work.chapters || work.chapters.length === 0) {
+                work.chapters = [{ id: 'chap_default', title: '第1章 序幕', synopsis: 'あらすじ...', goal: 5000 }];
+            }
+
+            let currentChapId = getCurrentChapterId(work.id);
+            let chapter = work.chapters.find(c => c.id === currentChapId) || work.chapters[0];
+            
+            document.getElementById('currentChapterDisplay').textContent = chapter.title;
+            document.getElementById('chapterGoalLabel').textContent = chapter.title + '目標';
+            document.getElementById('chapterGoalLimitText').textContent = chapter.goal.toLocaleString() + '字';
+            document.getElementById('chapterTitleInput').value = chapter.title;
+            document.getElementById('synopsisInput').value = chapter.synopsis || '';
+
             updateCharacterCount();
         }
 
         loadCurrentWorkData();
 
-        // Work Selector Modal Elements
+        // Real-time Character Count Logic
+        const mainEditor = document.getElementById('mainEditor');
+        const episodeCurrentText = document.getElementById('episodeCurrentText');
+        const episodeGoalText = document.getElementById('episodeGoalText');
+        const episodeBar = document.getElementById('episodeBar');
+        
+        const chapterCurrentText = document.getElementById('chapterCurrentText');
+        const chapterBar = document.getElementById('chapterBar');
+
+        const overallCurrentText = document.getElementById('overallCurrentText');
+        const overallGoalText = document.getElementById('overallGoalText');
+        const overallBar = document.getElementById('overallBar');
+
+        function updateCharacterCount() {
+            const text = mainEditor.value;
+            const count = text.length;
+            episodeCurrentText.textContent = count.toLocaleString();
+
+            const epGoal = 1500;
+            const epPercent = Math.min(100, Math.round((count / epGoal) * 100));
+            episodeBar.style.width = epPercent + '%';
+
+            // Chapter count simulation
+            chapterCurrentText.textContent = count.toLocaleString();
+            const works = getStoredWorks();
+            const work = works.find(w => w.id === getCurrentWorkId()) || works[0];
+            const currentChapId = getCurrentChapterId(work.id);
+            const chapter = (work.chapters || []).find(c => c.id === currentChapId) || work.chapters[0];
+            const chapGoal = chapter ? chapter.goal : 5000;
+            const chapPercent = Math.min(100, Math.round((count / chapGoal) * 100));
+            chapterBar.style.width = chapPercent + '%';
+
+            // Overall simulation
+            const overallTotal = 10000 + count;
+            overallCurrentText.textContent = overallTotal.toLocaleString();
+            const goalVal = work.goal || 50000;
+            overallGoalText.textContent = goalVal.toLocaleString() + '字';
+            const overallPercent = Math.min(100, Math.round((overallTotal / goalVal) * 100));
+            overallBar.style.width = overallPercent + '%';
+        }
+
+        mainEditor.addEventListener('input', updateCharacterCount);
+
+        // --- Work Selector Modal Logic ---
         const workSelectorModal = document.getElementById('workSelectorModal');
         const openWorkSelectorBtn = document.getElementById('openWorkSelectorBtn');
         const closeWorkSelectorBtn = document.getElementById('closeWorkSelectorBtn');
@@ -471,25 +535,18 @@
         const deleteWorkBtn = document.getElementById('deleteWorkBtn');
 
         openWorkSelectorBtn.addEventListener('click', () => {
-            showListView();
+            showWorkListView();
             renderWorkList();
             workSelectorModal.classList.remove('hidden');
         });
 
-        closeWorkSelectorBtn.addEventListener('click', () => {
-            workSelectorModal.classList.add('hidden');
-        });
+        closeWorkSelectorBtn.addEventListener('click', () => workSelectorModal.classList.add('hidden'));
+        workSelectorModal.addEventListener('click', (e) => { if (e.target === workSelectorModal) workSelectorModal.classList.add('hidden'); });
 
-        workSelectorModal.addEventListener('click', (e) => {
-            if (e.target === workSelectorModal) {
-                workSelectorModal.classList.add('hidden');
-            }
-        });
+        tabListBtn.addEventListener('click', showWorkListView);
+        tabNewBtn.addEventListener('click', () => showWorkFormView());
 
-        tabListBtn.addEventListener('click', showListView);
-        tabNewBtn.addEventListener('click', () => showFormView());
-
-        function showListView() {
+        function showWorkListView() {
             tabListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition';
             tabNewBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition';
             workListView.classList.remove('hidden');
@@ -499,7 +556,7 @@
             document.getElementById('editingWorkId').value = '';
         }
 
-        function showFormView(workToEdit = null) {
+        function showWorkFormView(workToEdit = null) {
             workListView.classList.add('hidden');
             workModalTabs.classList.add('hidden');
             workFormView.classList.remove('hidden');
@@ -511,7 +568,7 @@
                 document.getElementById('formSubTitleInput').value = workToEdit.subtitle || '';
                 document.getElementById('formSynopsisInput').value = workToEdit.synopsis || '';
                 document.getElementById('formGoalInput').value = workToEdit.goal || 50000;
-                deleteWorkBtn.classList.remove('hidden'); // Show delete button when editing
+                deleteWorkBtn.classList.remove('hidden');
             } else {
                 workModalTitle.innerHTML = `<i class="fa-solid fa-plus text-slate-400"></i><span>新規作品登録</span>`;
                 document.getElementById('editingWorkId').value = '';
@@ -519,13 +576,11 @@
                 document.getElementById('formSubTitleInput').value = '';
                 document.getElementById('formSynopsisInput').value = '';
                 document.getElementById('formGoalInput').value = '50000';
-                deleteWorkBtn.classList.add('hidden'); // Hide delete button for new work
+                deleteWorkBtn.classList.add('hidden');
             }
         }
 
-        document.getElementById('cancelFormBtn').addEventListener('click', () => {
-            showListView();
-        });
+        document.getElementById('cancelFormBtn').addEventListener('click', showWorkListView);
 
         function renderWorkList() {
             const works = getStoredWorks();
@@ -569,14 +624,11 @@
                     const id = e.currentTarget.getAttribute('data-id');
                     const works = getStoredWorks();
                     const work = works.find(w => w.id === id);
-                    if (work) {
-                        showFormView(work);
-                    }
+                    if (work) showWorkFormView(work);
                 });
             });
         }
 
-        // Save work form (New or Edit)
         document.getElementById('saveWorkFormBtn').addEventListener('click', () => {
             const editingId = document.getElementById('editingWorkId').value;
             const title = document.getElementById('formTitleInput').value.trim();
@@ -590,14 +642,8 @@
             }
 
             let works = getStoredWorks();
-
             if (editingId) {
-                works = works.map(w => {
-                    if (w.id === editingId) {
-                        return { ...w, title, subtitle, synopsis, goal };
-                    }
-                    return w;
-                });
+                works = works.map(w => w.id === editingId ? { ...w, title, subtitle, synopsis, goal } : w);
                 localStorage.setItem('novelist_works_list', JSON.stringify(works));
                 loadCurrentWorkData();
                 workSelectorModal.classList.add('hidden');
@@ -608,55 +654,202 @@
                     id: newId,
                     title: title,
                     subtitle: subtitle,
-                    chapterNumber: '第1章',
-                    chapterTitle: '第一話',
                     synopsis: synopsis,
-                    goal: goal
+                    goal: goal,
+                    chapters: [{ id: 'chap_' + Date.now(), title: '第1章 序幕', synopsis: 'あらすじ...', goal: 5000 }]
                 };
                 works.push(newWork);
                 localStorage.setItem('novelist_works_list', JSON.stringify(works));
                 localStorage.setItem('novelist_current_work_id', newId);
+                localStorage.setItem('novelist_current_chapter_id_' + newId, newWork.chapters[0].id);
                 loadCurrentWorkData();
                 workSelectorModal.classList.add('hidden');
                 showNotice('新しい作品を登録しました');
             }
         });
 
-        // Delete work handler
         deleteWorkBtn.addEventListener('click', () => {
             const editingId = document.getElementById('editingWorkId').value;
-            if (!editingId) return;
-
             let works = getStoredWorks();
             if (works.length <= 1) {
                 showNotice('最後の作品は削除できません');
                 return;
             }
-
             works = works.filter(w => w.id !== editingId);
             localStorage.setItem('novelist_works_list', JSON.stringify(works));
-
-            // If deleted current active work, switch to first available
             if (editingId === getCurrentWorkId()) {
                 localStorage.setItem('novelist_current_work_id', works[0].id);
             }
-
             loadCurrentWorkData();
             workSelectorModal.classList.add('hidden');
             showNotice('作品を削除しました');
         });
 
-        // --- Settings & Button Lock Logic ---
+        // --- Chapter Selector Modal Logic ---
+        const chapterSelectorModal = document.getElementById('chapterSelectorModal');
+        const openChapterSelectorBtn = document.getElementById('openChapterSelectorBtn');
+        const closeChapterSelectorBtn = document.getElementById('closeChapterSelectorBtn');
+        const tabChapterListBtn = document.getElementById('tabChapterListBtn');
+        const tabChapterNewBtn = document.getElementById('tabChapterNewBtn');
+        const chapterListView = document.getElementById('chapterListView');
+        const chapterFormView = document.getElementById('chapterFormView');
+        const chapterModalTabs = document.getElementById('chapterModalTabs');
+        const chapterModalTitle = document.getElementById('chapterModalTitle');
+        const deleteChapterBtn = document.getElementById('deleteChapterBtn');
+
+        openChapterSelectorBtn.addEventListener('click', () => {
+            showChapterListView();
+            renderChapterList();
+            chapterSelectorModal.classList.remove('hidden');
+        });
+
+        closeChapterSelectorBtn.addEventListener('click', () => chapterSelectorModal.classList.add('hidden'));
+        chapterSelectorModal.addEventListener('click', (e) => { if (e.target === chapterSelectorModal) chapterSelectorModal.classList.add('hidden'); });
+
+        tabChapterListBtn.addEventListener('click', showChapterListView);
+        tabChapterNewBtn.addEventListener('click', () => showChapterFormView());
+
+        function showChapterListView() {
+            tabChapterListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition';
+            tabChapterNewBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition';
+            chapterListView.classList.remove('hidden');
+            chapterModalTabs.classList.remove('hidden');
+            chapterFormView.classList.add('hidden');
+            chapterModalTitle.innerHTML = `<i class="fa-solid fa-bookmark text-slate-400"></i><span>章の選択・新規登録</span>`;
+            document.getElementById('editingChapterId').value = '';
+        }
+
+        function showChapterFormView(chapToEdit = null) {
+            chapterListView.classList.add('hidden');
+            chapterModalTabs.classList.add('hidden');
+            chapterFormView.classList.remove('hidden');
+
+            if (chapToEdit) {
+                chapterModalTitle.innerHTML = `<i class="fa-solid fa-pen text-slate-400"></i><span>章の編集</span>`;
+                document.getElementById('editingChapterId').value = chapToEdit.id;
+                document.getElementById('formChapterTitleInput').value = chapToEdit.title;
+                document.getElementById('formChapterSynopsisInput').value = chapToEdit.synopsis || '';
+                document.getElementById('formChapterGoalInput').value = chapToEdit.goal || 5000;
+                deleteChapterBtn.classList.remove('hidden');
+            } else {
+                chapterModalTitle.innerHTML = `<i class="fa-solid fa-plus text-slate-400"></i><span>新規章登録</span>`;
+                document.getElementById('editingChapterId').value = '';
+                document.getElementById('formChapterTitleInput').value = '';
+                document.getElementById('formChapterSynopsisInput').value = '';
+                document.getElementById('formChapterGoalInput').value = '5000';
+                deleteChapterBtn.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('cancelChapterFormBtn').addEventListener('click', showChapterListView);
+
+        function renderChapterList() {
+            const works = getStoredWorks();
+            const work = works.find(w => w.id === getCurrentWorkId()) || works[0];
+            const currentChapId = getCurrentChapterId(work.id);
+            chapterListView.innerHTML = '';
+
+            (work.chapters || []).forEach(chap => {
+                const isSelected = chap.id === currentChapId || (!currentChapId && chap === work.chapters[0]);
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-lg border flex items-center justify-between transition ${isSelected ? 'bg-dark-700/80 border-slate-500 shadow-sm' : 'bg-dark-900/50 border-dark-700/60 hover:border-slate-600'}`;
+                item.innerHTML = `
+                    <div class="flex flex-col space-y-0.5 overflow-hidden pr-2 flex-1">
+                        <span class="font-semibold text-slate-200 truncate">${chap.title}</span>
+                        <span class="text-[10px] text-slate-400 truncate">あらすじ: ${chap.synopsis || 'なし'}</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5 shrink-0">
+                        <button class="px-2.5 py-1 rounded bg-dark-600 hover:bg-slate-500 text-slate-100 font-medium transition edit-chap-btn" data-id="${chap.id}" title="編集">
+                            <i class="fa-solid fa-pen text-[10px]"></i>
+                        </button>
+                        <button class="px-3 py-1 rounded ${isSelected ? 'bg-dark-700 text-slate-400 cursor-default' : 'bg-dark-600 hover:bg-slate-500 text-slate-100'} font-medium transition select-chap-btn" data-id="${chap.id}">
+                            ${isSelected ? '選択中' : '切り替え'}
+                        </button>
+                    </div>
+                `;
+                chapterListView.appendChild(item);
+            });
+
+            document.querySelectorAll('.select-chap-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    localStorage.setItem('novelist_current_chapter_id_' + work.id, id);
+                    loadCurrentWorkData();
+                    chapterSelectorModal.classList.add('hidden');
+                    showNotice('章を切り替えました');
+                });
+            });
+
+            document.querySelectorAll('.edit-chap-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const chap = work.chapters.find(c => c.id === id);
+                    if (chap) showChapterFormView(chap);
+                });
+            });
+        }
+
+        document.getElementById('saveChapterFormBtn').addEventListener('click', () => {
+            const editingId = document.getElementById('editingChapterId').value;
+            const title = document.getElementById('formChapterTitleInput').value.trim();
+            const synopsis = document.getElementById('formChapterSynopsisInput').value.trim();
+            const goal = parseInt(document.getElementById('formChapterGoalInput').value) || 5000;
+
+            if (!title) {
+                showNotice('章タイトルを入力してください');
+                return;
+            }
+
+            let works = getStoredWorks();
+            let work = works.find(w => w.id === getCurrentWorkId());
+
+            if (editingId) {
+                work.chapters = work.chapters.map(c => c.id === editingId ? { ...c, title, synopsis, goal } : c);
+                localStorage.setItem('novelist_works_list', JSON.stringify(works));
+                loadCurrentWorkData();
+                chapterSelectorModal.classList.add('hidden');
+                showNotice('章情報を更新しました');
+            } else {
+                const newChapId = 'chap_' + Date.now();
+                const newChap = { id: newChapId, title, synopsis, goal };
+                if (!work.chapters) work.chapters = [];
+                work.chapters.push(newChap);
+                localStorage.setItem('novelist_works_list', JSON.stringify(works));
+                localStorage.setItem('novelist_current_chapter_id_' + work.id, newChapId);
+                loadCurrentWorkData();
+                chapterSelectorModal.classList.add('hidden');
+                showNotice('新しい章を登録しました');
+            }
+        });
+
+        deleteChapterBtn.addEventListener('click', () => {
+            const editingId = document.getElementById('editingChapterId').value;
+            let works = getStoredWorks();
+            let work = works.find(w => w.id === getCurrentWorkId());
+
+            if (work.chapters.length <= 1) {
+                showNotice('最後の章は削除できません');
+                return;
+            }
+
+            work.chapters = work.chapters.filter(c => c.id !== editingId);
+            localStorage.setItem('novelist_works_list', JSON.stringify(works));
+            localStorage.setItem('novelist_current_chapter_id_' + work.id, work.chapters[0].id);
+
+            loadCurrentWorkData();
+            chapterSelectorModal.classList.add('hidden');
+            showNotice('章を削除しました');
+        });
+
+        // --- Settings Modal Logic ---
         const settingsModal = document.getElementById('settingsModal');
         const closeSettingsBtn = document.getElementById('closeSettingsBtn');
         const saveSettingsBtn = document.getElementById('saveSettingsBtn');
-        
         const chkOverall = document.getElementById('chkOverall');
         const chkChapter = document.getElementById('chkChapter');
         const chkEpisode = document.getElementById('chkEpisode');
         const chkLockToolBtn = document.getElementById('chkLockToolBtn');
         const chkLockRubyBtn = document.getElementById('chkLockRubyBtn');
-        
         const goalOverall = document.getElementById('goalOverall');
         const goalChapter = document.getElementById('goalChapter');
         const goalEpisode = document.getElementById('goalEpisode');
@@ -707,42 +900,16 @@
         }
 
         let isToolLockedCurrent = false;
-        function applyToolLock(locked) {
-            isToolLockedCurrent = locked;
-            if (locked) {
-                toolBtnContainer.classList.add('locked');
-            } else {
-                toolBtnContainer.classList.remove('locked');
-            }
-        }
+        function applyToolLock(locked) { isToolLockedCurrent = locked; if (locked) toolBtnContainer.classList.add('locked'); else toolBtnContainer.classList.remove('locked'); }
 
         let isRubyLockedCurrent = false;
-        function applyRubyLock(locked) {
-            isRubyLockedCurrent = locked;
-            if (locked) {
-                rubyBtnContainer.classList.add('locked');
-            } else {
-                rubyBtnContainer.classList.remove('locked');
-            }
-        }
+        function applyRubyLock(locked) { isRubyLockedCurrent = locked; if (locked) rubyBtnContainer.classList.add('locked'); else rubyBtnContainer.classList.remove('locked'); }
 
         loadSettings();
 
-        document.getElementById('toolBtn').addEventListener('click', (e) => {
-            if (!e.defaultPrevented) {
-                settingsModal.classList.remove('hidden');
-            }
-        });
-
-        closeSettingsBtn.addEventListener('click', () => {
-            settingsModal.classList.add('hidden');
-        });
-
-        settingsModal.addEventListener('click', (e) => {
-            if (e.target === settingsModal) {
-                settingsModal.classList.add('hidden');
-            }
-        });
+        document.getElementById('toolBtn').addEventListener('click', (e) => { if (!e.defaultPrevented) settingsModal.classList.remove('hidden'); });
+        closeSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
+        settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.add('hidden'); });
 
         saveSettingsBtn.addEventListener('click', () => {
             localStorage.setItem('goal_overall_visible', chkOverall.checked);
@@ -771,18 +938,11 @@
                 hasMoved = false;
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                
-                startX = clientX;
-                startY = clientY;
-                
+                startX = clientX; startY = clientY;
                 const rect = elm.getBoundingClientRect();
-                initialX = rect.left;
-                initialY = rect.top;
-
-                elm.style.left = initialX + 'px';
-                elm.style.top = initialY + 'px';
-                elm.style.right = 'auto';
-                elm.style.bottom = 'auto';
+                initialX = rect.left; initialY = rect.top;
+                elm.style.left = initialX + 'px'; elm.style.top = initialY + 'px';
+                elm.style.right = 'auto'; elm.style.bottom = 'auto';
 
                 document.addEventListener('mousemove', dragMove);
                 document.addEventListener('mouseup', dragEnd);
@@ -794,35 +954,18 @@
                 if (!isDragging) return;
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
                 const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-
-                const dx = clientX - startX;
-                const dy = clientY - startY;
-
-                if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
-                    hasMoved = true;
-                }
-
-                let newX = initialX + dx;
-                let newY = initialY + dy;
-
-                const maxX = window.innerWidth - elm.offsetWidth;
-                const maxY = window.innerHeight - elm.offsetHeight;
-
-                newX = Math.max(10, Math.min(newX, maxX - 10));
-                newY = Math.max(10, Math.min(newY, maxY - 10));
-
-                elm.style.left = newX + 'px';
-                elm.style.top = newY + 'px';
-
-                if (e.touches && hasMoved) {
-                    e.preventDefault();
-                }
+                const dx = clientX - startX; const dy = clientY - startY;
+                if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasMoved = true;
+                let newX = initialX + dx; let newY = initialY + dy;
+                const maxX = window.innerWidth - elm.offsetWidth; const maxY = window.innerHeight - elm.offsetHeight;
+                newX = Math.max(10, Math.min(newX, maxX - 10)); newY = Math.max(10, Math.min(newY, maxY - 10));
+                elm.style.left = newX + 'px'; elm.style.top = newY + 'px';
+                if (e.touches && hasMoved) e.preventDefault();
             }
 
             function dragEnd(e) {
                 if (!isDragging) return;
                 isDragging = false;
-
                 document.removeEventListener('mousemove', dragMove);
                 document.removeEventListener('mouseup', dragEnd);
                 document.removeEventListener('touchmove', dragMove);
@@ -830,17 +973,9 @@
 
                 if (hasMoved) {
                     const currentRect = elm.getBoundingClientRect();
-                    localStorage.setItem(storageKey, JSON.stringify({
-                        left: currentRect.left + 'px',
-                        top: currentRect.top + 'px'
-                    }));
-
+                    localStorage.setItem(storageKey, JSON.stringify({ left: currentRect.left + 'px', top: currentRect.top + 'px' }));
                     const innerBtn = elm.querySelector('button');
-                    const clickPreventer = (event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        innerBtn.removeEventListener('click', clickPreventer, true);
-                    };
+                    const clickPreventer = (event) => { event.preventDefault(); event.stopPropagation(); innerBtn.removeEventListener('click', clickPreventer, true); };
                     innerBtn.addEventListener('click', clickPreventer, true);
                 }
             }
