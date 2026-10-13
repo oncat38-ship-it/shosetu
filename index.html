@@ -2,31 +2,131 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f4f2ed"><title>綴り場</title>
+<meta name="theme-color" content="#181a1f"><title>綴り場</title>
 <style>
-:root{--bg:#f4f2ed;--paper:#fffefa;--ink:#292a2d;--muted:#777a80;--line:#ddd9d0;--accent:#566b82;--soft:#e8edf2;--danger:#a13d3d;--shadow:0 8px 24px #20242a12}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Yu Gothic",sans-serif;line-height:1.55}button,input,textarea{font:inherit}button{cursor:pointer;touch-action:manipulation}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #8da9c5;outline-offset:2px}
-.top{position:sticky;top:0;z-index:5;background:#f4f2edee;backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:10px 14px}.toprow{display:flex;align-items:center;gap:12px;max-width:900px;margin:auto}
-.brand-btn{background:transparent;border:0;padding:4px 6px;display:flex;align-items:center;gap:6px;font-weight:700;font-size:1.05rem;color:var(--ink);border-radius:8px}
-.brand-btn:hover{background:var(--soft)}
-.current-work-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:1.05rem;font-weight:700;color:var(--ink);text-align:left;background:transparent;border:0;padding:4px 6px;cursor:pointer;border-radius:6px}
-.current-work-title:hover{background:var(--soft)}
-.iconbtn,.btn{border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:8px 12px;color:var(--ink)}.stats{max-width:900px;margin:8px auto 0;display:flex;align-items:center;gap:12px;font-size:.88rem;color:var(--muted)}.stats strong{color:var(--ink)}.progress{height:4px;background:#e3e0d9;border-radius:9px;overflow:hidden;flex:1}.progress span{display:block;height:100%;width:0;background:var(--accent)}main{max-width:900px;margin:20px auto;padding:0 14px 40px}.chapter-head{padding:18px 18px 12px;background:var(--paper);border:1px solid var(--line);border-radius:16px 16px 0 0;box-shadow:var(--shadow);cursor:pointer;touch-action:manipulation}.eyebrow{font-size:.78rem;color:var(--muted);margin-bottom:3px}.chapter-title-row{display:flex;align-items:center;gap:10px}.chapter-title{font-size:1.25rem;font-weight:750;flex:1;min-width:0;overflow-wrap:anywhere}.tap-hint{color:var(--muted);font-size:.80rem;white-space:nowrap}.chapter-detail{font-size:.9rem;color:#666b71;white-space:pre-wrap;margin-top:9px}.editor-wrap{background:var(--paper);border:1px solid var(--line);border-top:0;border-radius:0 0 16px 16px;box-shadow:var(--shadow);overflow:hidden}.editor{display:block;width:100%;min-height:55vh;resize:vertical;border:0;background:transparent;padding:20px;font-size:1.02rem;line-height:1.9;color:var(--ink)}.editor:focus{outline:none}.editor-foot{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid var(--line);padding:10px 14px;color:var(--muted);font-size:.82rem}.save-state{color:var(--muted)}.hidden{display:none!important}.focus-mode .stats,.focus-mode .chapter-detail,.focus-mode .editor-foot,.focus-mode .tap-hint,.focus-mode .app-version-footer{display:none!important}.focus-mode main{margin-top:8px}.focus-mode .chapter-head{border-radius:14px 14px 0 0}.modal-backdrop{position:fixed;inset:0;z-index:20;background:#17191dcc;display:flex;align-items:flex-end;justify-content:center;padding:12px}.modal{background:var(--paper);width:min(100%,620px);max-height:88dvh;overflow:auto;border-radius:20px 20px 14px 14px;padding:18px;box-shadow:0 20px 60px #0003}.modal h2{font-size:1.15rem;margin:0 0 14px}.field{display:block;margin:12px 0}.field span{display:block;font-size:.85rem;color:var(--muted);margin-bottom:5px}.field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;background:white;padding:10px}.field textarea{min-height:90px;resize:vertical}.modal-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:16px}.btn.primary{background:var(--accent);color:white;border-color:var(--accent)}.btn.danger{color:var(--danger);border-color:#d9aaaa}.chapter-list,.work-list{display:flex;flex-direction:column;gap:8px}.chapter-item,.work-item{border:1px solid var(--line);border-radius:12px;padding:10px;display:flex;gap:8px;align-items:center;background:white}.chapter-pick,.work-pick{border:0;background:transparent;text-align:left;flex:1;min-width:0;padding:4px}.chapter-pick strong,.work-pick strong{display:block;overflow-wrap:anywhere}.chapter-pick small,.work-pick small{color:var(--muted)}.chapter-item.active,.work-item.active{border-color:var(--accent);background:var(--soft)}.mini-actions{display:flex;gap:5px}.mini-actions button{padding:7px 8px;font-size:.82rem;border:1px solid var(--line);border-radius:8px;background:var(--paper)}.empty{color:var(--muted);padding:10px}.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#292a2d;color:white;border-radius:99px;padding:8px 14px;z-index:30;font-size:.85rem;max-width:90vw}.settings-panel{border:1px solid var(--line);background:var(--paper);border-radius:14px;padding:16px;margin-top:14px}.settings-panel h3{margin:0 0 8px;font-size:1rem}.target-row{display:flex;align-items:center;gap:8px}.target-row input{width:100px;border:1px solid var(--line);border-radius:8px;padding:7px}
-.app-version-footer{max-width:900px;margin:20px auto 10px;text-align:center;font-size:0.78rem;color:var(--muted)}
-@media(min-width:650px){.modal-backdrop{align-items:center}.modal{border-radius:18px}.editor{min-height:65vh;padding:26px;font-size:1.08rem}}
+:root{
+  --bg:#121418;
+  --paper:#1a1d24;
+  --paper-hover:#222630;
+  --ink:#e1e4ed;
+  --muted:#8b92a5;
+  --line:#2a2f3d;
+  --accent:#7893af;
+  --accent-hover:#8fa9c5;
+  --soft:#222732;
+  --danger:#d96b6b;
+  --shadow:0 12px 32px rgba(0,0,0,0.35);
+  --radius:12px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;line-height:1.7;letter-spacing:0.02em}
+button,input,textarea{font:inherit}
+button{cursor:pointer;touch-action:manipulation}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.top{position:sticky;top:0;z-index:5;background:rgba(18,20,24,0.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:12px 18px}
+.toprow{display:flex;align-items:center;gap:16px;max-width:920px;margin:auto}
+
+.brand-btn{background:transparent;border:0;padding:4px 8px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:0.95rem;color:var(--muted);border-radius:var(--radius);transition:color .2s}
+.brand-btn:hover{color:var(--ink)}
+
+.current-work-container{flex:1;min-width:0;display:flex;flex-direction:column;cursor:pointer;padding:4px 8px;border-radius:var(--radius);transition:background .2s}
+.current-work-container:hover{background:var(--paper-hover)}
+.current-work-eyebrow{font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;display:flex;align-items:center;gap:4px}
+.current-work-title{font-size:1.02rem;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.iconbtn,.btn{border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);padding:8px 14px;color:var(--ink);transition:all .2s}
+.iconbtn:hover,.btn:hover{background:var(--paper-hover);border-color:var(--muted)}
+
+.stats{max-width:920px;margin:10px auto 0;display:flex;align-items:center;gap:12px;font-size:0.85rem;color:var(--muted)}
+.stats strong{color:var(--ink);font-weight:500}
+.progress{height:3px;background:var(--line);border-radius:9px;overflow:hidden;flex:1}
+.progress span{display:block;height:100%;width:0;background:var(--accent);transition:width .3s ease}
+
+main{max-width:920px;margin:24px auto;padding:0 16px 48px}
+
+.chapter-head{padding:20px 22px 14px;background:var(--paper);border:1px solid var(--line);border-radius:16px 16px 0 0;box-shadow:var(--shadow);cursor:pointer;touch-action:manipulation;transition:border-color .2s}
+.chapter-head:hover{border-color:var(--muted)}
+.eyebrow{font-size:0.78rem;color:var(--muted);margin-bottom:4px}
+.chapter-title-row{display:flex;align-items:center;gap:12px}
+.chapter-title{font-size:1.2rem;font-weight:600;flex:1;min-width:0;overflow-wrap:anywhere}
+.tap-hint{color:var(--muted);font-size:0.8rem;white-space:nowrap}
+.chapter-detail{font-size:0.88rem;color:var(--muted);white-space:pre-wrap;margin-top:8px}
+
+.editor-wrap{background:var(--paper);border:1px solid var(--line);border-top:0;border-radius:0 0 16px 16px;box-shadow:var(--shadow);overflow:hidden}
+.editor{display:block;width:100%;min-height:58vh;resize:vertical;border:0;background:transparent;padding:24px;font-size:1.02rem;line-height:1.9;color:var(--ink)}
+.editor:focus{outline:none}
+.editor-foot{display:flex;justify-content:space-between;gap:10px;align-items:center;border-top:1px solid var(--line);padding:12px 20px;color:var(--muted);font-size:0.82rem}
+
+.save-state{color:var(--muted)}
+.hidden{display:none!important}
+
+.focus-mode .stats,.focus-mode .chapter-detail,.focus-mode .editor-foot,.focus-mode .tap-hint,.focus-mode .app-version-footer{display:none!important}
+.focus-mode main{margin-top:12px}
+.focus-mode .chapter-head{border-radius:14px 14px 0 0}
+
+.modal-backdrop{position:fixed;inset:0;z-index:20;background:rgba(10,12,16,0.75);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:16px}
+.modal{background:var(--paper);border:1px solid var(--line);width:min(100%,600px);max-height:85dvh;overflow-y:auto;border-radius:20px;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,0.5)}
+.modal h2{font-size:1.15rem;font-weight:600;margin:0 0 16px;color:var(--ink)}
+
+.field{display:block;margin:14px 0}
+.field span{display:block;font-size:0.82rem;color:var(--muted);margin-bottom:6px}
+.field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg);color:var(--ink);padding:10px 14px;transition:border-color .2s}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+.field textarea{min-height:90px;resize:vertical}
+
+.modal-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:20px}
+.btn.primary{background:var(--accent);color:#121418;border-color:var(--accent);font-weight:600}
+.btn.primary:hover{background:var(--accent-hover)}
+.btn.danger{color:var(--danger);border-color:rgba(217,107,107,0.3)}
+
+/* スクロール式の作品・章リスト */
+.scroll-list{display:flex;flex-direction:column;gap:10px;max-height:50dvh;overflow-y:auto;padding-right:4px}
+.scroll-item{border:1px solid var(--line);border-radius:var(--radius);padding:12px 16px;display:flex;gap:12px;align-items:center;background:var(--bg);transition:all .2s}
+.scroll-item:hover{border-color:var(--muted);background:var(--paper-hover)}
+.scroll-item.active{border-color:var(--accent);background:var(--soft)}
+.scroll-pick{border:0;background:transparent;text-align:left;flex:1;min-width:0;padding:0;cursor:pointer}
+.scroll-pick strong{display:block;overflow-wrap:anywhere;font-size:0.95rem;color:var(--ink);margin-bottom:2px}
+.scroll-pick .sub{font-size:0.8rem;color:var(--accent);margin-bottom:2px}
+.scroll-pick small{color:var(--muted);font-size:0.78rem}
+
+.mini-actions{display:flex;gap:6px}
+.mini-actions button{padding:6px 10px;font-size:0.78rem;border:1px solid var(--line);border-radius:8px;background:var(--paper);color:var(--muted)}
+.mini-actions button:hover{color:var(--ink);border-color:var(--muted)}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:10px 18px;z-index:30;font-size:0.85rem;box-shadow:var(--shadow)}
+
+.settings-panel{border:1px solid var(--line);background:var(--paper);border-radius:16px;padding:20px;margin-top:16px;box-shadow:var(--shadow)}
+.settings-panel h3{margin:0 0 12px;font-size:1.02rem}
+.target-row{display:flex;align-items:center;gap:10px}
+.target-row input{width:120px;border:1px solid var(--line);border-radius:var(--radius);padding:8px 12px;background:var(--bg);color:var(--ink)}
+
+.app-version-footer{max-width:920px;margin:24px auto 12px;text-align:center;font-size:0.75rem;color:var(--muted);letter-spacing:0.05em}
+
+@media(min-width:650px){
+  .modal{border-radius:20px}
+  .editor{min-height:65vh;padding:32px;font-size:1.06rem}
+}
 </style></head>
 <body>
 <header class="top" id="topBar">
   <div class="toprow">
-    <button class="brand-btn" id="brandBtn" type="button" title="綴り場について">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.5 7.5"></path></svg>
-      <span style="font-size:0.9rem;">綴り場</span>
+    <button class="brand-btn" id="brandBtn" type="button" title="綴り場">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path><path d="M2 2l7.5 7.5"></path></svg>
+      <span>綴り場</span>
     </button>
-    <button class="current-work-title" id="currentWorkTitle" type="button" title="作品を選択・切り替え">無題の作品</button>
+    
+    <!-- タッチしてスクロール式作品選択を開くエリア -->
+    <div class="current-work-container" id="currentWorkContainer" title="クリックして作品を切り替え・選択">
+      <div class="current-work-eyebrow">執筆中の作品 ▾</div>
+      <div class="current-work-title" id="currentWorkTitle">無題の作品</div>
+    </div>
+
     <button class="iconbtn" id="focusBtn" type="button">集中</button>
   </div>
   <div class="stats"><span>作品文字数 <strong id="workCount">0</strong></span><span>/</span><span>目標 <strong id="workTarget">0</strong></span><div class="progress"><span id="progressBar"></span></div></div>
 </header>
+
 <main>
   <section class="chapter-head" id="chapterHead" role="button" tabindex="0" aria-label="章の選択・管理">
     <div class="eyebrow" id="chapterNumber">第1章</div>
@@ -36,6 +136,7 @@
     </div>
     <div class="chapter-detail" id="chapterDetail"></div>
   </section>
+
   <section class="editor-wrap">
     <textarea class="editor" id="bodyEditor" placeholder="ここから物語を書き始めましょう…" spellcheck="false"></textarea>
     <div class="editor-foot">
@@ -43,14 +144,21 @@
       <span class="save-state" id="saveState">自動保存</span>
     </div>
   </section>
+
+  <!-- 作品設定パネル（後から編集用） -->
   <section class="settings-panel hidden" id="settingsPanel">
-    <h3>作品設定</h3>
+    <h3>作品設定の編集</h3>
     <label class="field"><span>作品タイトル</span><input id="settingsTitle" type="text"></label>
-    <label class="field"><span>目標文字数</span><div class="target-row"><input id="settingsTarget" type="number" min="0" step="100" value="10000"><span>文字</span><button class="btn primary" id="saveSettingsBtn" type="button">保存</button></div></label>
+    <label class="field"><span>作品サブタイトル</span><input id="settingsSubtitle" type="text" placeholder="サブタイトルやキャッチコピー"></label>
+    <label class="field"><span>あらすじ・説明</span><textarea id="settingsDesc" placeholder="作品のあらすじやメモ"></textarea></label>
+    <label class="field"><span>目標文字数</span><div class="target-row"><input id="settingsTarget" type="number" min="0" step="100" value="10000"><span>文字</span><button class="btn primary" id="saveSettingsBtn" type="button">設定を保存</button></div></label>
   </section>
-  <div class="app-version-footer">綴り場 v1.2</div>
+
+  <div class="app-version-footer">綴り場 v1.3</div>
 </main>
+
 <div id="modalRoot"></div><div id="toastRoot"></div>
+
 <script>
 (()=>{'use strict';
 const STORAGE_KEY='tsuzuriba_rebuild_v1';
@@ -58,17 +166,31 @@ const $=id=>document.getElementById(id);
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const escapeHtml=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const makeChapter=(title='新しい章')=>({id:uid(),title,detail:'',body:''});
-const initial=()=>{const c=makeChapter('はじまり');return {activeWorkId:'work1',works:[{id:'work1',title:'無題の作品',target:10000,activeChapterId:c.id,chapters:[c]}]}};
+const initial=()=>{const c=makeChapter('はじまり');return {activeWorkId:'work1',works:[{id:'work1',title:'無題の作品',subtitle:'',desc:'',target:10000,activeChapterId:c.id,chapters:[c]}]}};
 let state;
 try{state=JSON.parse(localStorage.getItem(STORAGE_KEY))||initial()}catch{state=initial()}
-function normalize(){if(!state||!Array.isArray(state.works)||!state.works.length)state=initial();state.works.forEach(w=>{if(!Array.isArray(w.chapters)||!w.chapters.length)w.chapters=[makeChapter('はじまり')];if(!w.chapters.some(c=>c.id===w.activeChapterId))w.activeChapterId=w.chapters[0].id;if(!Number.isFinite(+w.target))w.target=10000});if(!state.works.some(w=>w.id===state.activeWorkId))state.activeWorkId=state.works[0].id}
+
+function normalize(){
+  if(!state||!Array.isArray(state.works)||!state.works.length)state=initial();
+  state.works.forEach(w=>{
+    if(!Array.isArray(w.chapters)||!w.chapters.length)w.chapters=[makeChapter('はじまり')];
+    if(!w.chapters.some(c=>c.id===w.activeChapterId))w.activeChapterId=w.chapters[0].id;
+    if(!Number.isFinite(+w.target))w.target=10000;
+    if(w.subtitle===undefined)w.subtitle='';
+    if(w.desc===undefined)w.desc='';
+  });
+  if(!state.works.some(w=>w.id===state.activeWorkId))state.activeWorkId=state.works[0].id;
+}
 normalize();
+
 let focus=false,saveTimer=null;
 const work=()=>state.works.find(w=>w.id===state.activeWorkId)||state.works[0];
 const chapter=()=>work().chapters.find(c=>c.id===work().activeChapterId)||work().chapters[0];
 const count=s=>(s||'').replace(/\s/g,'').length;
-function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));$('saveState').textContent='保存済み'}catch{$('saveState').textContent='保存できません（容量等を確認）'}}
+
+function persist(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));$('saveState').textContent='保存済み'}catch{$('saveState').textContent='保存できません'}}
 function scheduleSave(){ $('saveState').textContent='保存中…';clearTimeout(saveTimer);saveTimer=setTimeout(persist,180)}
+
 function render(){
   const w=work(),c=chapter();
   $('currentWorkTitle').textContent=w.title||'無題の作品';
@@ -77,22 +199,38 @@ function render(){
   $('chapterDetail').textContent=c.detail||'';
   $('chapterDetail').classList.toggle('hidden',!c.detail);$('bodyEditor').value=c.body||'';
   updateCounts();
-  $('settingsTitle').value=w.title\vert{}\vert{}'';$('settingsTarget').value=w.target||0;
+  
+  // 設定パネルの値反映
+  $('settingsTitle').value=w.title\vert{}\vert{}'';$('settingsSubtitle').value=w.subtitle||'';
+  $('settingsDesc').value=w.desc\vert{}\vert{}'';$('settingsTarget').value=w.target||0;
+
   document.body.classList.toggle('focus-mode',focus);
   $('focusBtn').textContent=focus?'通常':'集中';
 }
-function updateCounts(){const w=work(),total=w.chapters.reduce((n,c)=>n+count(c.body),0),target=Math.max(0,+w.target||0);$('workCount').textContent=total.toLocaleString('ja-JP');$('workTarget').textContent=target.toLocaleString('ja-JP');$('chapterCount').textContent=`章の文字数 ${count(chapter().body).toLocaleString('ja-JP')}`;$('progressBar').style.width=(target?Math.min(100,total/target*100):0)+'%'}
+
+function updateCounts(){
+  const w=work(),total=w.chapters.reduce((n,c)=>n+count(c.body),0),target=Math.max(0,+w.target||0);
+  $('workCount').textContent=total.toLocaleString('ja-JP');
+  $('workTarget').textContent=target.toLocaleString('ja-JP');$('chapterCount').textContent=`章の文字数 ${count(chapter().body).toLocaleString('ja-JP')}`;
+  $('progressBar').style.width=(target?Math.min(100,total/target*100):0)+'%';
+}
+
 function toast(msg){$('toastRoot').innerHTML=`<div class="toast">${escapeHtml(msg)}</div>`;setTimeout(()=>$('toastRoot').replaceChildren(),1800)}
 function closeModal(){$('modalRoot').replaceChildren()}
-function showModal(title,content,actions){$('modalRoot').innerHTML=`<div class="modal-backdrop" data-close="backdrop"><section class="modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(title)}"><h2>${escapeHtml(title)}</h2>${content}<div class="modal-actions">${actions}</div></section></div>`;$('modalRoot').querySelector('[data-close="backdrop"]').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()})}
+function showModal(title,content,actions){
+  $('modalRoot').innerHTML=`<div class="modal-backdrop" data-close="backdrop"><section class="modal" role="dialog" aria-modal="true" aria-label="${escapeHtml(title)}"><h2>${escapeHtml(title)}</h2>${content}<div class="modal-actions">${actions}</div></section></div>`;
+  $('modalRoot').querySelector('[data-close="backdrop"]').addEventListener('click',e=>{if(e.target===e.currentTarget)closeModal()});
+}
 
-// 作品選択・管理モーダル
+// スクロール式作品選択・管理モーダル
 function workManager(){
   const rows=state.works.map(w=>{
     const total=w.chapters.reduce((n,c)=>n+count(c.body),0);
-    return `<div class="work-item ${w.id===state.activeWorkId?'active':''}"><button type="button" class="work-pick" data-action="pick" data-id="${escapeHtml(w.id)}"><strong>${escapeHtml(w.title||'無題の作品')} ${w.id===state.activeWorkId?'（執筆中）':''}</strong><small>総文字数: ${total.toLocaleString('ja-JP')}文字 / 目標: ${(+w.target||0).toLocaleString('ja-JP')}文字</small></button><div class="mini-actions"><button type="button" data-action="delete" data-id="${escapeHtml(w.id)}">削除</button></div></div>`;
+    return `<div class="scroll-item ${w.id===state.activeWorkId?'active':''}"><button type="button" class="scroll-pick" data-action="pick" data-id="${escapeHtml(w.id)}"><strong>${escapeHtml(w.title||'無題の作品')} ${w.id===state.activeWorkId?'（執筆中）':''}</strong>${w.subtitle?`<div class="sub">${escapeHtml(w.subtitle)}</div>`:''}<small>総文字数: ${total.toLocaleString('ja-JP')}文字 / 目標: ${(+w.target||0).toLocaleString('ja-JP')}文字</small></button><div class="mini-actions"><button type="button" data-action="delete" data-id="${escapeHtml(w.id)}">削除</button></div></div>`;
   }).join('');
-  showModal('作品の選択・管理',`<div class="work-list">${rows}</div>`,`<button type="button" class="btn" data-modal-action="close">閉じる</button><button type="button" class="btn primary" data-modal-action="add">＋ 新しい作品</button>`);
+  
+  showModal('作品の選択',`<div class="scroll-list">${rows}</div>`,`<button type="button" class="btn" data-modal-action="close">閉じる</button><button type="button" class="btn primary" data-modal-action="add">＋ 新しい作品を作成</button>`);
+  
   $('modalRoot').querySelectorAll('[data-action]').forEach(b=>b.addEventListener('click',()=>{
     const id=b.dataset.id,action=b.dataset.action;
     if(action==='pick'){state.activeWorkId=id;persist();render();closeModal();toast('作品を切り替えました')}
@@ -106,32 +244,120 @@ function workManager(){
     }
   }));
   $('modalRoot').querySelector('[data-modal-action="close"]').addEventListener('click',closeModal);
-  $('modalRoot').querySelector('[data-modal-action="add"]').addEventListener('click',()=>addWork());
+  $('modalRoot').querySelector('[data-modal-action="add"]').addEventListener('click',()=>editWorkModal(null));
 }
 
-function chapterManager(){const w=work();const rows=w.chapters.map((c,i)=>`<div class="chapter-item ${c.id===w.activeChapterId?'active':''}"><button type="button" class="chapter-pick" data-action="pick" data-id="${escapeHtml(c.id)}"><strong>${i+1}. ${escapeHtml(c.title||'無題の章')} ${c.id===w.activeChapterId?'（執筆中）':''}</strong><small>${count(c.body).toLocaleString('ja-JP')}文字${c.detail?' ・ 詳細あり':''}</small></button><div class="mini-actions"><button type="button" data-action="edit" data-id="${escapeHtml(c.id)}">編集</button><button type="button" data-action="delete" data-id="${escapeHtml(c.id)}">削除</button></div></div>`).join('');showModal('章の管理',`<div class="chapter-list">${rows}</div>`,`<button type="button" class="btn" data-modal-action="close">閉じる</button><button type="button" class="btn primary" data-modal-action="add">＋ 章を追加</button>`);$('modalRoot').querySelectorAll('[data-action]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.id,action=b.dataset.action;if(action==='pick'){w.activeChapterId=id;persist();render();closeModal();toast('章を切り替えました')}else if(action==='edit')editChapter(id);else if(action==='delete')deleteChapter(id)}));$('modalRoot').querySelector('[data-modal-action="close"]').addEventListener('click',closeModal);$('modalRoot').querySelector('[data-modal-action="add"]').addEventListener('click',()=>editChapter(null));}
-function editChapter(id){const w=work(),old=w.chapters.find(c=>c.id===id),isNew=!old,c=old||{title:`第${w.chapters.length+1}章`,detail:'',body:''};showModal(isNew?'章を追加':'章を編集',`<label class="field"><span>章タイトル</span><input id="chapterEditTitle" maxlength="120" value="${escapeHtml(c.title)}" placeholder="章タイトル"></label><label class="field"><span>章の詳細・メモ</span><textarea id="chapterEditDetail" placeholder="この章のあらすじやメモ">${escapeHtml(c.detail||'')}</textarea></label>`,`<button type="button" class="btn" id="chapterEditCancel">戻る</button><button type="button" class="btn primary" id="chapterEditSave">保存</button>`);$('chapterEditCancel').addEventListener('click',chapterManager);$('chapterEditSave').addEventListener('click',()=>{const title=$('chapterEditTitle'].value.trim()\vert{}\vert{}'無題の章',detail=$('chapterEditDetail'].value;if(isNew){const fresh=makeChapter(title);fresh.detail=detail;w.chapters.push(fresh);w.activeChapterId=fresh.id}else{old.title=title;old.detail=detail}persist();render();chapterManager();toast(isNew?'章を追加しました':'章を更新しました')});}
-function deleteChapter(id){const w=work();if(w.chapters.length<=1){toast('最後の1章は削除できません');return}const c=w.chapters.find(x=>x.id===id);if(!c)return;showModal('章を削除',`<p>「${escapeHtml(c.title||'無題の章')}」を削除しますか？</p><p>本文も一緒に削除されます。この操作は取り消せません。</p>`,`<button type="button" class="btn" id="deleteCancel">キャンセル</button><button type="button" class="btn danger" id="deleteConfirm">削除する</button>`);$('deleteCancel').addEventListener('click',chapterManager);$('deleteConfirm').addEventListener('click',()=>{w.chapters=w.chapters.filter(x=>x.id!==id);if(w.activeChapterId===id)w.activeChapterId=w.chapters[0].id;persist();render();chapterManager();toast('章を削除しました')});}
+// 新規作成・詳細設定用モーダル
+function editWorkModal(targetWorkId){
+  const isNew=!targetWorkId;
+  showModal(isNew?'新しい作品を作成':'作品情報を編集',`
+    <label class="field"><span>作品タイトル</span><input id="modalWorkTitle" maxlength="120" placeholder="作品のタイトル"></label>
+    <label class="field"><span>作品サブタイトル</span><input id="modalWorkSubtitle" maxlength="120" placeholder="サブタイトルやキャッチコピー（後からでも追加可能）"></label>
+    <label class="field"><span>あらすじや説明</span><textarea id="modalWorkDesc" placeholder="あらすじやメモ（後からでも編集可能）"></textarea></label>
+    <label class="field"><span>目標文字数</span><input id="modalWorkTarget" type="number" min="0" step="100" value="10000"></label>
+  `,`<button type="button" class="btn" id="modalWorkCancel">戻る</button><button type="button" class="btn primary" id="modalWorkSave">保存する</button>`);
 
-function addWork(){
-  showModal('作品を追加',`<label class="field"><span>作品タイトル</span><input id="newWorkTitle" maxlength="120" placeholder="新しい作品"></label><label class="field"><span>目標文字数</span><input id="newWorkTarget" type="number" min="0" value="10000"></label>`,`<button type="button" class="btn" id="newWorkCancel">キャンセル</button><button type="button" class="btn primary" id="newWorkSave">作成</button>`);
-  $('newWorkCancel').addEventListener('click',workManager);$('newWorkSave').addEventListener('click',()=>{
-    const c=makeChapter('はじまり'),w={id:uid(),title:$('newWorkTitle').value.trim()\vert{}\vert{}'無題の作品',target:Math.max(0,+$('newWorkTarget').value||0),activeChapterId:c.id,chapters:[c]};
-    state.works.push(w);state.activeWorkId=w.id;persist();render();closeModal();toast('作品を作成しました');
+  if(!isNew){
+    const w=state.works.find(x=>x.id===targetWorkId);
+    if(w){
+      $('modalWorkTitle').value=w.title\vert{}\vert{}'';$('modalWorkSubtitle').value=w.subtitle||'';
+      $('modalWorkDesc').value=w.desc\vert{}\vert{}'';$('modalWorkTarget').value=w.target||10000;
+    }
+  }
+
+  $('modalWorkCancel').addEventListener('click',isNew?workManager:closeModal);
+  $('modalWorkSave').addEventListener('click',()=>{
+    const title=$('modalWorkTitle').value.trim()||'無題の作品';
+    const subtitle=$('modalWorkSubtitle').value.trim();
+    const desc=$('modalWorkDesc').value;
+    const target=Math.max(0,+$('modalWorkTarget').value||0);
+
+    if(isNew){
+      const c=makeChapter('はじまり');
+      const w={id:uid(),title,subtitle,desc,target,activeChapterId:c.id,chapters:[c]};
+      state.works.push(w);
+      state.activeWorkId=w.id;
+      persist();render();closeModal();toast('新しい作品を作成しました');
+    }else{
+      const w=state.works.find(x=>x.id===targetWorkId);
+      if(w){
+        w.title=title;
+        w.subtitle=subtitle;
+        w.desc=desc;
+        w.target=target;
+        persist();render();closeModal();toast('作品情報を更新しました');
+      }
+    }
   });
 }
 
+// 章管理モーダル
+function chapterManager(){
+  const w=work();
+  const rows=w.chapters.map((c,i)=>`<div class="scroll-item ${c.id===w.activeChapterId?'active':''}"><button type="button" class="scroll-pick" data-action="pick" data-id="${escapeHtml(c.id)}"><strong>${i+1}. ${escapeHtml(c.title||'無題の章')} ${c.id===w.activeChapterId?'（執筆中）':''}</strong><small>${count(c.body).toLocaleString('ja-JP')}文字${c.detail?' ・ 詳細あり':''}</small></button><div class="mini-actions"><button type="button" data-action="edit" data-id="${escapeHtml(c.id)}">編集</button><button type="button" data-action="delete" data-id="${escapeHtml(c.id)}">削除</button></div></div>`).join('');
+  
+  showModal('章の管理',`<div class="scroll-list">${rows}</div>`,`<button type="button" class="btn" data-modal-action="close">閉じる</button><button type="button" class="btn primary" data-modal-action="add">＋ 章を追加</button>`);
+  
+  $('modalRoot').querySelectorAll('[data-action]').forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.id,action=b.dataset.action;
+    if(action==='pick'){w.activeChapterId=id;persist();render();closeModal();toast('章を切り替えました')}
+    else if(action==='edit')editChapter(id);
+    else if(action==='delete')deleteChapter(id);
+  }));
+  $('modalRoot').querySelector('[data-modal-action="close"]').addEventListener('click',closeModal);
+  $('modalRoot').querySelector('[data-modal-action="add"]').addEventListener('click',()=>editChapter(null));
+}
+
+function editChapter(id){
+  const w=work(),old=w.chapters.find(c=>c.id===id),isNew=!old,c=old||{title:`第${w.chapters.length+1}章`,detail:'',body:''};
+  showModal(isNew?'章を追加':'章を編集',`
+    <label class="field"><span>章タイトル</span><input id="chapterEditTitle" maxlength="120" value="${escapeHtml(c.title)}" placeholder="章タイトル"></label>
+    <label class="field"><span>章の詳細・メモ</span><textarea id="chapterEditDetail" placeholder="この章のあらすじやメモ">${escapeHtml(c.detail||'')}</textarea></label>
+  `,`<button type="button" class="btn" id="chapterEditCancel">戻る</button><button type="button" class="btn primary" id="chapterEditSave">保存</button>`);
+  
+  $('chapterEditCancel').addEventListener('click',chapterManager);$('chapterEditSave').addEventListener('click',()=>{
+    const title=$('chapterEditTitle').value.trim()\vert{}\vert{}'無題の章',detail=$('chapterEditDetail').value;
+    if(isNew){const fresh=makeChapter(title);fresh.detail=detail;w.chapters.push(fresh);w.activeChapterId=fresh.id}
+    else{old.title=title;old.detail=detail}
+    persist();render();chapterManager();toast(isNew?'章を追加しました':'章を更新しました');
+  });
+}
+
+function deleteChapter(id){
+  const w=work();
+  if(w.chapters.length<=1){toast('最後の1章は削除できません');return}
+  const c=w.chapters.find(x=>x.id===id);
+  if(!c)return;
+  showModal('章を削除',`<p>「${escapeHtml(c.title||'無題の章')}」を削除しますか？</p><p>本文も一緒に削除されます。この操作は取り消せません。</p>`,`<button type="button" class="btn" id="deleteCancel">キャンセル</button><button type="button" class="btn danger" id="deleteConfirm">削除する</button>`);
+  $('deleteCancel').addEventListener('click',chapterManager);$('deleteConfirm').addEventListener('click',()=>{
+    w.chapters=w.chapters.filter(x=>x.id!==id);
+    if(w.activeChapterId===id)w.activeChapterId=w.chapters[0].id;
+    persist();render();chapterManager();toast('章を削除しました');
+  });
+}
+
+// イベント設定
 $('bodyEditor').addEventListener('input',e=>{chapter().body=e.target.value;updateCounts();scheduleSave()});
 $('chapterHead').addEventListener('click',chapterManager);$('chapterHead').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();chapterManager()}});
 
-// トップバナーの作品名部分をタッチして作品切り替え・管理を開く
-$('currentWorkTitle').addEventListener('click',workManager);
+// トップの作品名コンテナをクリックでスクロール式の作品選択へ
+$('currentWorkContainer').addEventListener('click',workManager);
 
 $('focusBtn').addEventListener('click',()=>{focus=!focus;document.body.classList.toggle('focus-mode',focus);$('focusBtn').textContent=focus?'通常':'集中'});
-$('saveSettingsBtn').addEventListener('click',()=>{const w=work();w.title=$('settingsTitle').value.trim()\vert{}\vert{}'無題の作品';w.target=Math.max(0,+$('settingsTarget').value||0);persist();render();toast('作品設定を保存しました')});
 
-// 設定ボタンの設置
-const settingsBtn=document.createElement('button');settingsBtn.type='button';settingsBtn.className='iconbtn';settingsBtn.textContent='設定';
+// 設定パネルの保存ボタン
+$('saveSettingsBtn').addEventListener('click',()=>{
+  const w=work();
+  w.title=$('settingsTitle').value.trim()||'無題の作品';
+  w.subtitle=$('settingsSubtitle').value.trim();
+  w.desc=$('settingsDesc').value;
+  w.target=Math.max(0,+$('settingsTarget').value||0);
+  persist();render();toast('作品設定を保存しました');
+});
+
+// 設定ボタン（歯車またはテキスト）の設置
+const settingsBtn=document.createElement('button');
+settingsBtn.type='button';settingsBtn.className='iconbtn';settingsBtn.textContent='作品設定';
 settingsBtn.addEventListener('click',()=>{$('settingsPanel').classList.toggle('hidden');if(!$('settingsPanel').classList.contains('hidden'))$('settingsPanel').scrollIntoView({behavior:'smooth',block:'nearest'})});
 $('topBar').querySelector('.toprow').insertBefore(settingsBtn,$('focusBtn'));
 
