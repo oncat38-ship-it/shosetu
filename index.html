@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chic Novelist Studio - UI Mockup V1.6</title>
+    <title>Chic Novelist Studio - UI Mockup V1.7</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -31,7 +31,6 @@
             font-family: 'Inter', 'Noto Serif JP', serif;
             touch-action: manipulation;
         }
-        /* Custom scrollbar for chic look */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -46,7 +45,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #64748b;
         }
-        /* Draggable buttons style */
         .draggable-btn {
             touch-action: none;
             user-select: none;
@@ -71,13 +69,12 @@
     <!-- Top Banner -->
     <header class="bg-dark-800/90 backdrop-blur-md border-b border-dark-700 px-4 py-2.5 sticky top-0 z-40 flex items-center justify-between shadow-sm">
         <div class="flex items-center space-x-3">
-            <!-- App Icon -->
             <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-slate-700 to-dark-900 flex items-center justify-center border border-slate-600 shadow-inner">
                 <i class="fa-solid fa-feather-pointed text-[11px] text-slate-300"></i>
             </div>
             <!-- Work Title & Subtitle Container -->
             <div class="flex items-center space-x-3">
-                <button id="openWorkSelectorBtn" class="text-left group flex flex-col focus:outline-none" title="作品の切り替え・新規登録">
+                <button id="openWorkSelectorBtn" type="button" class="text-left group flex flex-col focus:outline-none cursor-pointer" title="作品の切り替え・新規登録">
                     <div class="flex items-center space-x-1.5">
                         <h1 id="currentWorkTitleDisplay" class="text-xs md:text-sm font-semibold tracking-wide text-slate-100 group-hover:text-white transition">深夜特急のレプリカント</h1>
                         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 group-hover:text-slate-200 transition"></i>
@@ -88,13 +85,13 @@
         </div>
 
         <!-- Focus Mode Button -->
-        <button id="focusModeBtn" title="集中モード" class="p-1.5 px-2.5 rounded-lg bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white transition border border-dark-600/50 flex items-center space-x-1.5 text-xs">
+        <button id="focusModeBtn" type="button" title="集中モード" class="p-1.5 px-2.5 rounded-lg bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white transition border border-dark-600/50 flex items-center space-x-1.5 text-xs cursor-pointer">
             <i id="focusIcon" class="fa-solid fa-expand"></i>
             <span class="hidden sm:inline" id="focusText">集中モード</span>
         </button>
     </header>
 
-    <!-- Compact Progress Dashboard (Controlled by Focus Mode) -->
+    <!-- Compact Progress Dashboard -->
     <section id="targetSection" class="bg-dark-800/50 border-b border-dark-700/60 px-4 py-2 text-xs transition-all duration-300 overflow-hidden">
         <div id="targetGridContainer" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-2.5">
             <!-- Overall Progress -->
@@ -133,11 +130,11 @@
     <!-- Main Content Area -->
     <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col space-y-3">
 
-        <!-- Chapter & Title Header (Clickable Chapter Button & Expanded Synopsis) -->
+        <!-- Chapter & Title Header -->
         <div class="bg-dark-800/60 border border-dark-700/70 rounded-xl px-3.5 py-2.5 shadow-sm flex flex-col space-y-2">
             <div class="flex items-center space-x-3">
                 <!-- Clickable Chapter Selector Button -->
-                <button id="openChapterSelectorBtn" class="flex items-center space-x-1.5 bg-dark-700/80 hover:bg-dark-700 border border-dark-600 rounded px-2.5 py-1 shrink-0 text-slate-200 text-xs font-semibold transition group" title="章の切り替え・管理">
+                <button id="openChapterSelectorBtn" type="button" class="flex items-center space-x-1.5 bg-dark-700/80 hover:bg-dark-700 border border-dark-600 rounded px-2.5 py-1 shrink-0 text-slate-200 text-xs font-semibold transition group cursor-pointer" title="章の切り替え・管理">
                     <i class="fa-solid fa-bookmark text-[10px] text-slate-400"></i>
                     <span id="currentChapterDisplay">第3章</span>
                     <i class="fa-solid fa-chevron-down text-[9px] text-slate-400 group-hover:text-slate-200 transition"></i>
@@ -145,7 +142,7 @@
                 <!-- Chapter / Episode Title Input -->
                 <input type="text" id="chapterTitleInput" value="雨音のプロムナード" class="bg-transparent border-b border-dark-600/60 focus:border-slate-400 outline-none text-sm md:text-base font-semibold text-slate-100 py-0.5 transition w-full" placeholder="話・サブタイトルを入力...">
             </div>
-            <!-- Synopsis Field (Expanded to minimum 2 rows) -->
+            <!-- Synopsis Field -->
             <div class="relative pt-1">
                 <span class="absolute top-0 left-2.5 px-1 bg-dark-800 text-[9px] text-slate-400 font-medium uppercase tracking-wider border border-dark-700 rounded">あらすじ</span>
                 <textarea id="synopsisInput" rows="2" class="w-full bg-dark-900/60 border border-dark-700 rounded-lg px-2.5 py-2 text-xs text-slate-300 focus:outline-none focus:border-slate-500 transition resize-none leading-relaxed" placeholder="章のあらすじやプロットの指針を記入...">主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。</textarea>
@@ -159,20 +156,17 @@
             <div class="col-span-3 md:col-span-2 bg-dark-800/40 border border-dark-700/60 rounded-xl p-2.5 flex flex-col space-y-2.5">
                 <div class="flex items-center justify-between border-b border-dark-700 pb-1.5">
                     <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">プロットNo.</span>
-                    <button title="プロット追加" class="text-slate-400 hover:text-slate-200 text-xs"><i class="fa-solid fa-plus"></i></button>
+                    <button type="button" title="プロット追加" class="text-slate-400 hover:text-slate-200 text-xs cursor-pointer"><i class="fa-solid fa-plus"></i></button>
                 </div>
                 <div class="flex flex-col space-y-2 overflow-y-auto max-h-[500px] pr-0.5">
-                    <!-- Plot Item 1 (Active) -->
                     <div class="p-2 rounded-lg bg-dark-700/60 border border-slate-600 cursor-pointer text-xs transition shadow-sm">
                         <div class="font-mono text-[10px] text-slate-400">#PLOT-012</div>
                         <div class="font-medium text-slate-200 truncate mt-0.5">裏路地での密会</div>
                     </div>
-                    <!-- Plot Item 2 -->
                     <div class="p-2 rounded-lg bg-dark-800/80 border border-dark-700/60 hover:bg-dark-700/40 cursor-pointer text-xs transition text-slate-400">
                         <div class="font-mono text-[10px] text-slate-500">#PLOT-013</div>
                         <div class="truncate mt-0.5">雨のハイウェイ</div>
                     </div>
-                    <!-- Plot Item 3 -->
                     <div class="p-2 rounded-lg bg-dark-800/80 border border-dark-700/60 hover:bg-dark-700/40 cursor-pointer text-xs transition text-slate-400">
                         <div class="font-mono text-[10px] text-slate-500">#PLOT-014</div>
                         <div class="truncate mt-0.5">記憶の残響</div>
@@ -201,7 +195,7 @@
 
     <!-- Version Footer -->
     <footer class="py-3 text-center border-t border-dark-800 text-[11px] text-slate-500 font-mono tracking-wider">
-        Chic Novelist Studio &mdash; V1.6
+        Chic Novelist Studio &mdash; V1.7
     </footer>
 
     <!-- Settings Modal -->
@@ -212,7 +206,7 @@
                     <i class="fa-solid fa-gear text-slate-400"></i>
                     <span>アプリケーション設定</span>
                 </div>
-                <button id="closeSettingsBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+                <button id="closeSettingsBtn" type="button" class="text-slate-400 hover:text-slate-200 text-sm cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
             <div class="flex flex-col space-y-4 text-xs">
@@ -250,7 +244,7 @@
             </div>
 
             <div class="flex justify-end pt-2">
-                <button id="saveSettingsBtn" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">設定を保存</button>
+                <button id="saveSettingsBtn" type="button" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow cursor-pointer">設定を保存</button>
             </div>
         </div>
     </div>
@@ -263,12 +257,12 @@
                     <i class="fa-solid fa-book-bookmark text-slate-400"></i>
                     <span>作品の選択・新規登録</span>
                 </div>
-                <button id="closeWorkSelectorBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+                <button id="closeWorkSelectorBtn" type="button" class="text-slate-400 hover:text-slate-200 text-sm cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
             <div id="workModalTabs" class="flex space-x-2 border-b border-dark-700 pb-2 text-xs">
-                <button id="tabListBtn" class="px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition">作品一覧・切替</button>
-                <button id="tabNewBtn" class="px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition">新規作品登録</button>
+                <button id="tabListBtn" type="button" class="px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition cursor-pointer">作品一覧・切替</button>
+                <button id="tabNewBtn" type="button" class="px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition cursor-pointer">新規作品登録</button>
             </div>
 
             <div id="workListView" class="flex flex-col space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs"></div>
@@ -292,10 +286,10 @@
                     <input type="number" id="formGoalInput" value="50000" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono">
                 </div>
                 <div class="flex items-center justify-between pt-2">
-                    <button id="deleteWorkBtn" type="button" class="hidden px-3 py-2 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 transition border border-rose-800/50">この作品を削除</button>
+                    <button id="deleteWorkBtn" type="button" class="hidden px-3 py-2 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 transition border border-rose-800/50 cursor-pointer">この作品を削除</button>
                     <div class="flex space-x-2 ml-auto">
-                        <button id="cancelFormBtn" type="button" class="px-3 py-2 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-300 transition">キャンセル</button>
-                        <button id="saveWorkFormBtn" type="button" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">保存する</button>
+                        <button id="cancelFormBtn" type="button" class="px-3 py-2 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-300 transition cursor-pointer">キャンセル</button>
+                        <button id="saveWorkFormBtn" type="button" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow cursor-pointer">保存する</button>
                     </div>
                 </div>
             </div>
@@ -310,12 +304,12 @@
                     <i class="fa-solid fa-bookmark text-slate-400"></i>
                     <span>章の選択・新規登録</span>
                 </div>
-                <button id="closeChapterSelectorBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+                <button id="closeChapterSelectorBtn" type="button" class="text-slate-400 hover:text-slate-200 text-sm cursor-pointer"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
             <div id="chapterModalTabs" class="flex space-x-2 border-b border-dark-700 pb-2 text-xs">
-                <button id="tabChapterListBtn" class="px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition">章一覧・切替</button>
-                <button id="tabChapterNewBtn" class="px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition">新規章登録</button>
+                <button id="tabChapterListBtn" type="button" class="px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition cursor-pointer">章一覧・切替</button>
+                <button id="tabChapterNewBtn" type="button" class="px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition cursor-pointer">新規章登録</button>
             </div>
 
             <div id="chapterListView" class="flex flex-col space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs"></div>
@@ -335,10 +329,10 @@
                     <input type="number" id="formChapterGoalInput" value="5000" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono">
                 </div>
                 <div class="flex items-center justify-between pt-2">
-                    <button id="deleteChapterBtn" type="button" class="hidden px-3 py-2 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 transition border border-rose-800/50">この章を削除</button>
+                    <button id="deleteChapterBtn" type="button" class="hidden px-3 py-2 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 transition border border-rose-800/50 cursor-pointer">この章を削除</button>
                     <div class="flex space-x-2 ml-auto">
-                        <button id="cancelChapterFormBtn" type="button" class="px-3 py-2 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-300 transition">キャンセル</button>
-                        <button id="saveChapterFormBtn" type="button" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">保存する</button>
+                        <button id="cancelChapterFormBtn" type="button" class="px-3 py-2 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-300 transition cursor-pointer">キャンセル</button>
+                        <button id="saveChapterFormBtn" type="button" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow cursor-pointer">保存する</button>
                     </div>
                 </div>
             </div>
@@ -347,13 +341,13 @@
 
     <!-- Draggable Floating Action Buttons -->
     <div id="toolBtnContainer" class="draggable-btn fixed z-50 select-none" style="left: 24px; bottom: 24px;">
-        <button id="toolBtn" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95" title="ツール・設定">
+        <button id="toolBtn" type="button" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95 cursor-pointer" title="ツール・設定">
             <i class="fa-solid fa-toolbox text-xs"></i>
         </button>
     </div>
 
     <div id="rubyBtnContainer" class="draggable-btn fixed z-50 select-none" style="right: 24px; bottom: 24px;">
-        <button id="rubyBtn" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95" title="ルビ付与">
+        <button id="rubyBtn" type="button" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95 cursor-pointer" title="ルビ付与">
             <i class="fa-solid fa-font text-xs"></i>
         </button>
     </div>
@@ -406,7 +400,7 @@
         });
 
         document.getElementById('rubyBtn').addEventListener('click', (e) => {
-            if (!e.defaultPrevented) showNotice('ルビ付与パネル・自動振替機能');
+            showNotice('ルビ付与パネル・自動振替機能');
         });
 
         // --- Data Management (Works & Chapters) ---
@@ -460,7 +454,6 @@
             document.getElementById('currentWorkTitleDisplay').textContent = work.title;
             document.getElementById('currentWorkSubTitleDisplay').textContent = work.subtitle || '';
 
-            // Chapters handling
             if (!work.chapters || work.chapters.length === 0) {
                 work.chapters = [{ id: 'chap_default', title: '第1章 序幕', synopsis: 'あらすじ...', goal: 5000 }];
             }
@@ -501,7 +494,6 @@
             const epPercent = Math.min(100, Math.round((count / epGoal) * 100));
             episodeBar.style.width = epPercent + '%';
 
-            // Chapter count simulation
             chapterCurrentText.textContent = count.toLocaleString();
             const works = getStoredWorks();
             const work = works.find(w => w.id === getCurrentWorkId()) || works[0];
@@ -511,7 +503,6 @@
             const chapPercent = Math.min(100, Math.round((count / chapGoal) * 100));
             chapterBar.style.width = chapPercent + '%';
 
-            // Overall simulation
             const overallTotal = 10000 + count;
             overallCurrentText.textContent = overallTotal.toLocaleString();
             const goalVal = work.goal || 50000;
@@ -547,8 +538,8 @@
         tabNewBtn.addEventListener('click', () => showWorkFormView());
 
         function showWorkListView() {
-            tabListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition';
-            tabNewBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition';
+            tabListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition cursor-pointer';
+            tabNewBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition cursor-pointer';
             workListView.classList.remove('hidden');
             workModalTabs.classList.remove('hidden');
             workFormView.classList.add('hidden');
@@ -597,10 +588,10 @@
                         <span class="text-[10px] text-slate-400 truncate">${work.subtitle || 'サブタイトルなし'}</span>
                     </div>
                     <div class="flex items-center space-x-1.5 shrink-0">
-                        <button class="px-2.5 py-1 rounded bg-dark-600 hover:bg-slate-500 text-slate-100 font-medium transition edit-work-btn" data-id="${work.id}" title="編集">
+                        <button type="button" class="px-2.5 py-1 rounded bg-dark-600 hover:bg-slate-500 text-slate-100 font-medium transition edit-work-btn cursor-pointer" data-id="${work.id}" title="編集">
                             <i class="fa-solid fa-pen text-[10px]"></i>
                         </button>
-                        <button class="px-3 py-1 rounded ${isSelected ? 'bg-dark-700 text-slate-400 cursor-default' : 'bg-dark-600 hover:bg-slate-500 text-slate-100'} font-medium transition select-work-btn" data-id="${work.id}">
+                        <button type="button" class="px-3 py-1 rounded ${isSelected ? 'bg-dark-700 text-slate-400 cursor-default' : 'bg-dark-600 hover:bg-slate-500 text-slate-100 cursor-pointer'} font-medium transition select-work-btn" data-id="${work.id}">
                             ${isSelected ? '選択中' : '切り替え'}
                         </button>
                     </div>
@@ -608,7 +599,7 @@
                 workListView.appendChild(item);
             });
 
-            document.querySelectorAll('.select-work-btn').forEach(btn => {
+            workListView.querySelectorAll('.select-work-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = e.currentTarget.getAttribute('data-id');
                     if (id === getCurrentWorkId()) return;
@@ -619,7 +610,7 @@
                 });
             });
 
-            document.querySelectorAll('.edit-work-btn').forEach(btn => {
+            workListView.querySelectorAll('.edit-work-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = e.currentTarget.getAttribute('data-id');
                     const works = getStoredWorks();
@@ -710,8 +701,8 @@
         tabChapterNewBtn.addEventListener('click', () => showChapterFormView());
 
         function showChapterListView() {
-            tabChapterListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition';
-            tabChapterNewBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition';
+            tabChapterListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition cursor-pointer';
+            tabChapterNewBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition cursor-pointer';
             chapterListView.classList.remove('hidden');
             chapterModalTabs.classList.remove('hidden');
             chapterFormView.classList.add('hidden');
@@ -759,10 +750,10 @@
                         <span class="text-[10px] text-slate-400 truncate">あらすじ: ${chap.synopsis || 'なし'}</span>
                     </div>
                     <div class="flex items-center space-x-1.5 shrink-0">
-                        <button class="px-2.5 py-1 rounded bg-dark-600 hover:bg-slate-500 text-slate-100 font-medium transition edit-chap-btn" data-id="${chap.id}" title="編集">
+                        <button type="button" class="px-2.5 py-1 rounded bg-dark-600 hover:bg-slate-500 text-slate-100 font-medium transition edit-chap-btn cursor-pointer" data-id="${chap.id}" title="編集">
                             <i class="fa-solid fa-pen text-[10px]"></i>
                         </button>
-                        <button class="px-3 py-1 rounded ${isSelected ? 'bg-dark-700 text-slate-400 cursor-default' : 'bg-dark-600 hover:bg-slate-500 text-slate-100'} font-medium transition select-chap-btn" data-id="${chap.id}">
+                        <button type="button" class="px-3 py-1 rounded ${isSelected ? 'bg-dark-700 text-slate-400 cursor-default' : 'bg-dark-600 hover:bg-slate-500 text-slate-100 cursor-pointer'} font-medium transition select-chap-btn" data-id="${chap.id}">
                             ${isSelected ? '選択中' : '切り替え'}
                         </button>
                     </div>
@@ -770,7 +761,7 @@
                 chapterListView.appendChild(item);
             });
 
-            document.querySelectorAll('.select-chap-btn').forEach(btn => {
+            chapterListView.querySelectorAll('.select-chap-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = e.currentTarget.getAttribute('data-id');
                     localStorage.setItem('novelist_current_chapter_id_' + work.id, id);
@@ -780,7 +771,7 @@
                 });
             });
 
-            document.querySelectorAll('.edit-chap-btn').forEach(btn => {
+            chapterListView.querySelectorAll('.edit-chap-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = e.currentTarget.getAttribute('data-id');
                     const chap = work.chapters.find(c => c.id === id);
@@ -907,7 +898,7 @@
 
         loadSettings();
 
-        document.getElementById('toolBtn').addEventListener('click', (e) => { if (!e.defaultPrevented) settingsModal.classList.remove('hidden'); });
+        document.getElementById('toolBtn').addEventListener('click', (e) => { settingsModal.classList.remove('hidden'); });
         closeSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
         settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.add('hidden'); });
 
@@ -974,8 +965,14 @@
                 if (hasMoved) {
                     const currentRect = elm.getBoundingClientRect();
                     localStorage.setItem(storageKey, JSON.stringify({ left: currentRect.left + 'px', top: currentRect.top + 'px' }));
+                    
+                    // Prevent immediate click event only if actually dragged
                     const innerBtn = elm.querySelector('button');
-                    const clickPreventer = (event) => { event.preventDefault(); event.stopPropagation(); innerBtn.removeEventListener('click', clickPreventer, true); };
+                    const clickPreventer = (event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        innerBtn.removeEventListener('click', clickPreventer, true);
+                    };
                     innerBtn.addEventListener('click', clickPreventer, true);
                 }
             }
