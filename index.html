@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chic Novelist Studio - UI Mockup V1.4</title>
+    <title>Chic Novelist Studio - UI Mockup V1.5</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -51,12 +51,18 @@
             touch-action: none;
             user-select: none;
             cursor: grab;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
         }
         .draggable-btn:active {
             cursor: grabbing;
         }
         .draggable-btn.locked {
             cursor: pointer;
+        }
+        .draggable-btn.hidden-mode {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
     </style>
 </head>
@@ -69,39 +75,33 @@
             <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-slate-700 to-dark-900 flex items-center justify-center border border-slate-600 shadow-inner">
                 <i class="fa-solid fa-feather-pointed text-[11px] text-slate-300"></i>
             </div>
-            <!-- Work Title & Toggle Button Container -->
+            <!-- Work Title & Subtitle Container -->
             <div class="flex items-center space-x-3">
-                <div class="flex flex-col">
-                    <span class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">GitHub Connected</span>
-                    <!-- Clickable Work Title to Open Novel Selector Modal -->
-                    <button id="openWorkSelectorBtn" class="text-left group flex items-center space-x-1.5 focus:outline-none" title="作品の切り替え・新規登録">
-                        <h1 id="currentWorkTitleDisplay" class="text-xs md:text-sm font-semibold tracking-wide text-slate-100 group-hover:text-white transition">深夜特急のレプリカント - 第3章</h1>
+                <button id="openWorkSelectorBtn" class="text-left group flex flex-col focus:outline-none" title="作品の切り替え・新規登録">
+                    <div class="flex items-center space-x-1.5">
+                        <h1 id="currentWorkTitleDisplay" class="text-xs md:text-sm font-semibold tracking-wide text-slate-100 group-hover:text-white transition">深夜特急のレプリカント</h1>
                         <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 group-hover:text-slate-200 transition"></i>
-                    </button>
-                </div>
-                <!-- Target Toggle Button -->
-                <button id="toggleTargetBtn" title="文字目標の表示切替" class="px-2 py-1 rounded bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white transition border border-dark-600/50 text-[11px] flex items-center space-x-1">
-                    <i id="toggleIcon" class="fa-solid fa-chart-pie"></i>
-                    <span class="hidden sm:inline" id="toggleText">目標非表示</span>
+                    </div>
+                    <span id="currentWorkSubTitleDisplay" class="text-[10px] text-slate-400 font-medium tracking-wide">第1部・覚醒編</span>
                 </button>
             </div>
         </div>
 
         <!-- Focus Mode Button -->
         <button id="focusModeBtn" title="集中モード" class="p-1.5 px-2.5 rounded-lg bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white transition border border-dark-600/50 flex items-center space-x-1.5 text-xs">
-            <i class="fa-solid fa-expand"></i>
-            <span class="hidden sm:inline">集中モード</span>
+            <i id="focusIcon" class="fa-solid fa-expand"></i>
+            <span class="hidden sm:inline" id="focusText">集中モード</span>
         </button>
     </header>
 
-    <!-- Compact Progress Dashboard (Collapsible with memory) -->
+    <!-- Compact Progress Dashboard (Controlled by Focus Mode) -->
     <section id="targetSection" class="bg-dark-800/50 border-b border-dark-700/60 px-4 py-2 text-xs transition-all duration-300 overflow-hidden">
         <div id="targetGridContainer" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-2.5">
             <!-- Overall Progress -->
             <div id="goalOverall" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
                 <div class="flex justify-between mb-1">
                     <span class="text-slate-400">全体目標</span>
-                    <span class="font-mono text-slate-250"><span id="overallCurrentText">0</span> / <span id="overallGoalText" class="text-slate-400">50,000字</span></span>
+                    <span class="font-mono text-slate-200"><span id="overallCurrentText">0</span> / <span id="overallGoalText" class="text-slate-400">50,000字</span></span>
                 </div>
                 <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
                     <div id="overallBar" class="bg-slate-400 h-1.5 rounded-full" style="width: 0%;"></div>
@@ -110,7 +110,7 @@
             <!-- Chapter Progress -->
             <div id="goalChapter" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
                 <div class="flex justify-between mb-1">
-                    <span class="text-slate-400">第3章目標</span>
+                    <span class="text-slate-400">章目標（第3章）</span>
                     <span class="font-mono text-slate-200">3,200 / <span class="text-slate-400">5,000字</span></span>
                 </div>
                 <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
@@ -133,15 +133,18 @@
     <!-- Main Content Area -->
     <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col space-y-3">
 
-        <!-- Chapter & Title Header (More Compact) -->
+        <!-- Chapter & Title Header (Separated Chapter Frame) -->
         <div class="bg-dark-800/60 border border-dark-700/70 rounded-xl px-3.5 py-2.5 shadow-sm flex flex-col space-y-2">
             <div class="flex items-center space-x-3">
-                <div class="px-2.5 py-0.5 bg-dark-700/80 border border-dark-600 rounded text-[11px] font-semibold text-slate-300 shrink-0">
-                    第3章
+                <!-- Independent Chapter Frame -->
+                <div class="flex items-center space-x-1.5 bg-dark-700/80 border border-dark-600 rounded px-2 py-0.5 shrink-0">
+                    <i class="fa-solid fa-bookmark text-[10px] text-slate-400"></i>
+                    <input type="text" id="chapterNumberInput" value="第3章" class="bg-transparent border-none text-[11px] font-semibold text-slate-200 focus:outline-none w-12 text-center" placeholder="章番号">
                 </div>
-                <input type="text" id="chapterTitleInput" value="雨音のプロムナード" class="bg-transparent border-b border-dark-600/60 focus:border-slate-400 outline-none text-sm md:text-base font-semibold text-slate-100 py-0.5 transition w-full" placeholder="章タイトルを入力...">
+                <!-- Chapter / Episode Title Input -->
+                <input type="text" id="chapterTitleInput" value="雨音のプロムナード" class="bg-transparent border-b border-dark-600/60 focus:border-slate-400 outline-none text-sm md:text-base font-semibold text-slate-100 py-0.5 transition w-full" placeholder="話・サブタイトルを入力...">
             </div>
-            <!-- Synopsis Field (Compact) -->
+            <!-- Synopsis Field -->
             <div class="relative">
                 <span class="absolute -top-2 left-2.5 px-1 bg-dark-800 text-[9px] text-slate-400 font-medium uppercase tracking-wider border border-dark-700 rounded">あらすじ</span>
                 <textarea id="synopsisInput" rows="1" class="w-full bg-dark-900/60 border border-dark-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-slate-500 transition resize-none" placeholder="章のあらすじやプロットの指針を記入...">主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。</textarea>
@@ -197,7 +200,7 @@
 
     <!-- Version Footer -->
     <footer class="py-3 text-center border-t border-dark-800 text-[11px] text-slate-500 font-mono tracking-wider">
-        Chic Novelist Studio &mdash; V1.4
+        Chic Novelist Studio &mdash; V1.5
     </footer>
 
     <!-- Settings Modal -->
@@ -264,7 +267,7 @@
                 <button id="closeWorkSelectorBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
-            <!-- Tab Switcher (Hidden in edit mode) -->
+            <!-- Tab Switcher -->
             <div id="workModalTabs" class="flex space-x-2 border-b border-dark-700 pb-2 text-xs">
                 <button id="tabListBtn" class="px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition">作品一覧・切替</button>
                 <button id="tabNewBtn" class="px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition">新規作品登録</button>
@@ -283,20 +286,23 @@
                     <input type="text" id="formTitleInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 虚空のアンソロジー">
                 </div>
                 <div class="flex flex-col space-y-1">
-                    <label class="text-slate-400 font-medium">サブタイトル（章名など）</label>
-                    <input type="text" id="formSubTitleInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 第1章 始まりの街">
+                    <label class="text-slate-400 font-medium">サブタイトル・シリーズ名</label>
+                    <input type="text" id="formSubTitleInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 第1部・覚醒編">
                 </div>
                 <div class="flex flex-col space-y-1">
                     <label class="text-slate-400 font-medium">あらすじ</label>
-                    <textarea id="formSynopsisInput" rows="2" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 resize-none" placeholder="作品や章のあらすじ..."></textarea>
+                    <textarea id="formSynopsisInput" rows="2" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 resize-none" placeholder="作品全体のあらすじ..."></textarea>
                 </div>
                 <div class="flex flex-col space-y-1">
                     <label class="text-slate-400 font-medium">目標文字数</label>
                     <input type="number" id="formGoalInput" value="50000" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono">
                 </div>
-                <div class="flex justify-between pt-2">
-                    <button id="cancelFormBtn" type="button" class="px-3 py-2 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-300 transition">キャンセル</button>
-                    <button id="saveWorkFormBtn" type="button" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">保存する</button>
+                <div class="flex items-center justify-between pt-2">
+                    <button id="deleteWorkBtn" type="button" class="hidden px-3 py-2 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 transition border border-rose-800/50">この作品を削除</button>
+                    <div class="flex space-x-2 ml-auto">
+                        <button id="cancelFormBtn" type="button" class="px-3 py-2 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-300 transition">キャンセル</button>
+                        <button id="saveWorkFormBtn" type="button" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">保存する</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -331,50 +337,38 @@
             }, 2200);
         }
 
-        // Target Section Collapse Toggle with Memory
+        // Focus Mode Toggle (Hides target section & floating buttons)
         const targetSection = document.getElementById('targetSection');
-        const toggleTargetBtn = document.getElementById('toggleTargetBtn');
-        const toggleIcon = document.getElementById('toggleIcon');
-        const toggleText = document.getElementById('toggleText');
+        const focusModeBtn = document.getElementById('focusModeBtn');
+        const focusIcon = document.getElementById('focusIcon');
+        const focusText = document.getElementById('focusText');
+        const toolBtnContainer = document.getElementById('toolBtnContainer');
+        const rubyBtnContainer = document.getElementById('rubyBtnContainer');
 
-        const savedTargetState = localStorage.getItem('novelist_target_collapsed');
-        if (savedTargetState === 'true') {
-            targetSection.style.maxHeight = '0px';
-            targetSection.style.paddingTop = '0px';
-            targetSection.style.paddingBottom = '0px';
-            targetSection.style.opacity = '0';
-            toggleText.textContent = '目標表示';
-            toggleIcon.className = 'fa-solid fa-chart-pie text-slate-400';
-        } else {
-            targetSection.style.maxHeight = '120px';
-            toggleText.textContent = '目標非表示';
-            toggleIcon.className = 'fa-solid fa-chart-pie';
-        }
-
-        toggleTargetBtn.addEventListener('click', () => {
-            const isCollapsed = targetSection.style.maxHeight === '0px' || targetSection.style.maxHeight === '';
-            if (isCollapsed) {
-                targetSection.style.maxHeight = '120px';
-                targetSection.style.paddingTop = '0.5rem';
-                targetSection.style.paddingBottom = '0.5rem';
-                targetSection.style.opacity = '1';
-                toggleText.textContent = '目標非表示';
-                toggleIcon.className = 'fa-solid fa-chart-pie';
-                localStorage.setItem('novelist_target_collapsed', 'false');
-            } else {
+        let isFocusMode = false;
+        focusModeBtn.addEventListener('click', () => {
+            isFocusMode = !isFocusMode;
+            if (isFocusMode) {
                 targetSection.style.maxHeight = '0px';
                 targetSection.style.paddingTop = '0px';
                 targetSection.style.paddingBottom = '0px';
                 targetSection.style.opacity = '0';
-                toggleText.textContent = '目標表示';
-                toggleIcon.className = 'fa-solid fa-chart-pie text-slate-400';
-                localStorage.setItem('novelist_target_collapsed', 'true');
+                toolBtnContainer.classList.add('hidden-mode');
+                rubyBtnContainer.classList.add('hidden-mode');
+                focusText.textContent = '通常モード';
+                focusIcon.className = 'fa-solid fa-compress';
+                showNotice('集中モードに切り替えました');
+            } else {
+                targetSection.style.maxHeight = '120px';
+                targetSection.style.paddingTop = '0.5rem';
+                targetSection.style.paddingBottom = '0.5rem';
+                targetSection.style.opacity = '1';
+                toolBtnContainer.classList.remove('hidden-mode');
+                rubyBtnContainer.classList.remove('hidden-mode');
+                focusText.textContent = '集中モード';
+                focusIcon.className = 'fa-solid fa-expand';
+                showNotice('通常モードに戻りました');
             }
-        });
-
-        // Focus mode button action
-        document.getElementById('focusModeBtn').addEventListener('click', () => {
-            showNotice('集中モードは次のステップで実装予定です');
         });
 
         document.getElementById('rubyBtn').addEventListener('click', (e) => {
@@ -393,15 +387,13 @@
 
         function updateCharacterCount() {
             const text = mainEditor.value;
-            // 1 character = 1 count (Zenaku / Hankaku both 1)
             const count = text.length;
             episodeCurrentText.textContent = count.toLocaleString();
 
-            const epGoal = 1500; // Fixed mock episode goal or from work config
+            const epGoal = 1500;
             const epPercent = Math.min(100, Math.round((count / epGoal) * 100));
             episodeBar.style.width = epPercent + '%';
 
-            // Overall simulation (using episode count + mock offset)
             const overallTotal = 11600 + count;
             overallCurrentText.textContent = overallTotal.toLocaleString();
             
@@ -420,15 +412,19 @@
         const defaultWorks = [
             {
                 id: 'work_1',
-                title: '深夜特急のレプリカント - 第3章',
+                title: '深夜特急のレプリカント',
+                subtitle: '第1部・覚醒編',
+                chapterNumber: '第3章',
                 chapterTitle: '雨音のプロムナード',
                 synopsis: '主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。',
                 goal: 50000
             },
             {
                 id: 'work_2',
-                title: '星屑のグリモワール - 序幕',
-                chapterTitle: '図書館の地下書庫',
+                title: '星屑のグリモワール',
+                subtitle: '外伝・始まりの図書館',
+                chapterNumber: '序幕',
+                chapterTitle: '地下書庫の出会い',
                 synopsis: '禁断の魔導書を発見した見習い魔術師の運命が動き出す。',
                 goal: 30000
             }
@@ -453,6 +449,8 @@
             const work = works.find(w => w.id === currentId) || works[0];
 
             document.getElementById('currentWorkTitleDisplay').textContent = work.title;
+            document.getElementById('currentWorkSubTitleDisplay').textContent = work.subtitle || '';
+            document.getElementById('chapterNumberInput').value = work.chapterNumber || '第1章';
             document.getElementById('chapterTitleInput').value = work.chapterTitle || '';
             document.getElementById('synopsisInput').value = work.synopsis || '';
             updateCharacterCount();
@@ -470,6 +468,7 @@
         const workFormView = document.getElementById('workFormView');
         const workModalTabs = document.getElementById('workModalTabs');
         const workModalTitle = document.getElementById('workModalTitle');
+        const deleteWorkBtn = document.getElementById('deleteWorkBtn');
 
         openWorkSelectorBtn.addEventListener('click', () => {
             showListView();
@@ -509,9 +508,10 @@
                 workModalTitle.innerHTML = `<i class="fa-solid fa-pen text-slate-400"></i><span>作品の編集</span>`;
                 document.getElementById('editingWorkId').value = workToEdit.id;
                 document.getElementById('formTitleInput').value = workToEdit.title;
-                document.getElementById('formSubTitleInput').value = workToEdit.chapterTitle || '';
+                document.getElementById('formSubTitleInput').value = workToEdit.subtitle || '';
                 document.getElementById('formSynopsisInput').value = workToEdit.synopsis || '';
                 document.getElementById('formGoalInput').value = workToEdit.goal || 50000;
+                deleteWorkBtn.classList.remove('hidden'); // Show delete button when editing
             } else {
                 workModalTitle.innerHTML = `<i class="fa-solid fa-plus text-slate-400"></i><span>新規作品登録</span>`;
                 document.getElementById('editingWorkId').value = '';
@@ -519,6 +519,7 @@
                 document.getElementById('formSubTitleInput').value = '';
                 document.getElementById('formSynopsisInput').value = '';
                 document.getElementById('formGoalInput').value = '50000';
+                deleteWorkBtn.classList.add('hidden'); // Hide delete button for new work
             }
         }
 
@@ -536,9 +537,9 @@
                 const item = document.createElement('div');
                 item.className = `p-3 rounded-lg border flex items-center justify-between transition ${isSelected ? 'bg-dark-700/80 border-slate-500 shadow-sm' : 'bg-dark-900/50 border-dark-700/60 hover:border-slate-600'}`;
                 item.innerHTML = `
-                    <div class="flex flex-col space-y-1 overflow-hidden pr-2 flex-1">
+                    <div class="flex flex-col space-y-0.5 overflow-hidden pr-2 flex-1">
                         <span class="font-semibold text-slate-200 truncate">${work.title}</span>
-                        <span class="text-[10px] text-slate-400 truncate">あらすじ: ${work.synopsis || 'なし'}</span>
+                        <span class="text-[10px] text-slate-400 truncate">${work.subtitle || 'サブタイトルなし'}</span>
                     </div>
                     <div class="flex items-center space-x-1.5 shrink-0">
                         <button class="px-2.5 py-1 rounded bg-dark-600 hover:bg-slate-500 text-slate-100 font-medium transition edit-work-btn" data-id="${work.id}" title="編集">
@@ -552,7 +553,6 @@
                 workListView.appendChild(item);
             });
 
-            // Select work handler
             document.querySelectorAll('.select-work-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = e.currentTarget.getAttribute('data-id');
@@ -564,7 +564,6 @@
                 });
             });
 
-            // Edit work handler
             document.querySelectorAll('.edit-work-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     const id = e.currentTarget.getAttribute('data-id');
@@ -577,11 +576,11 @@
             });
         }
 
-        // Save work form (New or Edit with Delete option)
+        // Save work form (New or Edit)
         document.getElementById('saveWorkFormBtn').addEventListener('click', () => {
             const editingId = document.getElementById('editingWorkId').value;
             const title = document.getElementById('formTitleInput').value.trim();
-            const subTitle = document.getElementById('formSubTitleInput').value.trim();
+            const subtitle = document.getElementById('formSubTitleInput').value.trim();
             const synopsis = document.getElementById('formSynopsisInput').value.trim();
             const goal = parseInt(document.getElementById('formGoalInput').value) || 50000;
 
@@ -593,10 +592,9 @@
             let works = getStoredWorks();
 
             if (editingId) {
-                // Update existing
                 works = works.map(w => {
                     if (w.id === editingId) {
-                        return { ...w, title, chapterTitle: subTitle, synopsis, goal };
+                        return { ...w, title, subtitle, synopsis, goal };
                     }
                     return w;
                 });
@@ -605,12 +603,13 @@
                 workSelectorModal.classList.add('hidden');
                 showNotice('作品情報を更新しました');
             } else {
-                // Create new
                 const newId = 'work_' + Date.now();
                 const newWork = {
                     id: newId,
                     title: title,
-                    chapterTitle: subTitle,
+                    subtitle: subtitle,
+                    chapterNumber: '第1章',
+                    chapterTitle: '第一話',
                     synopsis: synopsis,
                     goal: goal
                 };
@@ -623,11 +622,31 @@
             }
         });
 
-        // Add Delete option inside Edit form dynamically or via confirmation
-        // Let's attach a delete button injection when editing
-        // (We can check if editingWorkId is present, or add a delete button next to save)
+        // Delete work handler
+        deleteWorkBtn.addEventListener('click', () => {
+            const editingId = document.getElementById('editingWorkId').value;
+            if (!editingId) return;
 
-        // --- Settings & Word Count Display Logic ---
+            let works = getStoredWorks();
+            if (works.length <= 1) {
+                showNotice('最後の作品は削除できません');
+                return;
+            }
+
+            works = works.filter(w => w.id !== editingId);
+            localStorage.setItem('novelist_works_list', JSON.stringify(works));
+
+            // If deleted current active work, switch to first available
+            if (editingId === getCurrentWorkId()) {
+                localStorage.setItem('novelist_current_work_id', works[0].id);
+            }
+
+            loadCurrentWorkData();
+            workSelectorModal.classList.add('hidden');
+            showNotice('作品を削除しました');
+        });
+
+        // --- Settings & Button Lock Logic ---
         const settingsModal = document.getElementById('settingsModal');
         const closeSettingsBtn = document.getElementById('closeSettingsBtn');
         const saveSettingsBtn = document.getElementById('saveSettingsBtn');
@@ -641,8 +660,6 @@
         const goalOverall = document.getElementById('goalOverall');
         const goalChapter = document.getElementById('goalChapter');
         const goalEpisode = document.getElementById('goalEpisode');
-        const toolBtnContainer = document.getElementById('toolBtnContainer');
-        const rubyBtnContainer = document.getElementById('rubyBtnContainer');
 
         function loadSettings() {
             const overallVisible = localStorage.getItem('goal_overall_visible') !== 'false';
@@ -659,7 +676,6 @@
 
             applyGoalVisibility(overallVisible, chapterVisible, episodeVisible);
 
-            // Restore saved positions if any
             const toolPos = JSON.parse(localStorage.getItem('tool_btn_pos') || 'null');
             if (toolPos) {
                 toolBtnContainer.style.left = toolPos.left;
@@ -743,14 +759,14 @@
             showNotice('設定を保存しました');
         });
 
-        // Draggable Functionality preserving last position
+        // Draggable Functionality
         function makeDraggable(elm, isLockedCheck, storageKey) {
             let startX = 0, startY = 0, initialX = 0, initialY = 0;
             let isDragging = false;
             let hasMoved = false;
 
             function dragStart(e) {
-                if (isLockedCheck()) return;
+                if (isLockedCheck() || isFocusMode) return;
                 isDragging = true;
                 hasMoved = false;
                 const clientX = e.touches ? e.touches[0].clientX : e.clientX;
@@ -813,7 +829,6 @@
                 document.removeEventListener('touchend', dragEnd);
 
                 if (hasMoved) {
-                    // Save current position to localStorage
                     const currentRect = elm.getBoundingClientRect();
                     localStorage.setItem(storageKey, JSON.stringify({
                         left: currentRect.left + 'px',
