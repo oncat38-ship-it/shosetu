@@ -1,681 +1,504 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Novelist Support App V1.2</title>
+    <title>Chic Novelist Studio - UI Mockup V1.2</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                            600: '#475569',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --bg-color: #121214;
-            --surface-color: #1a1a1e;
-            --surface-hover: #26262b;
-            --border-color: #2e2e38;
-            --text-main: #e1e1e6;
-            --text-sub: #a8a8b3;
-            --accent-color: #6c63ff;
-            --accent-hover: #5a52d5;
-            --danger-color: #ff5555;
-            --success-color: #50fa7b;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap');
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            font-family: 'Inter', 'Noto Serif JP', serif;
+            touch-action: manipulation;
         }
-
-        /* トップバナー */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 24px;
-            background-color: var(--surface-color);
-            border-bottom: 1px solid var(--border-color);
-            flex-shrink: 0;
+        /* Custom scrollbar for chic look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
         }
-
-        .app-icon {
-            width: 28px;
-            height: 28px;
-            background-color: var(--accent-color);
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 14px;
-            color: #fff;
-        }
-
-        .app-title {
-            font-size: 16px;
-            font-weight: 600;
-            letter-spacing: 0.05em;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .icon-btn {
-            background: none;
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 13px;
-            transition: all 0.2s;
-        }
-
-        .icon-btn:hover {
-            background-color: var(--surface-hover);
-            border-color: var(--accent-color);
-        }
-
-        /* 目標文字数セクション */
-        .goals-container {
-            background-color: var(--surface-color);
-            border-bottom: 1px solid var(--border-color);
-            padding: 10px 24px;
-            flex-shrink: 0;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            overflow: hidden;
-            max-height: 300px;
-        }
-
-        .goals-container.collapsed {
-            max-height: 0;
-            padding-top: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .goals-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-
-        .goals-title-text {
-            font-size: 12px;
-            color: var(--text-sub);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .goal-controls {
-            display: flex;
-            gap: 6px;
-        }
-
-        .goal-add-btn {
-            background: none;
-            border: 1px dashed var(--border-color);
-            color: var(--text-sub);
-            font-size: 11px;
-            padding: 2px 8px;
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
             border-radius: 3px;
-            cursor: pointer;
         }
-
-        .goal-add-btn:hover {
-            color: var(--text-main);
-            border-color: var(--accent-color);
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
         }
-
-        .goals-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 12px;
-        }
-
-        .goal-item {
-            background-color: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 8px 12px;
-            position: relative;
-        }
-
-        .goal-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            margin-bottom: 4px;
-        }
-
-        .goal-label {
-            color: var(--text-sub);
-        }
-
-        .goal-values {
-            font-weight: 500;
-        }
-
-        .progress-bar-bg {
-            width: 100%;
-            height: 4px;
-            background-color: var(--border-color);
-            border-radius: 2px;
-            overflow: hidden;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            background-color: var(--accent-color);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .goal-remove-btn {
-            position: absolute;
-            top: 4px;
-            right: 6px;
-            background: none;
-            border: none;
-            color: var(--text-sub);
-            font-size: 10px;
-            cursor: pointer;
-            display: none;
-        }
-
-        .goal-item:hover .goal-remove-btn {
-            display: block;
-        }
-
-        .goal-remove-btn:hover {
-            color: var(--danger-color);
-        }
-
-        /* メイン編集エリア */
-        .main-editor-layout {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* プロットNoカラム */
-        .plot-sidebar {
-            width: 50px;
-            background-color: var(--surface-color);
-            border-right: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 16px;
-            flex-shrink: 0;
-        }
-
-        .plot-number-badge {
-            font-size: 11px;
-            color: var(--text-sub);
-            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            letter-spacing: 0.1em;
-            background-color: var(--bg-color);
-            padding: 8px 4px;
-            border-radius: 4px;
-            border: 1px solid var(--border-color);
-        }
-
-        /* 本文エリア本体 */
-        .editor-content-area {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            padding: 24px;
-            overflow-y: auto;
-            background-color: var(--bg-color);
-        }
-
-        /* 章タイトル周りコンパクト化 */
-        .chapter-meta-compact {
-            display: flex;
-            align-items: baseline;
-            gap: 12px;
-            margin-bottom: 8px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 8px;
-        }
-
-        .chapter-heading {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--accent-color);
-        }
-
-        .chapter-title-input {
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            font-size: 14px;
-            font-weight: 500;
-            outline: none;
-            flex: 1;
-        }
-
-        .chapter-synopsis-input {
-            background: transparent;
-            border: none;
-            color: var(--text-sub);
-            font-size: 12px;
-            outline: none;
-            width: 100%;
-            margin-bottom: 16px;
-            resize: none;
-            height: 20px;
-        }
-
-        /* 本文記入欄 */
-        .main-text-textarea {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--text-main);
-            font-size: 15px;
-            line-height: 1.8;
-            outline: none;
-            resize: none;
-            width: 100%;
-            min-height: 300px;
-        }
-
-        /* 追従式ボタン群 */
-        .floating-btn {
-            position: absolute;
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 10px 14px;
-            border-radius: 30px;
-            cursor: grab;
-            font-size: 13px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            z-index: 100;
+        /* Draggable buttons style */
+        .draggable-btn {
+            touch-action: none;
             user-select: none;
-            transition: border-color 0.2s;
+            cursor: grab;
         }
-
-        .floating-btn:active {
+        .draggable-btn:active {
             cursor: grabbing;
         }
-
-        .floating-btn:hover {
-            border-color: var(--accent-color);
-        }
-
-        #tool-btn {
-            bottom: 24px;
-            left: 74px; /* プロットサイドバーの幅を考慮 */
-        }
-
-        #ruby-btn {
-            bottom: 24px;
-            right: 24px;
-        }
-
-        /* 設定ポップアップモーダル */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-content {
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            width: 320px;
-            padding: 20px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-
-        .modal-title {
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .modal-close {
-            background: none;
-            border: none;
-            color: var(--text-sub);
+        .draggable-btn.locked {
             cursor: pointer;
-            font-size: 16px;
-        }
-
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 13px;
-            margin-bottom: 12px;
-        }
-
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 36px;
-            height: 20px;
-        }
-
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: var(--border-color);
-            transition: .2s;
-            border-radius: 20px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 14px;
-            width: 14px;
-            left: 3px;
-            bottom: 3px;
-            background-color: white;
-            transition: .2s;
-            border-radius: 50%;
-        }
-
-        input:checked + .slider {
-            background-color: var(--accent-color);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(16px);
-        }
-
-        /* 最下部バージョン表記 */
-        footer {
-            text-align: right;
-            padding: 4px 16px;
-            font-size: 10px;
-            color: var(--text-sub);
-            background-color: var(--surface-color);
-            border-top: 1px solid var(--border-color);
-            flex-shrink: 0;
         }
     </style>
 </head>
-<body>
+<body class="bg-dark-900 text-slate-200 min-h-screen flex flex-col antialiased selection:bg-slate-700 selection:text-white">
 
-    <!-- トップバナー -->
-    <header>
-        <div class="header-left">
-            <div class="app-icon">N</div>
-            <div class="app-title">小説執筆サポート</div>
+    <!-- Top Banner -->
+    <header class="bg-dark-800/90 backdrop-blur-md border-b border-dark-700 px-4 py-2.5 sticky top-0 z-40 flex items-center justify-between shadow-sm">
+        <div class="flex items-center space-x-3">
+            <!-- App Icon -->
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-slate-700 to-dark-900 flex items-center justify-center border border-slate-600 shadow-inner">
+                <i class="fa-solid fa-feather-pointed text-[11px] text-slate-300"></i>
+            </div>
+            <!-- Work Title & Toggle Button Container -->
+            <div class="flex items-center space-x-3">
+                <div class="flex flex-col">
+                    <span class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">GitHub Connected</span>
+                    <h1 class="text-xs md:text-sm font-semibold tracking-wide text-slate-100">深夜特急のレプリカント - 第3章</h1>
+                </div>
+                <!-- Target Toggle Button -->
+                <button id="toggleTargetBtn" title="文字目標の表示切替" class="px-2 py-1 rounded bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white transition border border-dark-600/50 text-[11px] flex items-center space-x-1">
+                    <i id="toggleIcon" class="fa-solid fa-chart-pie"></i>
+                    <span class="hidden sm:inline" id="toggleText">目標非表示</span>
+                </button>
+            </div>
         </div>
-        <div class="header-right">
-            <button class="icon-btn" id="toggle-goals-btn" title="目標文字数の表示切替">目標 📊</button>
-            <button class="icon-btn" title="集中モード">集中モード ⚡</button>
-        </div>
+
+        <!-- Focus Mode Button -->
+        <button id="focusModeBtn" title="集中モード" class="p-1.5 px-2.5 rounded-lg bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white transition border border-dark-600/50 flex items-center space-x-1.5 text-xs">
+            <i class="fa-solid fa-expand"></i>
+            <span class="hidden sm:inline">集中モード</span>
+        </button>
     </header>
 
-    <!-- 目標文字数コンテナ -->
-    <div class="goals-container" id="goals-container">
-        <div class="goals-header">
-            <span class="goals-title-text">文字数目標・進捗</span>
-            <div class="goal-controls">
-                <button class="goal-add-btn" onclick="addGoalItem()">＋ 目標を追加</button>
+    <!-- Compact Progress Dashboard (Collapsible with memory) -->
+    <section id="targetSection" class="bg-dark-800/50 border-b border-dark-700/60 px-4 py-2 text-xs transition-all duration-300 overflow-hidden">
+        <div id="targetGridContainer" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-2.5">
+            <!-- Overall Progress -->
+            <div id="goalOverall" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
+                <div class="flex justify-between mb-1">
+                    <span class="text-slate-400">全体目標</span>
+                    <span class="font-mono text-slate-200">12,450 / <span class="text-slate-400">50,000字</span></span>
+                </div>
+                <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
+                    <div class="bg-slate-400 h-1.5 rounded-full" style="width: 25%;"></div>
+                </div>
+            </div>
+            <!-- Chapter Progress -->
+            <div id="goalChapter" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
+                <div class="flex justify-between mb-1">
+                    <span class="text-slate-400">第3章目標</span>
+                    <span class="font-mono text-slate-200">3,200 / <span class="text-slate-400">5,000字</span></span>
+                </div>
+                <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
+                    <div class="bg-slate-500 h-1.5 rounded-full" style="width: 64%;"></div>
+                </div>
+            </div>
+            <!-- Episode Progress -->
+            <div id="goalEpisode" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
+                <div class="flex justify-between mb-1">
+                    <span class="text-slate-400">本話（第12話）</span>
+                    <span class="font-mono text-slate-200">850 / <span class="text-slate-400">1,500字</span></span>
+                </div>
+                <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
+                    <div class="bg-slate-300 h-1.5 rounded-full" style="width: 56%;"></div>
+                </div>
             </div>
         </div>
-        <div class="goals-grid" id="goals-grid">
-            <!-- 動的生成される目標カード -->
-        </div>
-    </div>
+    </section>
 
-    <!-- メイン編集レイアウト -->
-    <div class="main-editor-layout" id="editor-layout">
-        <!-- プロットNo表示欄 -->
-        <div class="plot-sidebar">
-            <div class="plot-number-badge">No.01</div>
-        </div>
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col space-y-3">
 
-        <!-- 本文記入エリア -->
-        <div class="editor-content-area">
-            <div class="chapter-meta-compact">
-                <span class="chapter-heading">第1章</span>
-                <input type="text" class="chapter-title-input" value="ここに章タイトルを入力">
+        <!-- Chapter & Title Header (More Compact) -->
+        <div class="bg-dark-800/60 border border-dark-700/70 rounded-xl px-3.5 py-2.5 shadow-sm flex flex-col space-y-2">
+            <div class="flex items-center space-x-3">
+                <div class="px-2.5 py-0.5 bg-dark-700/80 border border-dark-600 rounded text-[11px] font-semibold text-slate-300 shrink-0">
+                    第3章
+                </div>
+                <input type="text" value="雨音のプロムナード" class="bg-transparent border-b border-dark-600/60 focus:border-slate-400 outline-none text-sm md:text-base font-semibold text-slate-100 py-0.5 transition w-full" placeholder="章タイトルを入力...">
             </div>
-            <input type="text" class="chapter-synopsis-input" placeholder="章のあらすじを入力...">
-            <textarea class="main-text-textarea" placeholder="ここに本文を入力してください..."></textarea>
-        </div>
-
-        <!-- 追従式ツールボタン -->
-        <div class="floating-btn" id="tool-btn">
-            <span>🛠 ツール</span>
-        </div>
-
-        <!-- 追従式ルビボタン -->
-        <div class="floating-btn" id="ruby-btn">
-            <span>ruby ルビ</span>
-        </div>
-    </div>
-
-    <!-- 設定モーダル -->
-    <div class="modal-overlay" id="settings-modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <span class="modal-title">ツール設定</span>
-                <button class="modal-close" id="close-modal">×</button>
-            </div>
-            <div class="setting-item">
-                <span>ツールボタンの位置固定</span>
-                <label class="switch">
-                    <input type="checkbox" id="lock-tool-btn">
-                    <span class="slider"></span>
-                </label>
-            </div>
-            <div class="setting-item">
-                <span>ルビボタンの位置固定</span>
-                <label class="switch">
-                    <input type="checkbox" id="lock-ruby-btn">
-                    <span class="slider"></span>
-                </label>
+            <!-- Synopsis Field (Compact) -->
+            <div class="relative">
+                <span class="absolute -top-2 left-2.5 px-1 bg-dark-800 text-[9px] text-slate-400 font-medium uppercase tracking-wider border border-dark-700 rounded">あらすじ</span>
+                <textarea rows="1" class="w-full bg-dark-900/60 border border-dark-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-slate-500 transition resize-none" placeholder="章のあらすじやプロットの指針を記入...">主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。</textarea>
             </div>
         </div>
-    </div>
 
-    <!-- バージョン表記 -->
-    <footer>V1.2</footer>
-
-    <script>
-        // --- 1. 目標文字数の動的追加・削除 & 開閉・記憶機能 ---
-        const goalsContainer = document.getElementById('goals-container');
-        const toggleGoalsBtn = document.getElementById('toggle-goals-btn');
-        const goalsGrid = document.getElementById('goals-grid');
-
-        // 初期目標データ
-        let goalsData = [
-            { id: 'total', label: '作品全体', current: 12450, target: 50000 },
-            { id: 'chapter', label: '第1章', current: 3100, target: 10000 },
-            { id: 'episode', label: '第1話', current: 1520, target: 3000 }
-        ];
-
-        function renderGoals() {
-            goalsGrid.innerHTML = '';
-            goalsData.forEach(goal => {
-                const percent = Math.min(Math.round((goal.current / goal.target) * 100), 100);
-                const item = document.createElement('div');
-                item.className = 'goal-item';
-                item.innerHTML = `
-                    <div class="goal-info">
-                        <span class="goal-label">${goal.label}</span>
-                        <span class="goal-values">${goal.current.toLocaleString()} / ${goal.target.toLocaleString()}字 (${percent}%)</span>
-                    </div>
-                    <div class="progress-bar-bg">
-                        <div class="progress-bar-fill" style="width: ${percent}%;"></div>
-                    </div>
-                    <button class="goal-remove-btn" onclick="removeGoalItem('${goal.id}')">✕</button>
-                `;
-                goalsGrid.appendChild(item);
-            });
-        }
-
-        function addGoalItem() {
-            const name = prompt('追加する目標の名称（例: 第2章、短編など）を入力してください:', '新しい目標');
-            if (!name) return;
-            const targetStr = prompt('目標文字数を入力してください:', '5000');
-            const target = parseInt(targetStr, 10) || 3000;
+        <!-- Editor Section with Plot Column on the Left -->
+        <div class="flex-1 grid grid-cols-12 gap-3 items-stretch">
             
-            const newId = 'goal_' + Date.now();
-            goalsData.push({ id: newId, label: name, current: 0, target: target });
-            renderGoals();
+            <!-- Plot No. Vertical Column (Left Side) -->
+            <div class="col-span-3 md:col-span-2 bg-dark-800/40 border border-dark-700/60 rounded-xl p-2.5 flex flex-col space-y-2.5">
+                <div class="flex items-center justify-between border-b border-dark-700 pb-1.5">
+                    <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">プロットNo.</span>
+                    <button title="プロット追加" class="text-slate-400 hover:text-slate-200 text-xs"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <div class="flex flex-col space-y-2 overflow-y-auto max-h-[500px] pr-0.5">
+                    <!-- Plot Item 1 (Active) -->
+                    <div class="p-2 rounded-lg bg-dark-700/60 border border-slate-600 cursor-pointer text-xs transition shadow-sm">
+                        <div class="font-mono text-[10px] text-slate-400">#PLOT-012</div>
+                        <div class="font-medium text-slate-200 truncate mt-0.5">裏路地での密会</div>
+                    </div>
+                    <!-- Plot Item 2 -->
+                    <div class="p-2 rounded-lg bg-dark-800/80 border border-dark-700/60 hover:bg-dark-700/40 cursor-pointer text-xs transition text-slate-400">
+                        <div class="font-mono text-[10px] text-slate-500">#PLOT-013</div>
+                        <div class="truncate mt-0.5">雨のハイウェイ</div>
+                    </div>
+                    <!-- Plot Item 3 -->
+                    <div class="p-2 rounded-lg bg-dark-800/80 border border-dark-700/60 hover:bg-dark-700/40 cursor-pointer text-xs transition text-slate-400">
+                        <div class="font-mono text-[10px] text-slate-500">#PLOT-014</div>
+                        <div class="truncate mt-0.5">記憶の残響</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Body Writing Field -->
+            <div class="col-span-9 md:col-span-10 bg-dark-800/50 border border-dark-700/70 rounded-xl p-3.5 flex flex-col shadow-inner relative">
+                <div class="flex justify-between items-center mb-2 text-xs text-slate-400 border-b border-dark-700/50 pb-1.5">
+                    <div class="flex items-center space-x-1.5">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <span>本文エディタ</span>
+                    </div>
+                    <span class="font-mono text-[10px]">Markdown / 縦書き風プレビュー対応予定</span>
+                </div>
+                <textarea rows="16" class="w-full flex-1 bg-transparent border-none text-slate-200 text-sm md:text-base leading-relaxed focus:outline-none resize-none font-serif" placeholder="ここに本文を記入してください...">ネオンの光がアスファルトの雨粒に反射し、まるで細かな星屑が地面に散らばっているかのように揺れていた。
+襟を立てたコートのポケットの中で、冷え切った指先がかすかに震える。
+
+「……遅かったな」
+
+影の中から低く枯れた声が響く。振り返ると、古びた自動販売機の光に照らされた男が、煙草の火を赤く点滅させていた。</textarea>
+            </div>
+        </div>
+    </main>
+
+    <!-- Version Footer -->
+    <footer class="py-3 text-center border-t border-dark-800 text-[11px] text-slate-500 font-mono tracking-wider">
+        Chic Novelist Studio &mdash; V1.2
+    </footer>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-md w-full p-5 shadow-2xl flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-dark-700 pb-3">
+                <div class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
+                    <i class="fa-solid fa-gear text-slate-400"></i>
+                    <span>アプリケーション設定</span>
+                </div>
+                <button id="closeSettingsBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="flex flex-col space-y-4 text-xs">
+                <!-- Word count display toggles -->
+                <div class="flex flex-col space-y-2">
+                    <span class="text-slate-400 font-medium uppercase tracking-wider text-[10px]">文字数目標の表示項目</span>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="flex items-center space-x-2 bg-dark-900/50 p-2 rounded border border-dark-700/60 cursor-pointer hover:border-slate-600 transition">
+                            <input type="checkbox" id="chkOverall" class="rounded bg-dark-700 border-dark-600 text-slate-500 focus:ring-0">
+                            <span class="text-slate-200">全体目標</span>
+                        </label>
+                        <label class="flex items-center space-x-2 bg-dark-900/50 p-2 rounded border border-dark-700/60 cursor-pointer hover:border-slate-600 transition">
+                            <input type="checkbox" id="chkChapter" class="rounded bg-dark-700 border-dark-600 text-slate-500 focus:ring-0">
+                            <span class="text-slate-200">章目標</span>
+                        </label>
+                        <label class="flex items-center space-x-2 bg-dark-900/50 p-2 rounded border border-dark-700/60 cursor-pointer hover:border-slate-600 transition">
+                            <input type="checkbox" id="chkEpisode" class="rounded bg-dark-700 border-dark-600 text-slate-500 focus:ring-0">
+                            <span class="text-slate-200">話目標</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Tool button lock setting -->
+                <div class="flex flex-col space-y-2 pt-2 border-t border-dark-700">
+                    <span class="text-slate-400 font-medium uppercase tracking-wider text-[10px]">ツール操作</span>
+                    <label class="flex items-center justify-between bg-dark-900/50 p-2.5 rounded border border-dark-700/60 cursor-pointer hover:border-slate-600 transition">
+                        <div class="flex flex-col">
+                            <span class="text-slate-200 font-medium">ツールボタン位置固定</span>
+                            <span class="text-[10px] text-slate-400">左下のツールボタンのドラッグ移動を無効化します</span>
+                        </div>
+                        <input type="checkbox" id="chkLockToolBtn" class="rounded bg-dark-700 border-dark-600 text-slate-500 focus:ring-0">
+                    </label>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button id="saveSettingsBtn" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">設定を保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Draggable Floating Action Buttons -->
+    <!-- Tool Button (Default bottom-left) -->
+    <div id="toolBtnContainer" class="draggable-btn fixed z-50 select-none" style="left: 24px; bottom: 24px;">
+        <button id="toolBtn" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95" title="ツール・設定">
+            <i class="fa-solid fa-toolbox text-xs"></i>
+        </button>
+    </div>
+
+    <!-- Ruby Button (Default bottom-right) -->
+    <div id="rubyBtnContainer" class="draggable-btn fixed z-50 select-none" style="right: 24px; bottom: 24px;">
+        <button id="rubyBtn" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95" title="ルビ付与（ドラッグで移動可能）">
+            <i class="fa-solid fa-font text-xs"></i>
+        </button>
+    </div>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Notification toast helper
+        function showNotice(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-14 right-4 z-50 bg-dark-800 border border-slate-600 text-slate-200 px-3.5 py-2 rounded-lg shadow-xl text-xs flex items-center space-x-2 transition-all duration-300';
+            toast.innerHTML = `<i class="fa-solid fa-info-circle text-slate-400"></i><span>${message}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 2200);
         }
 
-        function removeGoalItem(id) {
-            goalsData = goalsData.filter(g => g.id !== id);
-            renderGoals();
+        // Target Section Collapse Toggle with Memory
+        const targetSection = document.getElementById('targetSection');
+        const toggleTargetBtn = document.getElementById('toggleTargetBtn');
+        const toggleIcon = document.getElementById('toggleIcon');
+        const toggleText = document.getElementById('toggleText');
+
+        const savedTargetState = localStorage.getItem('novelist_target_collapsed');
+        if (savedTargetState === 'true') {
+            targetSection.style.maxHeight = '0px';
+            targetSection.style.paddingTop = '0px';
+            targetSection.style.paddingBottom = '0px';
+            targetSection.style.opacity = '0';
+            toggleText.textContent = '目標表示';
+            toggleIcon.className = 'fa-solid fa-chart-pie text-slate-400';
+        } else {
+            targetSection.style.maxHeight = '120px';
+            toggleText.textContent = '目標非表示';
+            toggleIcon.className = 'fa-solid fa-chart-pie';
         }
 
-        // 開閉状態の復元・保存
-        const savedGoalsState = localStorage.getItem('novelist_goals_collapsed');
-        if (savedGoalsState === 'true') {
-            goalsContainer.classList.add('collapsed');
-        }
-
-        toggleGoalsBtn.addEventListener('click', () => {
-            goalsContainer.classList.toggle('collapsed');
-            localStorage.setItem('novelist_goals_collapsed', goalsContainer.classList.contains('collapsed'));
+        toggleTargetBtn.addEventListener('click', () => {
+            const isCollapsed = targetSection.style.maxHeight === '0px' || targetSection.style.maxHeight === '';
+            if (isCollapsed) {
+                targetSection.style.maxHeight = '120px';
+                targetSection.style.paddingTop = '0.5rem';
+                targetSection.style.paddingBottom = '0.5rem';
+                targetSection.style.opacity = '1';
+                toggleText.textContent = '目標非表示';
+                toggleIcon.className = 'fa-solid fa-chart-pie';
+                localStorage.setItem('novelist_target_collapsed', 'false');
+            } else {
+                targetSection.style.maxHeight = '0px';
+                targetSection.style.paddingTop = '0px';
+                targetSection.style.paddingBottom = '0px';
+                targetSection.style.opacity = '0';
+                toggleText.textContent = '目標表示';
+                toggleIcon.className = 'fa-solid fa-chart-pie text-slate-400';
+                localStorage.setItem('novelist_target_collapsed', 'true');
+            }
         });
 
-        renderGoals();
-
-        // --- 2. ドラッグ＆ドロップによるボタン位置調整 & 固定機能 ---
-        let isToolLocked = false;
-        let isRubyLocked = false;
-
-        function makeDraggable(elementId, getLockState) {
-            const el = document.getElementById(elementId);
-            let isDragging = false;
-            let startX, startY, initialX, initialY;
-
-            el.addEventListener('pointerdown', (e) => {
-                if (getLockState()) return; // 固定されている場合はドラッグ無効
-                isDragging = true;
-                startX = e.clientX;
-                startY = e.clientY;
-                
-                const rect = el.getBoundingClientRect();
-                const parentRect = document.getElementById('editor-layout').getBoundingClientRect();
-                
-                // 初回ドラッグ時にstyleをabsolute基準に変更
-                el.style.left = (rect.left - parentRect.left) + 'px';
-                el.style.top = (rect.top - parentRect.top) + 'px';
-                el.style.bottom = 'auto';
-                el.style.right = 'auto';
-
-                initialX = rect.left - parentRect.left;
-                initialY = rect.top - parentRect.top;
-
-                el.setPointerCapture(e.pointerId);
-            });
-
-            el.addEventListener('pointermove', (e) => {
-                if (!isDragging) return;
-                const dx = e.clientX - startX;
-                const dy = e.clientY - startY;
-
-                el.style.left = (initialX + dx) + 'px';
-                el.style.top = (initialY + dy) + 'px';
-            });
-
-            el.addEventListener('pointerup', (e) => {
-                isDragging = false;
-                try {
-                    el.releasePointerCapture(e.pointerId);
-                } catch(err) {}
-            });
-        }
-
-        makeDraggable('tool-btn', () => isToolLocked);
-        makeDraggable('ruby-btn', () => isRubyLocked);
-
-        // --- 3. 設定モーダル & ツールボタン機能拡張 ---
-        const toolBtn = document.getElementById('tool-btn');
-        const settingsModal = document.getElementById('settings-modal');
-        const closeModal = document.getElementById('close-modal');
-        const lockToolCheckbox = document.getElementById('lock-tool-btn');
-        const lockRubyCheckbox = document.getElementById('lock-ruby-btn');
-
-        // ツールボタンをクリックした時は設定を開く
-        toolBtn.addEventListener('click', (e) => {
-            // ドラッグ直後のクリック誤爆を防ぐ簡易判定
-            settingsModal.classList.add('active');
+        // Focus mode button action
+        document.getElementById('focusModeBtn').addEventListener('click', () => {
+            showNotice('集中モードは次のステップで実装予定です');
         });
 
-        closeModal.addEventListener('click', () => {
-            settingsModal.classList.remove('active');
+        document.getElementById('rubyBtn').addEventListener('click', (e) => {
+            if (!e.defaultPrevented) showNotice('ルビ付与パネル・自動振替機能');
+        });
+
+        // --- Settings & Word Count Display Logic ---
+        const settingsModal = document.getElementById('settingsModal');
+        const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+        const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+        
+        const chkOverall = document.getElementById('chkOverall');
+        const chkChapter = document.getElementById('chkChapter');
+        const chkEpisode = document.getElementById('chkEpisode');
+        const chkLockToolBtn = document.getElementById('chkLockToolBtn');
+        
+        const goalOverall = document.getElementById('goalOverall');
+        const goalChapter = document.getElementById('goalChapter');
+        const goalEpisode = document.getElementById('goalEpisode');
+        const toolBtnContainer = document.getElementById('toolBtnContainer');
+
+        // Load settings from localStorage
+        function loadSettings() {
+            const overallVisible = localStorage.getItem('goal_overall_visible') !== 'false';
+            const chapterVisible = localStorage.getItem('goal_chapter_visible') !== 'false';
+            const episodeVisible = localStorage.getItem('goal_episode_visible') !== 'false';
+            const isToolLocked = localStorage.getItem('tool_btn_locked') === 'true';
+
+            chkOverall.checked = overallVisible;
+            chkChapter.checked = chapterVisible;
+            chkEpisode.checked = episodeVisible;
+            chkLockToolBtn.checked = isToolLocked;
+
+            applyGoalVisibility(overallVisible, chapterVisible, episodeVisible);
+            applyToolLock(isToolLocked);
+        }
+
+        function applyGoalVisibility(overall, chapter, episode) {
+            goalOverall.style.display = overall ? 'flex' : 'none';
+            goalChapter.style.display = chapter ? 'flex' : 'none';
+            goalEpisode.style.display = episode ? 'flex' : 'none';
+
+            // Adjust grid columns dynamically based on active count
+            const count = [overall, chapter, episode].filter(Boolean).length;
+            const gridContainer = document.getElementById('targetGridContainer');
+            gridContainer.className = `max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-${Math.max(1, count)} gap-2.5`;
+        }
+
+        let isLockedCurrent = false;
+        function applyToolLock(locked) {
+            isLockedCurrent = locked;
+            if (locked) {
+                toolBtnContainer.classList.add('locked');
+                toolBtnContainer.style.left = '24px';
+                toolBtnContainer.style.bottom = '24px';
+                toolBtnContainer.style.top = 'auto';
+                toolBtnContainer.style.right = 'auto';
+            } else {
+                toolBtnContainer.classList.remove('locked');
+            }
+        }
+
+        loadSettings();
+
+        // Open tool button -> open settings modal
+        document.getElementById('toolBtn').addEventListener('click', (e) => {
+            if (!e.defaultPrevented) {
+                settingsModal.classList.remove('hidden');
+            }
+        });
+
+        closeSettingsBtn.addEventListener('click', () => {
+            settingsModal.classList.add('hidden');
         });
 
         settingsModal.addEventListener('click', (e) => {
             if (e.target === settingsModal) {
-                settingsModal.classList.remove('active');
+                settingsModal.classList.add('hidden');
             }
         });
 
-        lockToolCheckbox.addEventListener('change', (e) => {
-            isToolLocked = e.target.checked;
+        saveSettingsBtn.addEventListener('click', () => {
+            localStorage.setItem('goal_overall_visible', chkOverall.checked);
+            localStorage.setItem('goal_chapter_visible', chkChapter.checked);
+            localStorage.setItem('goal_episode_visible', chkEpisode.checked);
+            localStorage.setItem('tool_btn_locked', chkLockToolBtn.checked);
+
+            applyGoalVisibility(chkOverall.checked, chkChapter.checked, chkEpisode.checked);
+            applyToolLock(chkLockToolBtn.checked);
+
+            settingsModal.classList.add('hidden');
+            showNotice('設定を保存しました');
         });
 
-        lockRubyCheckbox.addEventListener('change', (e) => {
-            isRubyLocked = e.target.checked;
-        });
+        // Draggable Functionality for Floating Buttons (with lock check)
+        function makeDraggable(elm, isLockedCheck) {
+            let startX = 0, startY = 0, initialX = 0, initialY = 0;
+            let isDragging = false;
+            let hasMoved = false;
+
+            function dragStart(e) {
+                if (isLockedCheck()) return; // Skip if locked
+                isDragging = true;
+                hasMoved = false;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                
+                startX = clientX;
+                startY = clientY;
+                
+                const rect = elm.getBoundingClientRect();
+                initialX = rect.left;
+                initialY = rect.top;
+
+                elm.style.left = initialX + 'px';
+                elm.style.top = initialY + 'px';
+                elm.style.right = 'auto';
+                elm.style.bottom = 'auto';
+
+                document.addEventListener('mousemove', dragMove);
+                document.addEventListener('mouseup', dragEnd);
+                document.addEventListener('touchmove', dragMove, { passive: false });
+                document.addEventListener('touchend', dragEnd);
+            }
+
+            function dragMove(e) {
+                if (!isDragging) return;
+                const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+
+                const dx = clientX - startX;
+                const dy = clientY - startY;
+
+                if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+                    hasMoved = true;
+                }
+
+                let newX = initialX + dx;
+                let newY = initialY + dy;
+
+                const maxX = window.innerWidth - elm.offsetWidth;
+                const maxY = window.innerHeight - elm.offsetHeight;
+
+                newX = Math.max(10, Math.min(newX, maxX - 10));
+                newY = Math.max(10, Math.min(newY, maxY - 10));
+
+                elm.style.left = newX + 'px';
+                elm.style.top = newY + 'px';
+
+                if (e.touches && hasMoved) {
+                    e.preventDefault();
+                }
+            }
+
+            function dragEnd(e) {
+                if (!isDragging) return;
+                isDragging = false;
+
+                document.removeEventListener('mousemove', dragMove);
+                document.removeEventListener('mouseup', dragEnd);
+                document.removeEventListener('touchmove', dragMove);
+                document.removeEventListener('touchend', dragEnd);
+
+                if (hasMoved) {
+                    const innerBtn = elm.querySelector('button');
+                    const clickPreventer = (event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        innerBtn.removeEventListener('click', clickPreventer, true);
+                    };
+                    innerBtn.addEventListener('click', clickPreventer, true);
+                }
+            }
+
+            elm.addEventListener('mousedown', dragStart);
+            elm.addEventListener('touchstart', dragStart, { passive: false });
+        }
+
+        makeDraggable(document.getElementById('toolBtnContainer'), () => isLockedCurrent);
+        makeDraggable(document.getElementById('rubyBtnContainer'), () => false);
     </script>
 </body>
 </html>
