@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chic Novelist Studio - UI Mockup V1.9</title>
+    <title>Chic Novelist Studio - UI Mockup V2.0</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -106,7 +106,7 @@
             <div id="goalOverall" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
                 <div class="flex justify-between mb-1">
                     <span class="text-slate-400">全体目標</span>
-                    <span class="font-mono text-slate-200"><span id="overallCurrentText">0</span> / <span id="overallGoalText" class="text-slate-400">50,000字</span></span>
+                    <span class="font-mono text-slate-200"><span id="overallCurrentText">0</span> / <span id="overallGoalText" class="text-slate-400">50,000 chars</span></span>
                 </div>
                 <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
                     <div id="overallBar" class="bg-slate-400 h-1.5 rounded-full" style="width: 0%;"></div>
@@ -116,7 +116,7 @@
             <div id="goalChapter" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
                 <div class="flex justify-between mb-1">
                     <span id="chapterGoalLabel" class="text-slate-400">章目標（第3章）</span>
-                    <span class="font-mono text-slate-200"><span id="chapterCurrentText">0</span> / <span id="chapterGoalText" class="text-slate-400">5,000字</span></span>
+                    <span class="font-mono text-slate-200"><span id="chapterCurrentText">0</span> / <span id="chapterGoalText" class="text-slate-400">5,000 chars</span></span>
                 </div>
                 <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
                     <div id="chapterBar" class="bg-slate-500 h-1.5 rounded-full" style="width: 0%;"></div>
@@ -126,7 +126,7 @@
             <div id="goalEpisode" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
                 <div class="flex justify-between mb-1">
                     <span id="episodeGoalLabel" class="text-slate-400">本話（第12話）</span>
-                    <span class="font-mono text-slate-200"><span id="episodeCurrentText">0</span> / <span id="episodeGoalText" class="text-slate-400">1,500字</span></span>
+                    <span class="font-mono text-slate-200"><span id="episodeCurrentText">0</span> / <span id="episodeGoalText" class="text-slate-400">1,500 chars</span></span>
                 </div>
                 <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
                     <div id="episodeBar" class="bg-slate-300 h-1.5 rounded-full" style="width: 0%;"></div>
@@ -189,23 +189,30 @@
 
         </div>
 
-        <!-- Editor Section with Minimal Number-Only Gauge Left Column -->
+        <!-- Editor Section with Interactive Dynamic Gauge Left Column -->
         <div class="flex-1 grid grid-cols-12 gap-3 items-stretch">
             
-            <!-- Gauge & Plot Column (Numbers with "字" Unit) -->
+            <!-- Dynamic Color-Changing Gauge Column (English 'chars' Unit & Pointer Icon) -->
             <div class="col-span-1 md:col-span-1 bg-dark-800/50 border border-dark-700/60 rounded-xl p-2 flex flex-col items-center justify-between shadow-inner relative">
                 
-                <!-- 1. 現文字数 (Current Count + 字 - Top) -->
+                <!-- 1. Current Count (chars - Top) -->
                 <div class="flex flex-col items-center w-full border-b border-dark-700/50 pb-1.5">
-                    <span id="sideEpCurrentText" class="font-mono text-xs md:text-sm font-bold text-slate-100">0字</span>
+                    <span id="sideEpCurrentText" class="font-mono text-[11px] md:text-xs font-bold text-slate-100 tracking-tight">0 chars</span>
                 </div>
 
-                <!-- 2. ゲージ (Gauge Bar: Top=0, Bottom=Goal) & プロットNo.バッジ -->
+                <!-- 2. Interactive Gauge Bar with Color Gradient & Moving Feather Icon -->
                 <div class="relative w-full flex-1 my-2 flex justify-center items-stretch min-h-[220px]">
-                    <!-- Main Gauge Track (Starts from top = 0) -->
-                    <div class="w-3 bg-dark-900/90 rounded-full relative overflow-hidden border border-dark-700/70 flex flex-col justify-start">
-                        <!-- Progress fill going downward dynamically -->
-                        <div id="sideEpBar" class="w-full bg-gradient-to-b from-sky-400 via-slate-300 to-emerald-400 transition-all duration-300 rounded-full shadow-lg" style="height: 0%;"></div>
+                    <!-- Main Track -->
+                    <div class="w-3 bg-dark-900/90 rounded-full relative overflow-hidden border border-dark-700/70 flex flex-col justify-start shadow-inner">
+                        <!-- Color-changing progress bar -->
+                        <div id="sideEpBar" class="w-full bg-gradient-to-b from-sky-500 via-indigo-500 to-emerald-400 transition-all duration-300 rounded-full shadow-md" style="height: 0%;"></div>
+                    </div>
+
+                    <!-- Moving Current Position Marker (Feather Icon) -->
+                    <div id="gaugePointerIcon" class="absolute z-20 left-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none flex items-center justify-center" style="top: 0%;">
+                        <div class="w-5 h-5 rounded-full bg-dark-800 border border-slate-400 text-sky-400 shadow-lg flex items-center justify-center text-[9px] transform transition hover:scale-110">
+                            <i class="fa-solid fa-feather-pointed"></i>
+                        </div>
                     </div>
 
                     <!-- Dynamic Overlay Plot No. Markers -->
@@ -214,12 +221,12 @@
                     </div>
                 </div>
 
-                <!-- 3. 目標文字数 (Goal Count + 字 - Below Gauge) -->
+                <!-- 3. Goal Count (chars - Below Gauge) -->
                 <div class="flex flex-col items-center w-full pt-1 border-t border-dark-700/50">
-                    <span id="sideEpGoalText" class="font-mono text-[10px] md:text-[11px] font-semibold text-slate-400">1,500字</span>
+                    <span id="sideEpGoalText" class="font-mono text-[10px] md:text-[11px] font-semibold text-slate-400 tracking-tight">1.5k chars</span>
                 </div>
 
-                <!-- 4. プロット追加ボタン (Plus Button Only - Bottom) -->
+                <!-- 4. Plus Button (Bottom) -->
                 <button id="addPlotBtn" title="プロットを追加" class="mt-2 w-7 h-7 rounded-full bg-dark-700/80 hover:bg-dark-600 text-slate-300 hover:text-white transition flex items-center justify-center border border-dark-600/70 shadow active:scale-95 shrink-0">
                     <i class="fa-solid fa-plus text-[11px]"></i>
                 </button>
@@ -246,7 +253,7 @@
 
     <!-- Version Footer -->
     <footer class="py-3 text-center border-t border-dark-800 text-[11px] text-slate-500 font-mono tracking-wider">
-        Chic Novelist Studio &mdash; V1.9
+        Chic Novelist Studio &mdash; V2.0
     </footer>
 
     <!-- Modals -->
@@ -552,7 +559,7 @@
                         </div>
                         <div class="absolute left-full ml-2 hidden group-hover:flex flex-col bg-dark-800 border border-slate-600 text-slate-200 p-2 rounded-lg shadow-xl text-[10px] w-32 z-50 pointer-events-none">
                             <span class="font-bold text-slate-100 truncate">${plot.title}</span>
-                            <span class="font-mono text-slate-400 mt-0.5">${plot.targetChar.toLocaleString()}字付近</span>
+                            <span class="font-mono text-slate-400 mt-0.5">${plot.targetChar.toLocaleString()} chars</span>
                         </div>
                     </div>
                 `;
@@ -569,7 +576,7 @@
             showNotice('新規プロット追加（設定予定）');
         });
 
-        // --- Real-time Character Count Logic & Dynamic Gauge Update ---
+        // --- Real-time Character Count Logic & Dynamic Color/Marker Gauge Update ---
         const mainEditor = document.getElementById('mainEditor');
         const episodeGoalLabel = document.getElementById('episodeGoalLabel');
         const episodeCurrentText = document.getElementById('episodeCurrentText');
@@ -579,6 +586,7 @@
         const sideEpCurrentText = document.getElementById('sideEpCurrentText');
         const sideEpGoalText = document.getElementById('sideEpGoalText');
         const sideEpBar = document.getElementById('sideEpBar');
+        const gaugePointerIcon = document.getElementById('gaugePointerIcon');
         
         const overallCurrentText = document.getElementById('overallCurrentText');
         const overallGoalText = document.getElementById('overallGoalText');
@@ -597,14 +605,32 @@
             const epGoal = currentEp.goal || 1500;
             episodeGoalLabel.textContent = `本話（${currentEp.number}）`;
             episodeCurrentText.textContent = count.toLocaleString();
-            episodeGoalText.textContent = epGoal.toLocaleString() + '字';
+            episodeGoalText.textContent = `${epGoal.toLocaleString()} chars`;
             const epPercent = Math.min(100, Math.round((count / epGoal) * 100));
             episodeBar.style.width = epPercent + '%';
 
-            // Vertical Side Gauge Updates ("字" included + Dynamic Fill Downward)
-            sideEpCurrentText.textContent = `${count.toLocaleString()}字`;
-            sideEpGoalText.textContent = `${epGoal.toLocaleString()}字`;
+            // Vertical Side Gauge Updates (English "chars" Unit)
+            sideEpCurrentText.textContent = `${count.toLocaleString()} chars`;
+            sideEpGoalText.textContent = epGoal >= 1000 ? `${(epGoal / 1000).toFixed(1)}k chars` : `${epGoal} chars`;
+            
+            // Set Gauge Bar Height & Moving Pointer Icon Top Position
             sideEpBar.style.height = `${epPercent}%`;
+            gaugePointerIcon.style.top = `${epPercent}%`;
+
+            // Dynamic Color Shift according to percentage
+            if (epPercent < 30) {
+                sideEpBar.className = "w-full bg-gradient-to-b from-slate-400 to-sky-500 transition-all duration-300 rounded-full shadow-md";
+                gaugePointerIcon.firstElementChild.className = "w-5 h-5 rounded-full bg-dark-800 border border-slate-400 text-sky-400 shadow-lg flex items-center justify-center text-[9px] transform transition hover:scale-110";
+            } else if (epPercent < 70) {
+                sideEpBar.className = "w-full bg-gradient-to-b from-sky-400 via-teal-400 to-emerald-400 transition-all duration-300 rounded-full shadow-md";
+                gaugePointerIcon.firstElementChild.className = "w-5 h-5 rounded-full bg-dark-800 border border-teal-400 text-teal-300 shadow-lg flex items-center justify-center text-[9px] transform transition hover:scale-110";
+            } else if (epPercent < 100) {
+                sideEpBar.className = "w-full bg-gradient-to-b from-teal-400 via-amber-400 to-orange-400 transition-all duration-300 rounded-full shadow-md";
+                gaugePointerIcon.firstElementChild.className = "w-5 h-5 rounded-full bg-dark-800 border border-amber-400 text-amber-300 shadow-lg flex items-center justify-center text-[9px] transform transition hover:scale-110";
+            } else {
+                sideEpBar.className = "w-full bg-gradient-to-b from-emerald-400 to-green-300 transition-all duration-300 rounded-full shadow-lg shadow-emerald-500/50";
+                gaugePointerIcon.firstElementChild.className = "w-5 h-5 rounded-full bg-emerald-500 border border-white text-dark-900 shadow-lg flex items-center justify-center text-[9px] transform transition hover:scale-110 animate-bounce";
+            }
 
             renderPlotMarkersOnGauge(epGoal);
 
@@ -614,7 +640,7 @@
             const chCurrent = (currentChapter.currentCount || 3200) + count;
             chapterGoalLabel.textContent = `章目標（${currentChapter.number}）`;
             chapterCurrentText.textContent = chCurrent.toLocaleString();
-            chapterGoalText.textContent = chGoal.toLocaleString() + '字';
+            chapterGoalText.textContent = `${chGoal.toLocaleString()} chars`;
             const chPercent = Math.min(100, Math.round((chCurrent / chGoal) * 100));
             chapterBar.style.width = chPercent + '%';
 
@@ -625,7 +651,7 @@
             const works = getStoredWorks();
             const currentWork = works.find(w => w.id === getCurrentWorkId()) || works[0];
             const goalVal = currentWork.goal || 50000;
-            overallGoalText.textContent = goalVal.toLocaleString() + '字';
+            overallGoalText.textContent = `${goalVal.toLocaleString()} chars`;
             
             const overallPercent = Math.min(100, Math.round((overallTotal / goalVal) * 100));
             overallBar.style.width = overallPercent + '%';
