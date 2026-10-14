@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chic Novelist Studio - UI Mockup V3.0 (Full Functional)</title>
+    <title>Chic Novelist Studio - UI Mockup V4.0 (Plot Management Enabled)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -92,7 +92,6 @@
     <!-- Compact Progress Dashboard -->
     <section id="targetSection" class="bg-dark-800/50 border-b border-dark-700/60 px-4 py-2 text-xs transition-all duration-300 overflow-hidden">
         <div id="targetGridContainer" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-2.5">
-            <!-- Overall Progress -->
             <div id="goalOverall" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
                 <div class="flex justify-between mb-1">
                     <span class="text-slate-400">全体目標（作品）</span>
@@ -102,7 +101,6 @@
                     <div id="overallBar" class="bg-slate-400 h-1.5 rounded-full transition-all duration-300" style="width: 0%;"></div>
                 </div>
             </div>
-            <!-- Chapter Progress -->
             <div id="goalChapter" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
                 <div class="flex justify-between mb-1">
                     <span id="chapterGoalLabel" class="text-slate-400">章目標（第1章）</span>
@@ -112,7 +110,6 @@
                     <div id="chapterBar" class="bg-slate-500 h-1.5 rounded-full transition-all duration-300" style="width: 0%;"></div>
                 </div>
             </div>
-            <!-- Episode Progress -->
             <div id="goalEpisode" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
                 <div class="flex justify-between mb-1">
                     <span id="episodeGoalLabel" class="text-slate-400">本話（第1話）</span>
@@ -130,7 +127,6 @@
 
         <!-- Navigation Stack Container -->
         <div class="flex flex-col space-y-2">
-            
             <!-- 1. Chapter Banner -->
             <div class="relative flex items-center justify-center w-full py-1 min-h-[36px]">
                 <button id="selectChapterBtn" class="absolute left-0 flex items-center space-x-1 bg-dark-800/90 hover:bg-dark-700 border border-dark-700 hover:border-dark-600 rounded px-2 py-0.5 shrink-0 text-slate-300 transition text-[10px]" title="章の切替・一覧">
@@ -176,26 +172,33 @@
                     <textarea id="episodeSynopsisInput" rows="2" class="w-full bg-dark-900/80 border border-dark-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-slate-500 transition resize-y leading-relaxed min-h-[3.2rem]" placeholder="話のあらすじや構成ノート..."></textarea>
                 </div>
             </div>
-
         </div>
 
         <!-- Editor Section with Interactive Dynamic Gauge Left Column -->
         <div class="flex-1 grid grid-cols-12 gap-3 items-stretch">
             
-            <!-- Gauge Column -->
+            <!-- Gauge & Plot Column -->
             <div class="col-span-1 md:col-span-1 bg-dark-800/50 border border-dark-700/60 rounded-xl p-2 flex flex-col items-center justify-between shadow-inner relative">
                 <div class="flex flex-col items-center w-full border-b border-dark-700/50 pb-1.5">
                     <span id="sideEpCurrentText" class="font-mono text-[11px] md:text-xs font-bold text-slate-100 tracking-tight">0 chars</span>
                 </div>
 
+                <!-- Gauge Area with Dynamic Overlay Plot Markers -->
                 <div class="relative w-full flex-1 my-2 flex justify-center items-stretch min-h-[220px]">
                     <div class="w-3 bg-dark-900/90 rounded-full relative overflow-hidden border border-dark-700/70 flex flex-col justify-start shadow-inner">
                         <div id="sideEpBar" class="w-full bg-gradient-to-b from-sky-500 via-indigo-500 to-emerald-400 transition-all duration-300 rounded-full shadow-md" style="height: 0%;"></div>
                     </div>
+                    
+                    <!-- Feather Marker Pointer -->
                     <div id="gaugePointerIcon" class="absolute z-20 left-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none flex items-center justify-center" style="top: 0%;">
                         <div class="w-5 h-5 rounded-full bg-dark-800 border border-slate-400 text-sky-400 shadow-lg flex items-center justify-center text-[9px]">
                             <i class="fa-solid fa-feather-pointed"></i>
                         </div>
+                    </div>
+
+                    <!-- Injected Dynamic Plot Blocks Overlay Container -->
+                    <div id="plotMarkersContainer" class="absolute inset-0 pointer-events-none z-30">
+                        <!-- Plots injected dynamically by JS -->
                     </div>
                 </div>
 
@@ -203,6 +206,7 @@
                     <span id="sideEpGoalText" class="font-mono text-[10px] md:text-[11px] font-semibold text-slate-400 tracking-tight">1.5k chars</span>
                 </div>
 
+                <!-- Add Plot Button -->
                 <button id="addPlotBtn" title="プロットを追加" class="mt-2 w-7 h-7 rounded-full bg-dark-700/80 hover:bg-dark-600 text-slate-300 hover:text-white transition flex items-center justify-center border border-dark-600/70 shadow active:scale-95 shrink-0">
                     <i class="fa-solid fa-plus text-[11px]"></i>
                 </button>
@@ -215,7 +219,7 @@
                         <i class="fa-solid fa-pen-nib"></i>
                         <span>本文エディタ (自動保存対応)</span>
                     </div>
-                    <span id="autoSaveStatus" class="font-mono text-[10px] text-emerald-400"><i class="fa-solid fa-check"></i> 変更は自動保存されます</span>
+                    <span id="autoSaveStatus" class="font-mono text-[10px] text-emerald-400"><i class="fa-solid fa-check"></i> 自動保存完了</span>
                 </div>
                 <textarea id="mainEditor" rows="16" class="w-full flex-1 bg-transparent border-none text-slate-200 text-sm md:text-base leading-relaxed focus:outline-none resize-none font-serif" placeholder="ここに本文を記入してください..."></textarea>
             </div>
@@ -223,10 +227,70 @@
     </main>
 
     <footer class="py-3 text-center border-t border-dark-800 text-[11px] text-slate-500 font-mono tracking-wider">
-        Chic Novelist Studio &mdash; V3.0 Fully Integrated
+        Chic Novelist Studio &mdash; V4.0
     </footer>
 
     <!-- Modals -->
+    <!-- Plot Creation / Edit Modal -->
+    <div id="plotModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-md w-full p-5 shadow-2xl flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-dark-700 pb-3">
+                <div class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
+                    <i class="fa-solid fa-list-check text-slate-400"></i>
+                    <span id="plotModalTitle">プロットブロックの追加</span>
+                </div>
+                <button id="closePlotModalBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form id="plotForm" class="flex flex-col space-y-3 text-xs">
+                <input type="hidden" id="editingPlotId" value="">
+                
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="col-span-1 flex flex-col space-y-1">
+                        <label class="text-slate-400 font-medium">プロットNo. <span class="text-rose-400">*</span></label>
+                        <input type="text" id="plotCodeInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono" placeholder="例: #01">
+                    </div>
+                    <div class="col-span-2 flex flex-col space-y-1">
+                        <label class="text-slate-400 font-medium">予定文字数位置 (字) <span class="text-rose-400">*</span></label>
+                        <input type="number" id="plotTargetCharInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono" placeholder="例: 400">
+                    </div>
+                </div>
+
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">プロット内容・やるべきこと <span class="text-rose-400">*</span></label>
+                    <textarea id="plotContentInput" rows="3" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 resize-none leading-relaxed" placeholder="この位置で起こる展開や描写ノート..."></textarea>
+                </div>
+
+                <!-- Flag Switch Option -->
+                <div class="flex flex-col space-y-1 pt-1">
+                    <label class="text-slate-400 font-medium">フラグ・役割タイプ</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="flex items-center space-x-1.5 bg-dark-900/60 p-2 rounded border border-dark-700/80 cursor-pointer hover:border-slate-600">
+                            <input type="radio" name="plotFlag" value="normal" checked class="text-slate-500 focus:ring-0">
+                            <span class="text-[11px] text-slate-300">通常展開</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 bg-dark-900/60 p-2 rounded border border-amber-800/40 cursor-pointer hover:border-amber-600">
+                            <input type="radio" name="plotFlag" value="setup" class="text-amber-500 focus:ring-0">
+                            <span class="text-[11px] text-amber-300 font-medium"><i class="fa-solid fa-seedling text-[9px] mr-0.5"></i>伏線配置</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 bg-dark-900/60 p-2 rounded border border-emerald-800/40 cursor-pointer hover:border-emerald-600">
+                            <input type="radio" name="plotFlag" value="payoff" class="text-emerald-500 focus:ring-0">
+                            <span class="text-[11px] text-emerald-300 font-medium"><i class="fa-solid fa-key text-[9px] mr-0.5"></i>伏線回収</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-3 border-t border-dark-700">
+                    <button id="deletePlotBtn" type="button" class="px-3 py-1.5 rounded bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 transition border border-rose-800/50 hidden">削除</button>
+                    <div class="flex space-x-2 ml-auto">
+                        <button id="cancelPlotBtn" type="button" class="px-3 py-1.5 rounded bg-dark-700 hover:bg-dark-600 text-slate-300 transition">キャンセル</button>
+                        <button id="savePlotBtn" type="button" class="px-4 py-1.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">保存する</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Chapter Synopsis Modal -->
     <div id="chapterSynopsisModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
         <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-md w-full p-5 shadow-2xl flex flex-col space-y-3">
@@ -433,7 +497,7 @@
         </button>
     </div>
 
-    <!-- Core App Database & State Engine Script -->
+    <!-- Core App Database & Plot Feature Engine -->
     <script>
         function showNotice(message) {
             const toast = document.createElement('div');
@@ -446,8 +510,8 @@
             }, 2200);
         }
 
-        // --- Core Relational Database & Storage Schema ---
-        const DB_KEY = 'novelist_studio_db_v3';
+        // --- Core Database Schema with Plot Array Support ---
+        const DB_KEY = 'novelist_studio_db_v4';
 
         const defaultDatabase = {
             currentWorkId: 'work_1',
@@ -474,7 +538,12 @@
                                     title: '裏路地の情報屋',
                                     synopsis: 'ネオン街の裏路地で情報屋と接触する導入シーケンス。',
                                     goal: 1500,
-                                    content: 'ネオンの光がアスファルトの雨粒に反射し、まるで細かな星屑が地面に散らばっているかのように揺れていた。\n襟を立てたコートのポケットの中で、冷え切った指先がかすかに震える。\n\n「……遅かったな」\n\n影の中から低く枯れた声が響く。振り返ると、古びた自動販売機の光に照らされた男が、煙草の火を赤く点滅させていた。'
+                                    content: 'ネオンの光がアスファルトの雨粒に反射し、まるで細かな星屑が地面に散らばっているかのように揺れていた。\n襟を立てたコートのポケットの中で、冷え切った指先がかすかに震える。\n\n「……遅かったな」\n\n影の中から低く枯れた声が響く。振り返ると、古びた自動販売機の光に照らされた男が、煙草の火を赤く点滅させていた。',
+                                    plots: [
+                                        { id: 'plot_1', code: '#01', targetChar: 300, content: '雨の裏路地での待ち合わせと雰囲気描写', flag: 'normal' },
+                                        { id: 'plot_2', code: '#02', targetChar: 800, content: '情報屋からのデータチップ手渡し（意味深な言動）', flag: 'setup' },
+                                        { id: 'plot_3', code: '#03', targetChar: 1300, content: '過去の事故の記憶フラッシュバック', flag: 'payoff' }
+                                    ]
                                 },
                                 {
                                     id: 'ep_2',
@@ -482,25 +551,8 @@
                                     title: '雨のハイウェイ',
                                     synopsis: '情報屋から受け取ったチップを抱えて逃走する追跡劇。',
                                     goal: 2000,
-                                    content: 'バイクのエンジン音が水たまりを引き裂くように轟く。背後からは追跡者のヘッドライトが容赦なく迫っていた。'
-                                }
-                            ]
-                        },
-                        {
-                            id: 'ch_2',
-                            number: '第2章',
-                            title: '記憶の残響',
-                            synopsis: 'データチップの解析と過去の真実へのアプローチ。',
-                            goal: 6000,
-                            currentEpisodeId: 'ep_3',
-                            episodes: [
-                                {
-                                    id: 'ep_3',
-                                    number: '第3話',
-                                    title: 'データ解析室',
-                                    synopsis: '古い端末にチップを挿入し、断片的な記憶の映像を再生する。',
-                                    goal: 2500,
-                                    content: 'モニターの青白い光が暗い部屋を照らし出す。画面に映し出されたのは、見覚えのない自身の顔だった。'
+                                    content: 'バイクのエンジン音が水たまりを引き裂くように轟く。背後からは追跡者のヘッドライトが容赦なく迫っていた。',
+                                    plots: []
                                 }
                             ]
                         }
@@ -522,7 +574,6 @@
             localStorage.setItem(DB_KEY, JSON.stringify(db));
         }
 
-        // --- State Getters ---
         function getCurrentWork() {
             const db = getDB();
             return db.works.find(w => w.id === db.currentWorkId) || db.works[0];
@@ -569,7 +620,7 @@
             }
         });
 
-        // --- Main UI Rendering & Recalculation Engine ---
+        // --- Main UI & Plot Gauge Rendering ---
         const mainEditor = document.getElementById('mainEditor');
         const autoSaveStatus = document.getElementById('autoSaveStatus');
 
@@ -578,7 +629,6 @@
             const chapter = getCurrentChapter();
             const ep = getCurrentEpisode();
 
-            // 1. Header & Banners
             document.getElementById('currentWorkTitleDisplay').textContent = work.title;
             document.getElementById('currentWorkSubTitleDisplay').textContent = work.subtitle || '';
 
@@ -589,13 +639,11 @@
             document.getElementById('episodeTitleInput').value = ep.title;
             document.getElementById('episodeSynopsisInput').value = ep.synopsis || '';
 
-            // 2. Editor Content Load (Only if not actively focused to avoid cursor jump)
             if (document.activeElement !== mainEditor) {
                 mainEditor.value = ep.content || '';
             }
 
-            // 3. Aggregate Calculations & Stats
-            // Episode Stats
+            // Stats Calculations
             const epCount = (ep.content || '').length;
             const epGoal = ep.goal || 1500;
             document.getElementById('episodeGoalLabel').textContent = `本話（${ep.number}）`;
@@ -609,7 +657,10 @@
             document.getElementById('sideEpBar').style.height = `${epPercent}%`;
             document.getElementById('gaugePointerIcon').style.top = `${epPercent}%`;
 
-            // Chapter Stats (Sum of all episodes in this chapter)
+            // Render Dynamic Plot Blocks onto Gauge Area
+            renderPlotMarkersOnGauge(ep, epGoal);
+
+            // Chapter Stats
             let chapterTotalCount = 0;
             let chapterTotalGoal = 0;
             chapter.episodes.forEach(e => {
@@ -622,7 +673,7 @@
             const chPercent = Math.min(100, Math.round((chapterTotalCount / chapterTotalGoal) * 100));
             document.getElementById('chapterBar').style.width = `${chPercent}%`;
 
-            // Overall Work Stats (Sum of all chapters & episodes)
+            // Overall Stats
             let workTotalCount = 0;
             work.chapters.forEach(c => {
                 c.episodes.forEach(e => {
@@ -636,12 +687,170 @@
             document.getElementById('overallBar').style.width = `${workPercent}%`;
         }
 
-        // --- Real-time Auto Save & Character Count ---
+        // Render Plot Blocks Function
+        function renderPlotMarkersOnGauge(episode, goalChar) {
+            const container = document.getElementById('plotMarkersContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const plots = episode.plots || [];
+
+            plots.forEach((plot) => {
+                const percentFromTop = Math.max(5, Math.min(95, Math.round((plot.targetChar / goalChar) * 100)));
+
+                // Color themes based on flag
+                let badgeClass = "bg-dark-700/95 text-slate-200 border-slate-500 hover:bg-slate-600";
+                let flagBadgeHtml = '';
+
+                if (plot.flag === 'setup') {
+                    badgeClass = "bg-amber-950/90 text-amber-200 border-amber-500/80 hover:bg-amber-800";
+                    flagBadgeHtml = `<span class="text-[8px] text-amber-400 font-bold ml-1"><i class="fa-solid fa-seedling"></i> 伏線</span>`;
+                } else if (plot.flag === 'payoff') {
+                    badgeClass = "bg-emerald-950/90 text-emerald-200 border-emerald-500/80 hover:bg-emerald-800";
+                    flagBadgeHtml = `<span class="text-[8px] text-emerald-400 font-bold ml-1"><i class="fa-solid fa-key"></i> 回収</span>`;
+                }
+
+                const marker = document.createElement('div');
+                marker.className = 'absolute left-0 right-0 flex items-center justify-between pointer-events-auto group cursor-pointer';
+                marker.style.top = `${percentFromTop}%`;
+                marker.style.transform = 'translateY(-50%)';
+
+                marker.innerHTML = `
+                    <div class="relative w-full flex items-center justify-center">
+                        <div class="w-full h-[1px] bg-slate-500/60 z-0"></div>
+                        <div class="absolute ${badgeClass} border rounded px-1 py-0.5 text-[9px] font-mono shadow-md z-10 transition group-hover:scale-105 flex items-center">
+                            <span class="font-bold">${plot.code}</span>
+                        </div>
+                        
+                        <!-- Hover Popup Tooltip -->
+                        <div class="absolute left-full ml-2 hidden group-hover:flex flex-col bg-dark-800 border border-slate-600 text-slate-200 p-2.5 rounded-lg shadow-xl text-[10px] w-40 z-50 pointer-events-none">
+                            <div class="flex items-center justify-between font-mono text-slate-400 pb-1 border-b border-dark-700 mb-1">
+                                <span class="font-bold text-slate-200">${plot.code}</span>
+                                <span>${plot.targetChar.toLocaleString()}字付近</span>
+                            </div>
+                            <span class="leading-relaxed text-slate-300 font-serif">${plot.content}</span>
+                            ${flagBadgeHtml ? `<div class="mt-1 pt-1 border-t border-dark-700">${flagBadgeHtml}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                // Click to Edit Plot
+                marker.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openPlotModal(plot);
+                });
+
+                container.appendChild(marker);
+            });
+        }
+
+        // --- Plot Modal Logic & Event Handlers ---
+        const plotModal = document.getElementById('plotModal');
+        const addPlotBtn = document.getElementById('addPlotBtn');
+        const closePlotModalBtn = document.getElementById('closePlotModalBtn');
+        const cancelPlotBtn = document.getElementById('cancelPlotBtn');
+        const savePlotBtn = document.getElementById('savePlotBtn');
+        const deletePlotBtn = document.getElementById('deletePlotBtn');
+
+        addPlotBtn.addEventListener('click', () => openPlotModal());
+
+        closePlotModalBtn.addEventListener('click', () => plotModal.classList.add('hidden'));
+        cancelPlotBtn.addEventListener('click', () => plotModal.classList.add('hidden'));
+
+        function openPlotModal(plotToEdit = null) {
+            const ep = getCurrentEpisode();
+            const plots = ep.plots || [];
+
+            if (plotToEdit) {
+                document.getElementById('plotModalTitle').textContent = 'プロットブロックの編集';
+                document.getElementById('editingPlotId').value = plotToEdit.id;
+                document.getElementById('plotCodeInput').value = plotToEdit.code;
+                document.getElementById('plotTargetCharInput').value = plotToEdit.targetChar;
+                document.getElementById('plotContentInput').value = plotToEdit.content;
+                
+                const flagRadio = document.querySelector(`input[name="plotFlag"][value="${plotToEdit.flag || 'normal'}"]`);
+                if (flagRadio) flagRadio.checked = true;
+
+                deletePlotBtn.classList.remove('hidden');
+            } else {
+                document.getElementById('plotModalTitle').textContent = '新規プロットブロック追加';
+                document.getElementById('editingPlotId').value = '';
+                document.getElementById('plotCodeInput').value = `#0${plots.length + 1}`;
+                document.getElementById('plotTargetCharInput').value = Math.round((ep.goal || 1500) * 0.5);
+                document.getElementById('plotContentInput').value = '';
+                document.querySelector('input[name="plotFlag"][value="normal"]').checked = true;
+
+                deletePlotBtn.classList.add('hidden');
+            }
+
+            plotModal.classList.remove('hidden');
+        }
+
+        savePlotBtn.addEventListener('click', () => {
+            const editingId = document.getElementById('editingPlotId').value;
+            const code = document.getElementById('plotCodeInput').value.trim();
+            const targetChar = parseInt(document.getElementById('plotTargetCharInput').value) || 0;
+            const content = document.getElementById('plotContentInput').value.trim();
+            const flag = document.querySelector('input[name="plotFlag"]:checked').value;
+
+            if (!code || !content) {
+                showNotice('No.とプロット内容を入力してください');
+                return;
+            }
+
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+            const chapter = work.chapters.find(c => c.id === work.currentChapterId);
+            const ep = chapter.episodes.find(e => e.id === chapter.currentEpisodeId);
+
+            if (!ep.plots) ep.plots = [];
+
+            if (editingId) {
+                ep.plots = ep.plots.map(p => p.id === editingId ? { ...p, code, targetChar, content, flag } : p);
+                showNotice('プロットブロックを更新しました');
+            } else {
+                const newPlot = {
+                    id: 'plot_' + Date.now(),
+                    code,
+                    targetChar,
+                    content,
+                    flag
+                };
+                ep.plots.push(newPlot);
+                showNotice('新しいプロットブロックを追加しました');
+            }
+
+            // Sort plots by target char position
+            ep.plots.sort((a, b) => a.targetChar - b.targetChar);
+
+            saveDB(db);
+            renderUI();
+            plotModal.classList.add('hidden');
+        });
+
+        deletePlotBtn.addEventListener('click', () => {
+            const editingId = document.getElementById('editingPlotId').value;
+            if (!editingId) return;
+
+            if (!confirm('このプロットブロックを削除しますか？')) return;
+
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+            const chapter = work.chapters.find(c => c.id === work.currentChapterId);
+            const ep = chapter.episodes.find(e => e.id === chapter.currentEpisodeId);
+
+            ep.plots = (ep.plots || []).filter(p => p.id !== editingId);
+
+            saveDB(db);
+            renderUI();
+            plotModal.classList.add('hidden');
+            showNotice('プロットブロックを削除しました');
+        });
+
+        // --- Auto Save & Instant Inputs Binding ---
         let saveTimeout;
         mainEditor.addEventListener('input', () => {
             const text = mainEditor.value;
-            
-            // Update DB state for current episode content
             const db = getDB();
             const work = db.works.find(w => w.id === db.currentWorkId);
             const chapter = work.chapters.find(c => c.id === work.currentChapterId);
@@ -651,7 +860,6 @@
             saveDB(db);
             renderUI();
 
-            // Auto-save visual indicator feedback
             autoSaveStatus.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> 保存中...`;
             clearTimeout(saveTimeout);
             saveTimeout = setTimeout(() => {
@@ -659,7 +867,6 @@
             }, 600);
         });
 
-        // Instant property edits binding
         document.getElementById('episodeTitleInput').addEventListener('change', (e) => {
             const db = getDB();
             const work = db.works.find(w => w.id === db.currentWorkId);
@@ -688,7 +895,7 @@
             showNotice('章タイトルを更新しました');
         });
 
-        // --- Episode Selector Modal & CRUD Logic ---
+        // --- Episode / Chapter / Work Selector Handlers ---
         const episodeModal = document.getElementById('episodeModal');
         const selectEpisodeBtn = document.getElementById('selectEpisodeBtn');
         const editEpisodeBtn = document.getElementById('editEpisodeBtn');
@@ -764,6 +971,8 @@
             chapter.episodes.forEach(ep => {
                 const isSelected = ep.id === chapter.currentEpisodeId;
                 const charCount = (ep.content || '').length;
+                const plotCount = (ep.plots || []).length;
+
                 const item = document.createElement('div');
                 item.className = `p-3 rounded-lg border flex items-center justify-between transition ${isSelected ? 'bg-dark-700/80 border-slate-500 shadow-sm' : 'bg-dark-900/50 border-dark-700/60 hover:border-slate-600'}`;
                 item.innerHTML = `
@@ -771,7 +980,7 @@
                         <div class="flex items-center space-x-2">
                             <span class="font-mono text-[11px] px-1.5 py-0.5 rounded bg-dark-800 text-slate-300 border border-dark-600">${ep.number}</span>
                             <span class="font-semibold text-slate-200 truncate">${ep.title}</span>
-                            <span class="font-mono text-[10px] text-slate-400 ml-auto">${charCount} chars</span>
+                            <span class="font-mono text-[10px] text-slate-400 ml-auto">${charCount} chars (${plotCount} plots)</span>
                         </div>
                         <span class="text-[10px] text-slate-400 truncate mt-1">${ep.synopsis || 'あらすじなし'}</span>
                     </div>
@@ -835,7 +1044,7 @@
                 showNotice('話を更新しました');
             } else {
                 const newId = 'ep_' + Date.now();
-                chapter.episodes.push({ id: newId, number, title, synopsis, goal, content: '' });
+                chapter.episodes.push({ id: newId, number, title, synopsis, goal, content: '', plots: [] });
                 chapter.currentEpisodeId = newId;
                 saveDB(db);
                 renderUI();
@@ -857,7 +1066,7 @@
                 return;
             }
 
-            if (!confirm('この話を削除しますか？ 本文データも削除されます。')) return;
+            if (!confirm('この話を削除しますか？')) return;
 
             chapter.episodes = chapter.episodes.filter(e => e.id !== editingId);
             if (chapter.currentEpisodeId === editingId) {
@@ -869,7 +1078,7 @@
             showNotice('話を削除しました');
         });
 
-        // --- Chapter Management Modal & CRUD ---
+        // --- Chapter Management ---
         const chapterModal = document.getElementById('chapterModal');
         const selectChapterBtn = document.getElementById('selectChapterBtn');
         const editChapterBtn = document.getElementById('editChapterBtn');
@@ -1024,7 +1233,7 @@
                     synopsis,
                     goal,
                     currentEpisodeId: newEpId,
-                    episodes: [{ id: newEpId, number: '第1話', title: '第1話', synopsis: '', goal: 1500, content: '' }]
+                    episodes: [{ id: newEpId, number: '第1話', title: '第1話', synopsis: '', goal: 1500, content: '', plots: [] }]
                 });
                 work.currentChapterId = newChId;
                 saveDB(db);
@@ -1046,7 +1255,7 @@
                 return;
             }
 
-            if (!confirm('この章を削除しますか？ 属する話と本文もすべて削除されます。')) return;
+            if (!confirm('この章を削除しますか？')) return;
 
             work.chapters = work.chapters.filter(c => c.id !== editingId);
             if (work.currentChapterId === editingId) {
@@ -1058,7 +1267,7 @@
             showNotice('章を削除しました');
         });
 
-        // --- Work Selector Modal & CRUD ---
+        // --- Work Selector Modal ---
         const workSelectorModal = document.getElementById('workSelectorModal');
         const openWorkSelectorBtn = document.getElementById('openWorkSelectorBtn');
         const closeWorkSelectorBtn = document.getElementById('closeWorkSelectorBtn');
@@ -1082,9 +1291,7 @@
 
         tabListBtn.addEventListener('click', showWorkListView);
         tabNewBtn.addEventListener('click', () => showWorkFormView());
-        tabEditCurrentBtn.addEventListener('click', () => {
-            showWorkFormView(getCurrentWork());
-        });
+        tabEditCurrentBtn.addEventListener('click', () => showWorkFormView(getCurrentWork()));
 
         function showWorkListView() {
             tabListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition';
@@ -1214,7 +1421,7 @@
                         synopsis: '',
                         goal: 5000,
                         currentEpisodeId: newEpId,
-                        episodes: [{ id: newEpId, number: '第1話', title: '第1話', synopsis: '', goal: 1500, content: '' }]
+                        episodes: [{ id: newEpId, number: '第1話', title: '第1話', synopsis: '', goal: 1500, content: '', plots: [] }]
                     }]
                 });
                 db.currentWorkId = newWorkId;
@@ -1247,7 +1454,7 @@
             showNotice('作品を削除しました');
         });
 
-        // --- Chapter Synopsis Modal Handlers ---
+        // --- Chapter Synopsis Modal ---
         const chapterSynopsisModal = document.getElementById('chapterSynopsisModal');
         const openChapterSynopsisModalBtn = document.getElementById('openChapterSynopsisModalBtn');
         const closeChapterSynopsisModalBtn = document.getElementById('closeChapterSynopsisModalBtn');
@@ -1272,7 +1479,7 @@
             showNotice('章のあらすじを更新しました');
         });
 
-        // --- Settings & Lock Handlers ---
+        // --- Settings Modal ---
         const settingsModal = document.getElementById('settingsModal');
         const closeSettingsBtn = document.getElementById('closeSettingsBtn');
         const saveSettingsBtn = document.getElementById('saveSettingsBtn');
