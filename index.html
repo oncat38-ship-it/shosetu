@@ -250,7 +250,7 @@
     </div>
 
     <!-- Work Selector Modal -->
-    <div id="workSelectorModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div id="workSelectorModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-lg w-full p-5 shadow-2xl flex flex-col space-y-4">
             <div class="flex items-center justify-between border-b border-dark-700 pb-3">
                 <div id="workModalTitle" class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
@@ -297,7 +297,7 @@
     </div>
 
     <!-- Chapter Selector Modal -->
-    <div id="chapterSelectorModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div id="chapterSelectorModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-lg w-full p-5 shadow-2xl flex flex-col space-y-4">
             <div class="flex items-center justify-between border-b border-dark-700 pb-3">
                 <div id="chapterModalTitle" class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
@@ -527,10 +527,19 @@
                 showWorkListView();
                 renderWorkList();
                 workSelectorModal.classList.remove('hidden');
+                workSelectorModal.classList.add('flex');
             });
 
-            closeWorkSelectorBtn.addEventListener('click', () => workSelectorModal.classList.add('hidden'));
-            workSelectorModal.addEventListener('click', (e) => { if (e.target === workSelectorModal) workSelectorModal.classList.add('hidden'); });
+            closeWorkSelectorBtn.addEventListener('click', () => {
+                workSelectorModal.classList.add('hidden');
+                workSelectorModal.classList.remove('flex');
+            });
+            workSelectorModal.addEventListener('click', (e) => { 
+                if (e.target === workSelectorModal) {
+                    workSelectorModal.classList.add('hidden');
+                    workSelectorModal.classList.remove('flex');
+                }
+            });
 
             tabListBtn.addEventListener('click', showWorkListView);
             tabNewBtn.addEventListener('click', () => showWorkFormView());
@@ -604,6 +613,7 @@
                         localStorage.setItem('novelist_current_work_id', id);
                         loadCurrentWorkData();
                         workSelectorModal.classList.add('hidden');
+                        workSelectorModal.classList.remove('flex');
                         showNotice('作品を切り替えました');
                     });
                 });
@@ -636,6 +646,7 @@
                     localStorage.setItem('novelist_works_list', JSON.stringify(works));
                     loadCurrentWorkData();
                     workSelectorModal.classList.add('hidden');
+                    workSelectorModal.classList.remove('flex');
                     showNotice('作品情報を更新しました');
                 } else {
                     const newId = 'work_' + Date.now();
@@ -653,6 +664,7 @@
                     localStorage.setItem('novelist_current_chapter_id_' + newId, newWork.chapters[0].id);
                     loadCurrentWorkData();
                     workSelectorModal.classList.add('hidden');
+                    workSelectorModal.classList.remove('flex');
                     showNotice('新しい作品を登録しました');
                 }
             });
@@ -671,6 +683,7 @@
                 }
                 loadCurrentWorkData();
                 workSelectorModal.classList.add('hidden');
+                workSelectorModal.classList.remove('flex');
                 showNotice('作品を削除しました');
             });
 
@@ -690,10 +703,19 @@
                 showChapterListView();
                 renderChapterList();
                 chapterSelectorModal.classList.remove('hidden');
+                chapterSelectorModal.classList.add('flex');
             });
 
-            closeChapterSelectorBtn.addEventListener('click', () => chapterSelectorModal.classList.add('hidden'));
-            chapterSelectorModal.addEventListener('click', (e) => { if (e.target === chapterSelectorModal) chapterSelectorModal.classList.add('hidden'); });
+            closeChapterSelectorBtn.addEventListener('click', () => {
+                chapterSelectorModal.classList.add('hidden');
+                chapterSelectorModal.classList.remove('flex');
+            });
+            chapterSelectorModal.addEventListener('click', (e) => { 
+                if (e.target === chapterSelectorModal) {
+                    chapterSelectorModal.classList.add('hidden');
+                    chapterSelectorModal.classList.remove('flex');
+                }
+            });
 
             tabChapterListBtn.addEventListener('click', showChapterListView);
             tabChapterNewBtn.addEventListener('click', () => showChapterFormView());
@@ -765,6 +787,7 @@
                         localStorage.setItem('novelist_current_chapter_id_' + work.id, id);
                         loadCurrentWorkData();
                         chapterSelectorModal.classList.add('hidden');
+                        chapterSelectorModal.classList.remove('flex');
                         showNotice('章を切り替えました');
                     });
                 });
@@ -797,6 +820,7 @@
                     localStorage.setItem('novelist_works_list', JSON.stringify(works));
                     loadCurrentWorkData();
                     chapterSelectorModal.classList.add('hidden');
+                    chapterSelectorModal.classList.remove('flex');
                     showNotice('章情報を更新しました');
                 } else {
                     const newChapId = 'chap_' + Date.now();
@@ -807,6 +831,7 @@
                     localStorage.setItem('novelist_current_chapter_id_' + work.id, newChapId);
                     loadCurrentWorkData();
                     chapterSelectorModal.classList.add('hidden');
+                    chapterSelectorModal.classList.remove('flex');
                     showNotice('新しい章を登録しました');
                 }
             });
@@ -827,6 +852,7 @@
 
                 loadCurrentWorkData();
                 chapterSelectorModal.classList.add('hidden');
+                chapterSelectorModal.classList.remove('flex');
                 showNotice('章を削除しました');
             });
 
@@ -896,9 +922,20 @@
 
             loadSettings();
 
-            document.getElementById('toolBtn').addEventListener('click', () => { settingsModal.classList.remove('hidden'); });
-            closeSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
-            settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) settingsModal.classList.add('hidden'); });
+            document.getElementById('toolBtn').addEventListener('click', () => { 
+                settingsModal.classList.remove('hidden'); 
+                settingsModal.classList.add('flex'); 
+            });
+            closeSettingsBtn.addEventListener('click', () => {
+                settingsModal.classList.add('hidden');
+                settingsModal.classList.remove('flex');
+            });
+            settingsModal.addEventListener('click', (e) => { 
+                if (e.target === settingsModal) {
+                    settingsModal.classList.add('hidden');
+                    settingsModal.classList.remove('flex');
+                }
+            });
 
             saveSettingsBtn.addEventListener('click', () => {
                 localStorage.setItem('goal_overall_visible', chkOverall.checked);
@@ -912,10 +949,11 @@
                 applyRubyLock(chkLockRubyBtn.checked);
 
                 settingsModal.classList.add('hidden');
+                settingsModal.classList.remove('flex');
                 showNotice('設定を保存しました');
             });
 
-            // Draggable Functionality
+            // Draggable Functionality with Click Protection
             function makeDraggable(elm, isLockedCheck, storageKey) {
                 let startX = 0, startY = 0, initialX = 0, initialY = 0;
                 let isDragging = false;
@@ -968,6 +1006,14 @@
 
                 elm.addEventListener('mousedown', dragStart);
                 elm.addEventListener('touchstart', dragStart, { passive: false });
+
+                // Prevent click event firing if the element was actually dragged
+                elm.addEventListener('click', (e) => {
+                    if (hasMoved) {
+                        e.stopImmediatePropagation();
+                        e.preventDefault();
+                    }
+                }, true);
             }
 
             makeDraggable(document.getElementById('toolBtnContainer'), () => isToolLockedCurrent, 'tool_btn_pos');
