@@ -1,61 +1,1534 @@
 <!DOCTYPE html>
 <html lang="ja" class="dark">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Chic Novelist Studio - Plot & Flag v1</title>
-<script src="https://cdn.tailwindcss.com"></script>
-<script>tailwind.config={darkMode:'class',theme:{extend:{colors:{dark:{900:'#0f172a',800:'#1e293b',700:'#334155',600:'#475569'}}}}}</script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap');
-body{font-family:Inter,'Noto Serif JP',serif;touch-action:manipulation}::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-track{background:#1e293b}::-webkit-scrollbar-thumb{background:#475569;border-radius:3px}.plot-segment{position:absolute;left:0;right:0;border:1px solid;border-radius:5px;min-height:14px;display:flex;align-items:center;justify-content:center;font-size:9px;line-height:1.1;padding:2px 1px;overflow:hidden;cursor:pointer;pointer-events:auto;box-shadow:0 1px 4px #02061799}.plot-segment span{writing-mode:vertical-rl;max-height:100%;overflow:hidden;white-space:nowrap}.modal-scroll{max-height:90dvh;overflow-y:auto}.hidden{display:none!important}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chic Novelist Studio - UI Mockup V4.0 (Plot Management Enabled)</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                            600: '#475569',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap');
+        body {
+            font-family: 'Inter', 'Noto Serif JP', serif;
+            touch-action: manipulation;
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        .draggable-btn {
+            touch-action: none;
+            user-select: none;
+            cursor: grab;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .draggable-btn:active {
+            cursor: grabbing;
+        }
+        .draggable-btn.locked {
+            cursor: pointer;
+        }
+        .draggable-btn.hidden-mode {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+    </style>
 </head>
-<body class="bg-dark-900 text-slate-200 min-h-screen flex flex-col antialiased">
-<header class="bg-dark-800/90 border-b border-dark-700 px-4 py-3 sticky top-0 z-40 flex items-center justify-between shadow-sm"><div><div class="text-sm font-semibold tracking-wide" id="workTitle">深夜特急のレプリカント</div><div class="text-[10px] text-slate-400" id="workSubtitle">第1部・覚醒編</div></div><button id="focusBtn" class="p-2 rounded-lg bg-dark-700 text-xs"><i class="fa-solid fa-expand"></i> 集中</button></header>
-<section id="stats" class="bg-dark-800/50 border-b border-dark-700 px-4 py-2"><div class="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs"><div class="bg-dark-800 p-2 rounded-lg border border-dark-700"><div class="flex justify-between"><span class="text-slate-400">作品</span><span><b id="workCount">0</b> / <span id="workGoal">50,000</span>字</span></div><div class="h-1.5 bg-dark-900 rounded mt-1"><div id="workBar" class="h-1.5 bg-slate-400 rounded" style="width:0%"></div></div></div><div class="bg-dark-800 p-2 rounded-lg border border-dark-700"><div class="flex justify-between"><span class="text-slate-400" id="chapterLabel">第1章</span><span><b id="chapterCount">0</b> / <span id="chapterGoal">5,000</span>字</span></div><div class="h-1.5 bg-dark-900 rounded mt-1"><div id="chapterBar" class="h-1.5 bg-slate-500 rounded" style="width:0%"></div></div></div><div class="bg-dark-800 p-2 rounded-lg border border-dark-700"><div class="flex justify-between"><span class="text-slate-400" id="episodeLabel">第1話</span><span><b id="episodeCount">0</b> / <span id="episodeGoal">1,500</span>字</span></div><div class="h-1.5 bg-dark-900 rounded mt-1"><div id="episodeBar" class="h-1.5 bg-sky-500 rounded" style="width:0%"></div></div></div></div></section>
-<main class="flex-1 max-w-5xl w-full mx-auto p-3 sm:p-5 flex flex-col gap-3">
-<div class="flex items-center gap-2"><button id="chapterPicker" class="text-xs rounded bg-dark-800 border border-dark-700 px-3 py-2"><i class="fa-solid fa-bookmark mr-1"></i><span id="chapterNum">第1章</span> ▾</button><input id="chapterTitle" class="min-w-0 flex-1 text-center text-sm font-bold bg-transparent border-b border-dark-700 focus:outline-none focus:border-slate-400 p-2" placeholder="章タイトル"><button id="editChapter" class="rounded bg-dark-800 border border-dark-700 px-3 py-2 text-xs" title="章を編集"><i class="fa-solid fa-pen"></i></button></div>
-<div class="bg-dark-800/80 border border-dark-700 rounded-xl p-3 flex flex-col gap-2"><div class="flex items-center gap-2"><button id="episodePicker" class="text-xs rounded-lg bg-slate-700 px-3 py-2 font-bold whitespace-nowrap"><i class="fa-solid fa-book-open mr-1"></i><span id="episodeNum">第1話</span> ▾</button><input id="episodeTitle" class="min-w-0 flex-1 bg-transparent border-b border-dark-600 focus:outline-none focus:border-slate-300 p-2 font-semibold" placeholder="話タイトル"><button id="editEpisode" class="text-xs rounded bg-dark-700 px-3 py-2"><i class="fa-solid fa-pen"></i></button></div><textarea id="episodeSynopsis" rows="2" class="w-full bg-dark-900/80 border border-dark-700 rounded-lg p-2 text-xs resize-y" placeholder="話のあらすじ・構成ノート"></textarea></div>
-<div class="grid grid-cols-12 gap-3 min-h-[430px]"><aside class="col-span-2 sm:col-span-1 bg-dark-800/60 border border-dark-700 rounded-xl p-2 flex flex-col items-center"><div id="gaugeCount" class="text-[10px] font-mono text-center">0字</div><div class="relative flex-1 w-full min-h-[300px] my-3 flex justify-center"><div class="absolute inset-y-0 w-3 bg-dark-900 border border-dark-700 rounded-full overflow-hidden"><div id="gaugeFill" class="absolute bottom-0 w-full bg-gradient-to-t from-emerald-400 via-indigo-500 to-sky-500 rounded-full" style="height:0%"></div></div><div id="plotTrack" class="absolute inset-0 pointer-events-none"></div></div><div id="gaugeGoal" class="text-[10px] font-mono text-slate-400 text-center">1.5k字</div><button id="addPlot" class="mt-3 w-8 h-8 rounded-full bg-dark-700 border border-dark-600"><i class="fa-solid fa-plus"></i></button></aside>
-<section class="col-span-10 sm:col-span-11 bg-dark-800/50 border border-dark-700 rounded-xl p-3 flex flex-col"><div class="flex justify-between items-center border-b border-dark-700 pb-2 mb-2 text-xs text-slate-400"><span><i class="fa-solid fa-pen-nib mr-1"></i>本文エディタ</span><span id="saveStatus" class="text-emerald-400">自動保存</span></div><textarea id="editor" class="flex-1 min-h-[350px] bg-transparent resize-y focus:outline-none text-sm sm:text-base leading-8 font-serif" placeholder="ここに本文を記入してください..."></textarea></section></div>
-<section class="bg-dark-800/50 border border-dark-700 rounded-xl p-3"><div class="flex items-center justify-between gap-2 mb-2"><h2 class="text-sm font-semibold"><i class="fa-solid fa-flag mr-2 text-amber-300"></i>伏線フラグ一覧</h2><span class="text-[10px] text-slate-400">配置済み・回収済みを管理</span></div><div id="flagList" class="flex flex-col gap-2 text-xs"></div></section>
-</main><footer class="text-center text-[10px] text-slate-500 py-3 border-t border-dark-800">Chic Novelist Studio — Plot & Flag v1</footer>
-<!-- Plot modal -->
-<div id="plotModal" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm items-center justify-center p-3"><div class="modal-scroll bg-dark-800 border border-dark-600 rounded-xl p-4 w-full max-w-lg shadow-2xl"><div class="flex justify-between items-center border-b border-dark-700 pb-3 mb-3"><h2 id="plotModalHeading" class="font-semibold text-sm">プロット追加</h2><button data-close="plotModal" class="text-slate-400 p-1"><i class="fa-solid fa-xmark"></i></button></div><input id="plotId" type="hidden"><div class="grid grid-cols-2 gap-3 text-xs"><label class="flex flex-col gap-1"><span class="text-slate-400">プロットNo.</span><input id="plotCode" class="bg-dark-900 border border-dark-700 rounded p-2" placeholder="#01"></label><label class="flex flex-col gap-1"><span class="text-slate-400">終了文字数（この展開の終わり）</span><input id="plotEnd" type="number" min="1" class="bg-dark-900 border border-dark-700 rounded p-2" placeholder="例：400"></label></div><label class="flex flex-col gap-1 text-xs mt-3"><span class="text-slate-400">展開内容・やること</span><textarea id="plotContent" rows="3" class="bg-dark-900 border border-dark-700 rounded p-2" placeholder="このブロックで起こること"></textarea></label><div class="mt-3 text-xs"><div class="text-slate-400 mb-2">役割タイプ</div><div class="grid grid-cols-3 gap-2"><label class="flex items-center gap-1.5 bg-dark-900 p-2 rounded border border-dark-700"><input type="radio" name="plotFlagType" value="normal" checked>通常</label><label class="flex items-center gap-1.5 bg-dark-900 p-2 rounded border border-amber-800"><input type="radio" name="plotFlagType" value="setup">伏線配置</label><label class="flex items-center gap-1.5 bg-dark-900 p-2 rounded border border-emerald-800"><input type="radio" name="plotFlagType" value="payoff">伏線回収</label></div></div><div id="setupFlagFields" class="mt-3 rounded-lg border border-amber-800/70 bg-amber-950/20 p-3"><label class="flex flex-col gap-1 text-xs"><span class="text-amber-300">登録する伏線フラグ名</span><input id="setupFlagName" class="bg-dark-900 border border-amber-900 rounded p-2" placeholder="例：情報屋が隠した記憶"></label><p class="text-[10px] text-slate-400 mt-1">この名前をフラグ一覧に登録し、あとで回収側から選べます。</p></div><div id="payoffFlagFields" class="hidden mt-3 rounded-lg border border-emerald-800/70 bg-emerald-950/20 p-3"><label class="flex flex-col gap-1 text-xs"><span class="text-emerald-300">回収する未回収フラグを選択</span><select id="payoffFlagSelect" class="bg-dark-900 border border-emerald-900 rounded p-2"></select></label><p id="noOpenFlags" class="hidden text-[10px] text-amber-300 mt-2">回収できる未回収フラグがありません。先に「伏線配置」を保存してください。</p></div><div class="flex items-center justify-between border-t border-dark-700 mt-4 pt-3"><button id="deletePlot" class="hidden text-rose-300 bg-rose-950/50 border border-rose-900 rounded px-3 py-2 text-xs">削除</button><div class="ml-auto flex gap-2"><button data-close="plotModal" class="bg-dark-700 rounded px-3 py-2 text-xs">キャンセル</button><button id="savePlot" class="bg-slate-600 hover:bg-slate-500 rounded px-4 py-2 text-xs font-semibold">保存</button></div></div></div></div>
-<!-- chapter/episode simple selector -->
-<div id="simpleModal" class="hidden fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-3"><div class="bg-dark-800 border border-dark-600 rounded-xl p-4 w-full max-w-md"><div class="flex justify-between items-center mb-3"><h2 id="simpleTitle" class="font-semibold text-sm">選択</h2><button data-close="simpleModal"><i class="fa-solid fa-xmark"></i></button></div><div id="simpleBody" class="flex flex-col gap-2 max-h-[65dvh] overflow-auto"></div><div class="flex justify-end mt-4"><button data-close="simpleModal" class="bg-dark-700 rounded px-3 py-2 text-xs">閉じる</button></div></div></div>
-<script>
-'use strict';
-const DB_KEY='novelist_studio_plot_flags_v1';
-const seed={currentWorkId:'w1',works:[{id:'w1',title:'深夜特急のレプリカント',subtitle:'第1部・覚醒編',goal:50000,currentChapterId:'c1',chapters:[{id:'c1',number:'第1章',title:'雨音のプロムナード',goal:5000,synopsis:'主人公が情報屋と接触し、記憶の手がかりを得る。',currentEpisodeId:'e1',episodes:[{id:'e1',number:'第1話',title:'裏路地の情報屋',synopsis:'ネオン街の裏路地で情報屋と接触する導入シーケンス。',goal:1500,content:'ネオンの光がアスファルトの雨粒に反射し、まるで細かな星屑が地面に散らばっているかのように揺れていた。\n\n「……遅かったな」\n\n影の中から低く枯れた声が響く。',plots:[{id:'p1',code:'#01',endChar:300,content:'雨の裏路地での待ち合わせと雰囲気描写',flag:'normal'},{id:'p2',code:'#02',endChar:800,content:'情報屋からデータチップを受け取る',flag:'setup',flagId:'f1',flagName:'情報屋が隠した記憶'},{id:'p3',code:'#03',endChar:1300,content:'過去の事故の記憶フラッシュバック',flag:'payoff',flagRef:'f1'}]}]}]}]};
-function loadDB(){try{let d=JSON.parse(localStorage.getItem(DB_KEY)||'null');if(!d){d=seed;localStorage.setItem(DB_KEY,JSON.stringify(d));}return normalize(d)}catch(e){return structuredClone(seed)}}
-function normalize(db){db.works ||= structuredClone(seed.works);for(const w of db.works){w.chapters ||= [];for(const c of w.chapters){c.episodes ||= [];for(const ep of c.episodes){ep.plots ||= [];let previous=0;ep.plots.sort((a,b)=>(Number(a.endChar??a.targetChar)||0)-(Number(b.endChar??b.targetChar)||0));for(const p of ep.plots){if(p.endChar==null)p.endChar=Number(p.targetChar)||0;delete p.targetChar;if(p.flag==='setup'&&!p.flagId){p.flagId='f_'+p.id;p.flagName=p.flagName||p.content||'未命名の伏線'}if(p.flag==='payoff'&&!p.flagRef&&p.flagId)p.flagRef=p.flagId;}}}}return db}
-function dbSave(){localStorage.setItem(DB_KEY,JSON.stringify(db))}let db=loadDB();
-function work(){return db.works.find(x=>x.id===db.currentWorkId)||db.works[0]}function chapter(){let w=work();return w.chapters.find(x=>x.id===w.currentChapterId)||w.chapters[0]}function episode(){let c=chapter();return c.episodes.find(x=>x.id===c.currentEpisodeId)||c.episodes[0]}function uid(prefix){return prefix+'_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,7)}function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function notice(s){const n=document.createElement('div');n.className='fixed top-16 right-3 z-[100] bg-dark-700 border border-dark-600 rounded-lg px-3 py-2 text-xs shadow-xl';n.textContent=s;document.body.append(n);setTimeout(()=>n.remove(),2000)}function pct(n,goal){return Math.max(0,Math.min(100,goal>0?n/goal*100:0))}
-function allPlots(){return work().chapters.flatMap(c=>c.episodes.flatMap(e=>e.plots||[]))}function allFlags(){const ps=allPlots();const setups=ps.filter(p=>p.flag==='setup'&&p.flagId).map(p=>({id:p.flagId,name:p.flagName||p.content,source:p}));const recovered=new Set(ps.filter(p=>p.flag==='payoff'&&p.flagRef).map(p=>p.flagRef));return setups.map(f=>({...f,recovered:recovered.has(f.id)}))}
-function render(){const w=work(),c=chapter(),e=episode();if(!w||!c||!e)return;document.getElementById('workTitle').textContent=w.title;document.getElementById('workSubtitle').textContent=w.subtitle||'';document.getElementById('chapterNum').textContent=c.number;document.getElementById('chapterTitle').value=c.title;document.getElementById('episodeNum').textContent=e.number;document.getElementById('episodeTitle').value=e.title;document.getElementById('episodeSynopsis').value=e.synopsis||'';if(document.activeElement!==document.getElementById('editor'))document.getElementById('editor').value=e.content||'';
-let ec=(e.content||'').length,eg=Number(e.goal)||1500,cc=c.episodes.reduce((a,x)=>a+(x.content||'').length,0),cg=Number(c.goal)||5000,wc=w.chapters.reduce((a,x)=>a+x.episodes.reduce((b,y)=>b+(y.content||'').length,0),0),wg=Number(w.goal)||50000;
-[['episodeCount',ec],['episodeGoal',eg],['chapterCount',cc],['chapterGoal',cg],['workCount',wc],['workGoal',wg]].forEach(([id,v])=>document.getElementById(id).textContent=Number(v).toLocaleString());document.getElementById('episodeLabel').textContent=e.number;document.getElementById('chapterLabel').textContent=c.number;document.getElementById('episodeBar').style.width=pct(ec,eg)+'%';document.getElementById('chapterBar').style.width=pct(cc,cg)+'%';document.getElementById('workBar').style.width=pct(wc,wg)+'%';document.getElementById('gaugeCount').textContent=ec.toLocaleString()+'字';document.getElementById('gaugeGoal').textContent=eg>=1000?(eg/1000).toFixed(1)+'k字':eg+'字';document.getElementById('gaugeFill').style.height=pct(ec,eg)+'%';renderPlots(e,eg);renderFlags();}
-function renderPlots(e,goal){const track=document.getElementById('plotTrack');track.innerHTML='';let start=0;const ps=[...(e.plots||[])].sort((a,b)=>a.endChar-b.endChar);for(const p of ps){const end=Math.max(start+1,Number(p.endChar)||start+1);const top=Math.min(100,start/goal*100),height=Math.max(3,(end-start)/goal*100);const node=document.createElement('button');node.type='button';node.className='plot-segment '+(p.flag==='setup'?'bg-amber-950/90 border-amber-400 text-amber-200':p.flag==='payoff'?'bg-emerald-950/90 border-emerald-400 text-emerald-200':'bg-slate-700/95 border-slate-400 text-slate-100');node.style.top=top+'%';node.style.height=Math.max(14,Math.min(100-top,height))+'%';node.style.minHeight='14px';node.title=`${p.code}：${start.toLocaleString()}〜${end.toLocaleString()}字\n${p.content}${p.flag==='setup'?'\n伏線：'+(p.flagName||''):p.flag==='payoff'?'\n回収：'+(allFlags().find(f=>f.id===p.flagRef)?.name||'紐付け先なし'):''}`;node.innerHTML=`<span>${esc(p.code)}${p.flag==='setup'?' ⚑':p.flag==='payoff'?' ✓':''}</span>`;node.addEventListener('click',()=>openPlot(p));track.appendChild(node);start=end;}}
-function renderFlags(){const el=document.getElementById('flagList');const flags=allFlags();if(!flags.length){el.innerHTML='<div class="text-slate-400">まだ伏線フラグはありません。「＋」からプロットを追加し、役割タイプを「伏線配置」にして登録してください。</div>';return}el.innerHTML=flags.map(f=>`<div class="flex items-center gap-2 p-2 rounded border ${f.recovered?'border-emerald-900 bg-emerald-950/20':'border-amber-900 bg-amber-950/20'}"><span class="${f.recovered?'text-emerald-300':'text-amber-300'}"><i class="fa-solid ${f.recovered?'fa-check-circle':'fa-flag'}"></i></span><div class="min-w-0 flex-1"><div class="font-semibold">${esc(f.name)}</div><div class="text-[10px] text-slate-400">配置元：${esc(f.source.code)}・終了 ${Number(f.source.endChar).toLocaleString()}字</div></div><span class="text-[10px] rounded px-2 py-1 ${f.recovered?'bg-emerald-900/60 text-emerald-200':'bg-amber-900/60 text-amber-200'}">${f.recovered?'回収済み':'未回収'}</span></div>`).join('')}
-const plotModal=document.getElementById('plotModal');function modalOpen(el){el.classList.remove('hidden');el.classList.add('flex')}function modalClose(el){el.classList.add('hidden');el.classList.remove('flex')}
-function currentFlagsForSelect(excludePlotId){const flags=allFlags().filter(f=>!f.recovered&&f.source.id!==excludePlotId);const sel=document.getElementById('payoffFlagSelect');sel.innerHTML='';if(!flags.length){sel.innerHTML='<option value="">未回収フラグなし</option>';document.getElementById('noOpenFlags').classList.remove('hidden')}else{document.getElementById('noOpenFlags').classList.add('hidden');sel.innerHTML='<option value="">回収する伏線を選択…</option>'+flags.map(f=>`<option value="${esc(f.id)}">${esc(f.name)}（${esc(f.source.code)}・${Number(f.source.endChar).toLocaleString()}字）</option>`).join('')}}
-function updateFlagFields(){const type=document.querySelector('input[name="plotFlagType"]:checked').value;document.getElementById('setupFlagFields').classList.toggle('hidden',type!=='setup');document.getElementById('payoffFlagFields').classList.toggle('hidden',type!=='payoff');if(type==='payoff')currentFlagsForSelect(document.getElementById('plotId').value)}document.querySelectorAll('input[name="plotFlagType"]').forEach(r=>r.addEventListener('change',updateFlagFields));
-function openPlot(p=null){const e=episode(),ps=e.plots||[];document.getElementById('plotId').value=p?.id||'';document.getElementById('plotModalHeading').textContent=p?'プロット編集':'プロット追加';document.getElementById('plotCode').value=p?.code||('#'+String(ps.length+1).padStart(2,'0'));document.getElementById('plotEnd').value=p?.endChar??Math.min(Number(e.goal)||1500,(ps.length?Math.max(...ps.map(x=>Number(x.endChar)||0))+300:300));document.getElementById('plotContent').value=p?.content||'';document.getElementById('setupFlagName').value=p?.flagName||'';document.querySelector(`input[name="plotFlagType"][value="${p?.flag||'normal'}"]`).checked=true;document.getElementById('deletePlot').classList.toggle('hidden',!p);updateFlagFields();if(p?.flag==='payoff'&&p.flagRef){const sel=document.getElementById('payoffFlagSelect');if(![...sel.options].some(o=>o.value===p.flagRef)){const flag=allFlags().find(f=>f.id===p.flagRef);if(flag)sel.add(new Option(flag.name+'（現在紐付け中）',flag.id))}sel.value=p.flagRef}modalOpen(plotModal)}
-document.getElementById('addPlot').addEventListener('click',()=>openPlot());document.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>modalClose(document.getElementById(b.dataset.close))));plotModal.addEventListener('click',e=>{if(e.target===plotModal)modalClose(plotModal)});
-document.getElementById('savePlot').addEventListener('click',()=>{const id=document.getElementById('plotId').value,code=document.getElementById('plotCode').value.trim(),endChar=Number(document.getElementById('plotEnd').value),content=document.getElementById('plotContent').value.trim(),flag=document.querySelector('input[name="plotFlagType"]:checked').value;if(!code||!content||!Number.isFinite(endChar)||endChar<1){notice('No.・終了文字数・内容を正しく入力してください');return}const e=episode();e.plots||=[];const old=e.plots.find(x=>x.id===id);let item={...(old||{}),id:id||uid('p'),code,endChar,content,flag};delete item.targetChar;delete item.flagId;delete item.flagName;delete item.flagRef;if(flag==='setup'){const flagName=document.getElementById('setupFlagName').value.trim();if(!flagName){notice('登録する伏線フラグ名を入力してください');return}item.flagId=old?.flag==='setup'&&old.flagId?old.flagId:uid('f');item.flagName=flagName;if(old?.flag==='setup'&&old.flagId&&old.flagName!==flagName){/* keep same identity so existing recovery references remain valid */}}
-if(flag==='payoff'){const flagRef=document.getElementById('payoffFlagSelect').value;if(!flagRef){notice('回収する未回収フラグを選択してください');return}const selected=allFlags().find(f=>f.id===flagRef);if(!selected){notice('選択したフラグが見つかりません');return}if(selected.source.id===id){notice('同じプロット自身の伏線は回収できません');return}item.flagRef=flagRef;item.flagName=selected.name}
-if(old){e.plots=e.plots.map(x=>x.id===id?item:x)}else e.plots.push(item);e.plots.sort((a,b)=>a.endChar-b.endChar);dbSave();render();modalClose(plotModal);notice('プロットを保存しました')});
-document.getElementById('deletePlot').addEventListener('click',()=>{const id=document.getElementById('plotId').value;if(!id||!confirm('このプロットを削除しますか？'))return;const e=episode();e.plots=e.plots.filter(p=>p.id!==id);dbSave();render();modalClose(plotModal);notice('プロットを削除しました')});
-// Keep the editor autosave immediate and update gauge/progress while typing.
-let saveTimer;document.getElementById('editor').addEventListener('input',e=>{episode().content=e.target.value;dbSave();render();document.getElementById('saveStatus').textContent='保存中…';clearTimeout(saveTimer);saveTimer=setTimeout(()=>document.getElementById('saveStatus').textContent='自動保存完了',350)});
-function saveField(id,field){document.getElementById(id).addEventListener('change',e=>{episode()[field]=e.target.value;dbSave();render()})}saveField('episodeTitle','title');saveField('episodeSynopsis','synopsis');document.getElementById('chapterTitle').addEventListener('change',e=>{chapter().title=e.target.value;dbSave();render()});
-const simpleModal=document.getElementById('simpleModal');function simple(title,body){document.getElementById('simpleTitle').textContent=title;document.getElementById('simpleBody').innerHTML=body;modalOpen(simpleModal)}simpleModal.addEventListener('click',e=>{if(e.target===simpleModal)modalClose(simpleModal)});
-document.getElementById('chapterPicker').addEventListener('click',()=>{const w=work();simple('章の切替・管理',w.chapters.map(c=>`<button data-ch="${esc(c.id)}" class="text-left p-3 rounded border ${c.id===w.currentChapterId?'border-slate-400 bg-dark-700':'border-dark-700 bg-dark-900'}"><b>${esc(c.number)} ${esc(c.title)}</b><div class="text-slate-400 mt-1">${esc(c.synopsis||'あらすじなし')}</div></button>`).join('')+`<button id="newChapter" class="p-3 rounded bg-slate-700">＋ 新しい章</button>`);document.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{w.currentChapterId=b.dataset.ch;dbSave();render();modalClose(simpleModal)});document.getElementById('newChapter').onclick=()=>{const number=prompt('章番号',`第${w.chapters.length+1}章`);if(!number)return;const title=prompt('章タイトル','新しい章');if(!title)return;const eid=uid('e'),cid=uid('c');w.chapters.push({id:cid,number,title,goal:5000,synopsis:'',currentEpisodeId:eid,episodes:[{id:eid,number:'第1話',title:'第1話',synopsis:'',goal:1500,content:'',plots:[]}]});w.currentChapterId=cid;dbSave();render();modalClose(simpleModal)}});
-document.getElementById('episodePicker').addEventListener('click',()=>{const c=chapter();simple('話の切替・管理',c.episodes.map(e=>`<button data-ep="${esc(e.id)}" class="text-left p-3 rounded border ${e.id===c.currentEpisodeId?'border-slate-400 bg-dark-700':'border-dark-700 bg-dark-900'}"><b>${esc(e.number)} ${esc(e.title)}</b><div class="text-slate-400 mt-1">${(e.content||'').length.toLocaleString()}字</div></button>`).join('')+`<button id="newEpisode" class="p-3 rounded bg-slate-700">＋ 新しい話</button>`);document.querySelectorAll('[data-ep]').forEach(b=>b.onclick=()=>{c.currentEpisodeId=b.dataset.ep;dbSave();render();modalClose(simpleModal)});document.getElementById('newEpisode').onclick=()=>{const number=prompt('話数',`第${c.episodes.length+1}話`);if(!number)return;const title=prompt('話タイトル','新しい話');if(!title)return;const id=uid('e');c.episodes.push({id,number,title,synopsis:'',goal:1500,content:'',plots:[]});c.currentEpisodeId=id;dbSave();render();modalClose(simpleModal)}});
-document.getElementById('editChapter').addEventListener('click',()=>{const c=chapter();const title=prompt('章タイトル',c.title);if(title===null)return;const number=prompt('章番号',c.number);if(number===null)return;c.title=title;c.number=number;const goal=prompt('章の目標文字数',c.goal||5000);if(goal!==null&&Number(goal)>0)c.goal=Number(goal);dbSave();render()});document.getElementById('editEpisode').addEventListener('click',()=>{const e=episode();const title=prompt('話タイトル',e.title);if(title===null)return;const number=prompt('話数',e.number);if(number===null)return;e.title=title;e.number=number;const goal=prompt('話の目標文字数',e.goal||1500);if(goal!==null&&Number(goal)>0)e.goal=Number(goal);dbSave();render()});
-document.getElementById('focusBtn').addEventListener('click',()=>{const active=document.body.classList.toggle('focus');document.getElementById('stats').classList.toggle('hidden',active);document.querySelector('header').classList.toggle('hidden',active);document.getElementById('focusBtn').innerHTML=active?'<i class="fa-solid fa-compress"></i> 通常':'<i class="fa-solid fa-expand"></i> 集中'});
-render();
-</script>
-</body></html>
+<body class="bg-dark-900 text-slate-200 min-h-screen flex flex-col antialiased selection:bg-slate-700 selection:text-white">
+
+    <!-- Top Banner -->
+    <header class="bg-dark-800/90 backdrop-blur-md border-b border-dark-700 px-4 py-2.5 sticky top-0 z-40 flex items-center justify-between shadow-sm">
+        <div class="flex items-center space-x-3">
+            <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-slate-700 to-dark-900 flex items-center justify-center border border-slate-600 shadow-inner">
+                <i class="fa-solid fa-feather-pointed text-[11px] text-slate-300"></i>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button id="openWorkSelectorBtn" class="text-left group flex flex-col focus:outline-none" title="作品の切り替え・編集・新規登録">
+                    <div class="flex items-center space-x-1.5">
+                        <h1 id="currentWorkTitleDisplay" class="text-xs md:text-sm font-semibold tracking-wide text-slate-100 group-hover:text-white transition">作品名読み込み中...</h1>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 group-hover:text-slate-200 transition"></i>
+                    </div>
+                    <span id="currentWorkSubTitleDisplay" class="text-[10px] text-slate-400 font-medium tracking-wide">サブタイトル</span>
+                </button>
+            </div>
+        </div>
+
+        <button id="focusModeBtn" title="集中モード" class="p-1.5 px-2.5 rounded-lg bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white transition border border-dark-600/50 flex items-center space-x-1.5 text-xs">
+            <i id="focusIcon" class="fa-solid fa-expand"></i>
+            <span class="hidden sm:inline" id="focusText">集中モード</span>
+        </button>
+    </header>
+
+    <!-- Compact Progress Dashboard -->
+    <section id="targetSection" class="bg-dark-800/50 border-b border-dark-700/60 px-4 py-2 text-xs transition-all duration-300 overflow-hidden">
+        <div id="targetGridContainer" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-2.5">
+            <div id="goalOverall" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
+                <div class="flex justify-between mb-1">
+                    <span class="text-slate-400">全体目標（作品）</span>
+                    <span class="font-mono text-slate-200"><span id="overallCurrentText">0</span> / <span id="overallGoalText" class="text-slate-400">50,000 chars</span></span>
+                </div>
+                <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
+                    <div id="overallBar" class="bg-slate-400 h-1.5 rounded-full transition-all duration-300" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div id="goalChapter" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
+                <div class="flex justify-between mb-1">
+                    <span id="chapterGoalLabel" class="text-slate-400">章目標（第1章）</span>
+                    <span class="font-mono text-slate-200"><span id="chapterCurrentText">0</span> / <span id="chapterGoalText" class="text-slate-400">5,000 chars</span></span>
+                </div>
+                <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
+                    <div id="chapterBar" class="bg-slate-500 h-1.5 rounded-full transition-all duration-300" style="width: 0%;"></div>
+                </div>
+            </div>
+            <div id="goalEpisode" class="bg-dark-800/80 p-2 rounded-lg border border-dark-700/50 flex flex-col justify-between">
+                <div class="flex justify-between mb-1">
+                    <span id="episodeGoalLabel" class="text-slate-400">本話（第1話）</span>
+                    <span class="font-mono text-slate-200"><span id="episodeCurrentText">0</span> / <span id="episodeGoalText" class="text-slate-400">1,500 chars</span></span>
+                </div>
+                <div class="w-full bg-dark-900 rounded-full h-1.5 overflow-hidden">
+                    <div id="episodeBar" class="bg-slate-300 h-1.5 rounded-full transition-all duration-300" style="width: 0%;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col space-y-3">
+
+        <!-- Navigation Stack Container -->
+        <div class="flex flex-col space-y-2">
+            <!-- 1. Chapter Banner -->
+            <div class="relative flex items-center justify-center w-full py-1 min-h-[36px]">
+                <button id="selectChapterBtn" class="absolute left-0 flex items-center space-x-1 bg-dark-800/90 hover:bg-dark-700 border border-dark-700 hover:border-dark-600 rounded px-2 py-0.5 shrink-0 text-slate-300 transition text-[10px]" title="章の切替・一覧">
+                    <i class="fa-solid fa-bookmark text-[8px] text-slate-400"></i>
+                    <span id="currentChapterNumDisplay" class="font-semibold">第1章</span>
+                    <i class="fa-solid fa-chevron-down text-[7px] text-slate-400"></i>
+                </button>
+                
+                <div class="flex justify-center w-full max-w-md px-16">
+                    <input type="text" id="chapterTitleInput" value="" class="bg-transparent border-b border-transparent hover:border-dark-600 focus:border-slate-400 outline-none text-sm md:text-base font-bold text-slate-200 py-0.5 transition w-full text-center truncate" placeholder="章タイトル...">
+                </div>
+
+                <div class="absolute right-0 flex items-center space-x-1 shrink-0">
+                    <button id="openChapterSynopsisModalBtn" class="p-1 px-1.5 rounded bg-dark-800/80 hover:bg-dark-700 text-slate-400 hover:text-slate-200 text-[10px] transition border border-dark-700" title="章のあらすじ">
+                        <i class="fa-solid fa-file-lines text-[10px]"></i>
+                    </button>
+                    <button id="editChapterBtn" class="p-1 px-1.5 rounded bg-dark-800/80 hover:bg-dark-700 text-slate-400 hover:text-slate-200 text-[10px] transition border border-dark-700" title="章の編集">
+                        <i class="fa-solid fa-pen text-[10px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 2. Episode Banner -->
+            <div class="w-full max-w-2xl mx-auto bg-dark-800/80 border border-dark-700 rounded-xl p-3.5 shadow-md flex flex-col space-y-2.5">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2.5 flex-1 mr-2">
+                        <button id="selectEpisodeBtn" class="flex items-center space-x-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg px-3 py-1.5 shrink-0 transition shadow text-xs md:text-sm font-bold" title="話の切替・一覧">
+                            <i class="fa-solid fa-book-open text-xs text-slate-300"></i>
+                            <span id="currentEpisodeNumDisplay">第1話</span>
+                            <i class="fa-solid fa-chevron-down text-[10px] text-slate-300"></i>
+                        </button>
+                        <input type="text" id="episodeTitleInput" value="" class="bg-transparent border-b border-dark-600 focus:border-slate-300 outline-none text-base md:text-lg font-bold text-slate-100 py-0.5 transition w-full" placeholder="話タイトルを入力...">
+                    </div>
+
+                    <button id="editEpisodeBtn" class="px-2.5 py-1.5 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-200 transition text-xs flex items-center space-x-1.5 border border-dark-600 shrink-0 font-medium" title="話の編集・削除">
+                        <i class="fa-solid fa-pen text-[11px]"></i>
+                        <span class="hidden sm:inline">話の編集</span>
+                    </button>
+                </div>
+
+                <div class="relative mt-1">
+                    <span class="absolute -top-2 left-2.5 px-1 bg-dark-800 text-[9px] text-slate-400 font-medium uppercase tracking-wider border border-dark-700 rounded">話のあらすじ</span>
+                    <textarea id="episodeSynopsisInput" rows="2" class="w-full bg-dark-900/80 border border-dark-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-slate-500 transition resize-y leading-relaxed min-h-[3.2rem]" placeholder="話のあらすじや構成ノート..."></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editor Section with Interactive Dynamic Gauge Left Column -->
+        <div class="flex-1 grid grid-cols-12 gap-3 items-stretch">
+            
+            <!-- Gauge & Plot Column -->
+            <div class="col-span-1 md:col-span-1 bg-dark-800/50 border border-dark-700/60 rounded-xl p-2 flex flex-col items-center justify-between shadow-inner relative">
+                <div class="flex flex-col items-center w-full border-b border-dark-700/50 pb-1.5">
+                    <span id="sideEpCurrentText" class="font-mono text-[11px] md:text-xs font-bold text-slate-100 tracking-tight">0 chars</span>
+                </div>
+
+                <!-- Gauge Area with Dynamic Overlay Plot Markers -->
+                <div class="relative w-full flex-1 my-2 flex justify-center items-stretch min-h-[220px]">
+                    <div class="w-3 bg-dark-900/90 rounded-full relative overflow-hidden border border-dark-700/70 flex flex-col justify-start shadow-inner">
+                        <div id="sideEpBar" class="w-full bg-gradient-to-b from-sky-500 via-indigo-500 to-emerald-400 transition-all duration-300 rounded-full shadow-md" style="height: 0%;"></div>
+                    </div>
+                    
+                    <!-- Feather Marker Pointer -->
+                    <div id="gaugePointerIcon" class="absolute z-20 left-1/2 -translate-x-1/2 transition-all duration-300 pointer-events-none flex items-center justify-center" style="top: 0%;">
+                        <div class="w-5 h-5 rounded-full bg-dark-800 border border-slate-400 text-sky-400 shadow-lg flex items-center justify-center text-[9px]">
+                            <i class="fa-solid fa-feather-pointed"></i>
+                        </div>
+                    </div>
+
+                    <!-- Injected Dynamic Plot Blocks Overlay Container -->
+                    <div id="plotMarkersContainer" class="absolute inset-0 pointer-events-none z-30">
+                        <!-- Plots injected dynamically by JS -->
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-center w-full pt-1 border-t border-dark-700/50">
+                    <span id="sideEpGoalText" class="font-mono text-[10px] md:text-[11px] font-semibold text-slate-400 tracking-tight">1.5k chars</span>
+                </div>
+
+                <!-- Add Plot Button -->
+                <button id="addPlotBtn" title="プロットを追加" class="mt-2 w-7 h-7 rounded-full bg-dark-700/80 hover:bg-dark-600 text-slate-300 hover:text-white transition flex items-center justify-center border border-dark-600/70 shadow active:scale-95 shrink-0">
+                    <i class="fa-solid fa-plus text-[11px]"></i>
+                </button>
+            </div>
+
+            <!-- Main Body Writing Field -->
+            <div class="col-span-11 md:col-span-11 bg-dark-800/50 border border-dark-700/70 rounded-xl p-3.5 flex flex-col shadow-inner relative">
+                <div class="flex justify-between items-center mb-2 text-xs text-slate-400 border-b border-dark-700/50 pb-1.5">
+                    <div class="flex items-center space-x-1.5">
+                        <i class="fa-solid fa-pen-nib"></i>
+                        <span>本文エディタ (自動保存対応)</span>
+                    </div>
+                    <span id="autoSaveStatus" class="font-mono text-[10px] text-emerald-400"><i class="fa-solid fa-check"></i> 自動保存完了</span>
+                </div>
+                <textarea id="mainEditor" rows="16" class="w-full flex-1 bg-transparent border-none text-slate-200 text-sm md:text-base leading-relaxed focus:outline-none resize-none font-serif" placeholder="ここに本文を記入してください..."></textarea>
+            </div>
+        </div>
+    </main>
+
+    <footer class="py-3 text-center border-t border-dark-800 text-[11px] text-slate-500 font-mono tracking-wider">
+        Chic Novelist Studio &mdash; V4.0
+    </footer>
+
+    <!-- Modals -->
+    <!-- Plot Creation / Edit Modal -->
+    <div id="plotModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-md w-full p-5 shadow-2xl flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-dark-700 pb-3">
+                <div class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
+                    <i class="fa-solid fa-list-check text-slate-400"></i>
+                    <span id="plotModalTitle">プロットブロックの追加</span>
+                </div>
+                <button id="closePlotModalBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <form id="plotForm" class="flex flex-col space-y-3 text-xs">
+                <input type="hidden" id="editingPlotId" value="">
+                
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="col-span-1 flex flex-col space-y-1">
+                        <label class="text-slate-400 font-medium">プロットNo. <span class="text-rose-400">*</span></label>
+                        <input type="text" id="plotCodeInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono" placeholder="例: #01">
+                    </div>
+                    <div class="col-span-2 flex flex-col space-y-1">
+                        <label class="text-slate-400 font-medium">予定文字数位置 (字) <span class="text-rose-400">*</span></label>
+                        <input type="number" id="plotTargetCharInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono" placeholder="例: 400">
+                    </div>
+                </div>
+
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">プロット内容・やるべきこと <span class="text-rose-400">*</span></label>
+                    <textarea id="plotContentInput" rows="3" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 resize-none leading-relaxed" placeholder="この位置で起こる展開や描写ノート..."></textarea>
+                </div>
+
+                <!-- Flag Switch Option -->
+                <div class="flex flex-col space-y-1 pt-1">
+                    <label class="text-slate-400 font-medium">フラグ・役割タイプ</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="flex items-center space-x-1.5 bg-dark-900/60 p-2 rounded border border-dark-700/80 cursor-pointer hover:border-slate-600">
+                            <input type="radio" name="plotFlag" value="normal" checked class="text-slate-500 focus:ring-0">
+                            <span class="text-[11px] text-slate-300">通常展開</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 bg-dark-900/60 p-2 rounded border border-amber-800/40 cursor-pointer hover:border-amber-600">
+                            <input type="radio" name="plotFlag" value="setup" class="text-amber-500 focus:ring-0">
+                            <span class="text-[11px] text-amber-300 font-medium"><i class="fa-solid fa-seedling text-[9px] mr-0.5"></i>伏線配置</span>
+                        </label>
+                        <label class="flex items-center space-x-1.5 bg-dark-900/60 p-2 rounded border border-emerald-800/40 cursor-pointer hover:border-emerald-600">
+                            <input type="radio" name="plotFlag" value="payoff" class="text-emerald-500 focus:ring-0">
+                            <span class="text-[11px] text-emerald-300 font-medium"><i class="fa-solid fa-key text-[9px] mr-0.5"></i>伏線回収</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-3 border-t border-dark-700">
+                    <button id="deletePlotBtn" type="button" class="px-3 py-1.5 rounded bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 transition border border-rose-800/50 hidden">削除</button>
+                    <div class="flex space-x-2 ml-auto">
+                        <button id="cancelPlotBtn" type="button" class="px-3 py-1.5 rounded bg-dark-700 hover:bg-dark-600 text-slate-300 transition">キャンセル</button>
+                        <button id="savePlotBtn" type="button" class="px-4 py-1.5 rounded bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">保存する</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Chapter Synopsis Modal -->
+    <div id="chapterSynopsisModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-md w-full p-5 shadow-2xl flex flex-col space-y-3">
+            <div class="flex items-center justify-between border-b border-dark-700 pb-2.5">
+                <div class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
+                    <i class="fa-solid fa-file-lines text-slate-400"></i>
+                    <span id="synopsisModalChapterTitle">章のあらすじ</span>
+                </div>
+                <button id="closeChapterSynopsisModalBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <textarea id="popupChapterSynopsisInput" rows="5" class="w-full bg-dark-900 border border-dark-700 rounded-lg p-3 text-xs text-slate-200 focus:outline-none focus:border-slate-500 transition resize-none leading-relaxed" placeholder="章のあらすじを入力..."></textarea>
+            <div class="flex justify-end pt-1">
+                <button id="savePopupSynopsisBtn" class="px-4 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 text-xs font-medium transition shadow">保存して閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Episode Selector Modal -->
+    <div id="episodeModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-lg w-full p-5 shadow-2xl flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-dark-700 pb-3">
+                <div id="episodeModalTitle" class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
+                    <i class="fa-solid fa-book-open text-slate-400"></i>
+                    <span>話（エピソード）の切替・管理</span>
+                </div>
+                <button id="closeEpisodeModalBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div id="episodeModalTabs" class="flex space-x-2 border-b border-dark-700 pb-2 text-xs">
+                <button id="tabEpisodeListBtn" class="px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition">話一覧・切替</button>
+                <button id="tabEpisodeNewBtn" class="px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition">新規話追加</button>
+            </div>
+
+            <div id="episodeListView" class="flex flex-col space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs"></div>
+
+            <div id="episodeFormView" class="hidden flex flex-col space-y-3 text-xs">
+                <input type="hidden" id="editingEpisodeId" value="">
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="col-span-1 flex flex-col space-y-1">
+                        <label class="text-slate-400 font-medium">話数 <span class="text-rose-400">*</span></label>
+                        <input type="text" id="formEpisodeNumInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 第1話">
+                    </div>
+                    <div class="col-span-2 flex flex-col space-y-1">
+                        <label class="text-slate-400 font-medium">話タイトル <span class="text-rose-400">*</span></label>
+                        <input type="text" id="formEpisodeTitleInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 裏路地の情報屋">
+                    </div>
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">話のあらすじ</label>
+                    <textarea id="formEpisodeSynopsisInput" rows="2" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 resize-none" placeholder="この話の要点や出来事..."></textarea>
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">目標文字数</label>
+                    <input type="number" id="formEpisodeGoalInput" value="1500" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono">
+                </div>
+                <div class="flex items-center justify-between pt-2">
+                    <button id="deleteEpisodeBtn" type="button" class="px-3 py-2 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 transition border border-rose-800/50">この話を削除</button>
+                    <div class="flex space-x-2 ml-auto">
+                        <button id="cancelEpisodeFormBtn" type="button" class="px-3 py-2 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-300 transition">キャンセル</button>
+                        <button id="saveEpisodeFormBtn" type="button" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">保存する</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chapter Selector Modal -->
+    <div id="chapterModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-lg w-full p-5 shadow-2xl flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-dark-700 pb-3">
+                <div id="chapterModalTitle" class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
+                    <i class="fa-solid fa-bookmark text-slate-400"></i>
+                    <span>章（チャプター）の切替・管理</span>
+                </div>
+                <button id="closeChapterModalBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div id="chapterModalTabs" class="flex space-x-2 border-b border-dark-700 pb-2 text-xs">
+                <button id="tabChapterListBtn" class="px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition">章一覧・切替</button>
+                <button id="tabChapterNewBtn" class="px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition">新規章作成</button>
+            </div>
+
+            <div id="chapterListView" class="flex flex-col space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs"></div>
+
+            <div id="chapterFormView" class="hidden flex flex-col space-y-3 text-xs">
+                <input type="hidden" id="editingChapterId" value="">
+                <div class="grid grid-cols-3 gap-2">
+                    <div class="col-span-1 flex flex-col space-y-1">
+                        <label class="text-slate-400 font-medium">章番号 <span class="text-rose-400">*</span></label>
+                        <input type="text" id="formChapterNumInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 第1章">
+                    </div>
+                    <div class="col-span-2 flex flex-col space-y-1">
+                        <label class="text-slate-400 font-medium">章タイトル <span class="text-rose-400">*</span></label>
+                        <input type="text" id="formChapterTitleInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 雨音のプロムナード">
+                    </div>
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">章のあらすじ</label>
+                    <textarea id="formChapterSynopsisInput" rows="2" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 resize-none" placeholder="この章のあらすじ..."></textarea>
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">目標文字数</label>
+                    <input type="number" id="formChapterGoalInput" value="5000" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono">
+                </div>
+                <div class="flex items-center justify-between pt-2">
+                    <button id="deleteChapterBtn" type="button" class="px-3 py-2 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 transition border border-rose-800/50">この章を削除</button>
+                    <div class="flex space-x-2 ml-auto">
+                        <button id="cancelChapterFormBtn" type="button" class="px-3 py-2 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-300 transition">キャンセル</button>
+                        <button id="saveChapterFormBtn" type="button" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">保存する</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Work Selector Modal -->
+    <div id="workSelectorModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-lg w-full p-5 shadow-2xl flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-dark-700 pb-3">
+                <div id="workModalTitle" class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
+                    <i class="fa-solid fa-book-bookmark text-slate-400"></i>
+                    <span>作品の選択・新規登録</span>
+                </div>
+                <button id="closeWorkSelectorBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="workModalTabs" class="flex space-x-2 border-b border-dark-700 pb-2 text-xs">
+                <button id="tabListBtn" class="px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition">作品一覧・切替</button>
+                <button id="tabNewBtn" class="px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition">新規作品登録</button>
+                <button id="tabEditCurrentBtn" class="ml-auto px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition">現作品の編集・削除</button>
+            </div>
+            <div id="workListView" class="flex flex-col space-y-2.5 max-h-64 overflow-y-auto pr-1 text-xs"></div>
+            <div id="workFormView" class="hidden flex flex-col space-y-3 text-xs">
+                <input type="hidden" id="editingWorkId" value="">
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">作品名 <span class="text-rose-400">*</span></label>
+                    <input type="text" id="formTitleInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 虚空のアンソロジー">
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">サブタイトル・シリーズ名</label>
+                    <input type="text" id="formSubTitleInput" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500" placeholder="例: 第1部・覚醒編">
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">あらすじ</label>
+                    <textarea id="formSynopsisInput" rows="2" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 resize-none" placeholder="作品全体のあらすじ..."></textarea>
+                </div>
+                <div class="flex flex-col space-y-1">
+                    <label class="text-slate-400 font-medium">目標文字数</label>
+                    <input type="number" id="formGoalInput" value="50000" class="bg-dark-900 border border-dark-700 rounded px-3 py-1.5 text-slate-200 focus:outline-none focus:border-slate-500 font-mono">
+                </div>
+                <div class="flex items-center justify-between pt-2">
+                    <button id="deleteWorkBtn" type="button" class="px-3 py-2 rounded-lg bg-rose-900/40 hover:bg-rose-900/60 text-rose-300 transition border border-rose-800/50">この作品を削除</button>
+                    <div class="flex space-x-2 ml-auto">
+                        <button id="cancelFormBtn" type="button" class="px-3 py-2 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-300 transition">キャンセル</button>
+                        <button id="saveWorkFormBtn" type="button" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">保存する</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-md w-full p-5 shadow-2xl flex flex-col space-y-4">
+            <div class="flex items-center justify-between border-b border-dark-700 pb-3">
+                <div class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
+                    <i class="fa-solid fa-gear text-slate-400"></i>
+                    <span>アプリケーション設定</span>
+                </div>
+                <button id="closeSettingsBtn" class="text-slate-400 hover:text-slate-200 text-sm"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            
+            <div class="flex flex-col space-y-4 text-xs">
+                <div class="flex flex-col space-y-2">
+                    <span class="text-slate-400 font-medium uppercase tracking-wider text-[10px]">ボタン位置固定</span>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center justify-between bg-dark-900/50 p-2.5 rounded border border-dark-700/60 cursor-pointer hover:border-slate-600 transition">
+                            <span class="text-slate-200 font-medium">ツールボタン固定</span>
+                            <input type="checkbox" id="chkLockToolBtn" class="rounded bg-dark-700 border-dark-600 text-slate-500 focus:ring-0">
+                        </label>
+                        <label class="flex items-center justify-between bg-dark-900/50 p-2.5 rounded border border-dark-700/60 cursor-pointer hover:border-slate-600 transition">
+                            <span class="text-slate-200 font-medium">ルビボタン固定</span>
+                            <input type="checkbox" id="chkLockRubyBtn" class="rounded bg-dark-700 border-dark-600 text-slate-500 focus:ring-0">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-2">
+                <button id="saveSettingsBtn" class="px-4 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-slate-100 font-medium transition shadow">設定を保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Draggable Floating Action Buttons -->
+    <div id="toolBtnContainer" class="draggable-btn fixed z-50 select-none" style="left: 24px; bottom: 24px;">
+        <button id="toolBtn" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95" title="ツール・設定">
+            <i class="fa-solid fa-toolbox text-xs"></i>
+        </button>
+    </div>
+
+    <div id="rubyBtnContainer" class="draggable-btn fixed z-50 select-none" style="right: 24px; bottom: 24px;">
+        <button id="rubyBtn" class="w-11 h-11 rounded-full bg-dark-800 hover:bg-dark-700 text-slate-300 hover:text-white border border-dark-600 shadow-xl flex items-center justify-center transition active:scale-95" title="ルビ付与">
+            <i class="fa-solid fa-font text-xs"></i>
+        </button>
+    </div>
+
+    <!-- Core App Database & Plot Feature Engine -->
+    <script>
+        function showNotice(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed top-14 right-4 z-50 bg-dark-800 border border-slate-600 text-slate-200 px-3.5 py-2 rounded-lg shadow-xl text-xs flex items-center space-x-2 transition-all duration-300';
+            toast.innerHTML = `<i class="fa-solid fa-info-circle text-slate-400"></i><span>${message}</span>`;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 2200);
+        }
+
+        // --- Core Database Schema with Plot Array Support ---
+        const DB_KEY = 'novelist_studio_db_v4';
+
+        const defaultDatabase = {
+            currentWorkId: 'work_1',
+            works: [
+                {
+                    id: 'work_1',
+                    title: '深夜特急のレプリカント',
+                    subtitle: '第1部・覚醒編',
+                    synopsis: 'ネオン街を舞台にしたサイバーパンク・ハードボイルドノベル。',
+                    goal: 50000,
+                    currentChapterId: 'ch_1',
+                    chapters: [
+                        {
+                            id: 'ch_1',
+                            number: '第1章',
+                            title: '雨音のプロムナード',
+                            synopsis: '主人公が情報屋と接触し、記憶の手がかりを得る。',
+                            goal: 5000,
+                            currentEpisodeId: 'ep_1',
+                            episodes: [
+                                {
+                                    id: 'ep_1',
+                                    number: '第1話',
+                                    title: '裏路地の情報屋',
+                                    synopsis: 'ネオン街の裏路地で情報屋と接触する導入シーケンス。',
+                                    goal: 1500,
+                                    content: 'ネオンの光がアスファルトの雨粒に反射し、まるで細かな星屑が地面に散らばっているかのように揺れていた。\n襟を立てたコートのポケットの中で、冷え切った指先がかすかに震える。\n\n「……遅かったな」\n\n影の中から低く枯れた声が響く。振り返ると、古びた自動販売機の光に照らされた男が、煙草の火を赤く点滅させていた。',
+                                    plots: [
+                                        { id: 'plot_1', code: '#01', targetChar: 300, content: '雨の裏路地での待ち合わせと雰囲気描写', flag: 'normal' },
+                                        { id: 'plot_2', code: '#02', targetChar: 800, content: '情報屋からのデータチップ手渡し（意味深な言動）', flag: 'setup' },
+                                        { id: 'plot_3', code: '#03', targetChar: 1300, content: '過去の事故の記憶フラッシュバック', flag: 'payoff' }
+                                    ]
+                                },
+                                {
+                                    id: 'ep_2',
+                                    number: '第2話',
+                                    title: '雨のハイウェイ',
+                                    synopsis: '情報屋から受け取ったチップを抱えて逃走する追跡劇。',
+                                    goal: 2000,
+                                    content: 'バイクのエンジン音が水たまりを引き裂くように轟く。背後からは追跡者のヘッドライトが容赦なく迫っていた。',
+                                    plots: []
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        };
+
+        function getDB() {
+            const data = localStorage.getItem(DB_KEY);
+            if (!data) {
+                localStorage.setItem(DB_KEY, JSON.stringify(defaultDatabase));
+                return defaultDatabase;
+            }
+            return JSON.parse(data);
+        }
+
+        function saveDB(db) {
+            localStorage.setItem(DB_KEY, JSON.stringify(db));
+        }
+
+        function getCurrentWork() {
+            const db = getDB();
+            return db.works.find(w => w.id === db.currentWorkId) || db.works[0];
+        }
+
+        function getCurrentChapter() {
+            const work = getCurrentWork();
+            return work.chapters.find(c => c.id === work.currentChapterId) || work.chapters[0];
+        }
+
+        function getCurrentEpisode() {
+            const chapter = getCurrentChapter();
+            return chapter.episodes.find(e => e.id === chapter.currentEpisodeId) || chapter.episodes[0];
+        }
+
+        // --- Focus Mode ---
+        const targetSection = document.getElementById('targetSection');
+        const focusModeBtn = document.getElementById('focusModeBtn');
+        const focusIcon = document.getElementById('focusIcon');
+        const focusText = document.getElementById('focusText');
+        let isFocusMode = false;
+
+        focusModeBtn.addEventListener('click', () => {
+            isFocusMode = !isFocusMode;
+            if (isFocusMode) {
+                targetSection.style.maxHeight = '0px';
+                targetSection.style.paddingTop = '0px';
+                targetSection.style.paddingBottom = '0px';
+                targetSection.style.opacity = '0';
+                document.getElementById('toolBtnContainer').classList.add('hidden-mode');
+                document.getElementById('rubyBtnContainer').classList.add('hidden-mode');
+                focusText.textContent = '通常モード';
+                focusIcon.className = 'fa-solid fa-compress';
+                showNotice('集中モードに切り替えました');
+            } else {
+                targetSection.style.maxHeight = '120px';
+                targetSection.style.paddingTop = '0.5rem';
+                targetSection.style.paddingBottom = '0.5rem';
+                targetSection.style.opacity = '1';
+                document.getElementById('toolBtnContainer').classList.remove('hidden-mode');
+                document.getElementById('rubyBtnContainer').classList.remove('hidden-mode');
+                focusText.textContent = '集中モード';
+                focusIcon.className = 'fa-solid fa-expand';
+            }
+        });
+
+        // --- Main UI & Plot Gauge Rendering ---
+        const mainEditor = document.getElementById('mainEditor');
+        const autoSaveStatus = document.getElementById('autoSaveStatus');
+
+        function renderUI() {
+            const work = getCurrentWork();
+            const chapter = getCurrentChapter();
+            const ep = getCurrentEpisode();
+
+            document.getElementById('currentWorkTitleDisplay').textContent = work.title;
+            document.getElementById('currentWorkSubTitleDisplay').textContent = work.subtitle || '';
+
+            document.getElementById('currentChapterNumDisplay').textContent = chapter.number;
+            document.getElementById('chapterTitleInput').value = chapter.title;
+
+            document.getElementById('currentEpisodeNumDisplay').textContent = ep.number;
+            document.getElementById('episodeTitleInput').value = ep.title;
+            document.getElementById('episodeSynopsisInput').value = ep.synopsis || '';
+
+            if (document.activeElement !== mainEditor) {
+                mainEditor.value = ep.content || '';
+            }
+
+            // Stats Calculations
+            const epCount = (ep.content || '').length;
+            const epGoal = ep.goal || 1500;
+            document.getElementById('episodeGoalLabel').textContent = `本話（${ep.number}）`;
+            document.getElementById('episodeCurrentText').textContent = epCount.toLocaleString();
+            document.getElementById('episodeGoalText').textContent = `${epGoal.toLocaleString()} chars`;
+            const epPercent = Math.min(100, Math.round((epCount / epGoal) * 100));
+            document.getElementById('episodeBar').style.width = `${epPercent}%`;
+
+            document.getElementById('sideEpCurrentText').textContent = `${epCount.toLocaleString()} chars`;
+            document.getElementById('sideEpGoalText').textContent = epGoal >= 1000 ? `${(epGoal / 1000).toFixed(1)}k chars` : `${epGoal} chars`;
+            document.getElementById('sideEpBar').style.height = `${epPercent}%`;
+            document.getElementById('gaugePointerIcon').style.top = `${epPercent}%`;
+
+            // Render Dynamic Plot Blocks onto Gauge Area
+            renderPlotMarkersOnGauge(ep, epGoal);
+
+            // Chapter Stats
+            let chapterTotalCount = 0;
+            let chapterTotalGoal = 0;
+            chapter.episodes.forEach(e => {
+                chapterTotalCount += (e.content || '').length;
+                chapterTotalGoal += (e.goal || 1500);
+            });
+            document.getElementById('chapterGoalLabel').textContent = `章目標（${chapter.number}）`;
+            document.getElementById('chapterCurrentText').textContent = chapterTotalCount.toLocaleString();
+            document.getElementById('chapterGoalText').textContent = `${chapterTotalGoal.toLocaleString()} chars`;
+            const chPercent = Math.min(100, Math.round((chapterTotalCount / chapterTotalGoal) * 100));
+            document.getElementById('chapterBar').style.width = `${chPercent}%`;
+
+            // Overall Stats
+            let workTotalCount = 0;
+            work.chapters.forEach(c => {
+                c.episodes.forEach(e => {
+                    workTotalCount += (e.content || '').length;
+                });
+            });
+            const workGoal = work.goal || 50000;
+            document.getElementById('overallCurrentText').textContent = workTotalCount.toLocaleString();
+            document.getElementById('overallGoalText').textContent = `${workGoal.toLocaleString()} chars`;
+            const workPercent = Math.min(100, Math.round((workTotalCount / workGoal) * 100));
+            document.getElementById('overallBar').style.width = `${workPercent}%`;
+        }
+
+        // Render Plot Blocks Function
+        function renderPlotMarkersOnGauge(episode, goalChar) {
+            const container = document.getElementById('plotMarkersContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const plots = episode.plots || [];
+
+            plots.forEach((plot) => {
+                const percentFromTop = Math.max(5, Math.min(95, Math.round((plot.targetChar / goalChar) * 100)));
+
+                // Color themes based on flag
+                let badgeClass = "bg-dark-700/95 text-slate-200 border-slate-500 hover:bg-slate-600";
+                let flagBadgeHtml = '';
+
+                if (plot.flag === 'setup') {
+                    badgeClass = "bg-amber-950/90 text-amber-200 border-amber-500/80 hover:bg-amber-800";
+                    flagBadgeHtml = `<span class="text-[8px] text-amber-400 font-bold ml-1"><i class="fa-solid fa-seedling"></i> 伏線</span>`;
+                } else if (plot.flag === 'payoff') {
+                    badgeClass = "bg-emerald-950/90 text-emerald-200 border-emerald-500/80 hover:bg-emerald-800";
+                    flagBadgeHtml = `<span class="text-[8px] text-emerald-400 font-bold ml-1"><i class="fa-solid fa-key"></i> 回収</span>`;
+                }
+
+                const marker = document.createElement('div');
+                marker.className = 'absolute left-0 right-0 flex items-center justify-between pointer-events-auto group cursor-pointer';
+                marker.style.top = `${percentFromTop}%`;
+                marker.style.transform = 'translateY(-50%)';
+
+                marker.innerHTML = `
+                    <div class="relative w-full flex items-center justify-center">
+                        <div class="w-full h-[1px] bg-slate-500/60 z-0"></div>
+                        <div class="absolute ${badgeClass} border rounded px-1 py-0.5 text-[9px] font-mono shadow-md z-10 transition group-hover:scale-105 flex items-center">
+                            <span class="font-bold">${plot.code}</span>
+                        </div>
+                        
+                        <!-- Hover Popup Tooltip -->
+                        <div class="absolute left-full ml-2 hidden group-hover:flex flex-col bg-dark-800 border border-slate-600 text-slate-200 p-2.5 rounded-lg shadow-xl text-[10px] w-40 z-50 pointer-events-none">
+                            <div class="flex items-center justify-between font-mono text-slate-400 pb-1 border-b border-dark-700 mb-1">
+                                <span class="font-bold text-slate-200">${plot.code}</span>
+                                <span>${plot.targetChar.toLocaleString()}字付近</span>
+                            </div>
+                            <span class="leading-relaxed text-slate-300 font-serif">${plot.content}</span>
+                            ${flagBadgeHtml ? `<div class="mt-1 pt-1 border-t border-dark-700">${flagBadgeHtml}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+
+                // Click to Edit Plot
+                marker.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openPlotModal(plot);
+                });
+
+                container.appendChild(marker);
+            });
+        }
+
+        // --- Plot Modal Logic & Event Handlers ---
+        const plotModal = document.getElementById('plotModal');
+        const addPlotBtn = document.getElementById('addPlotBtn');
+        const closePlotModalBtn = document.getElementById('closePlotModalBtn');
+        const cancelPlotBtn = document.getElementById('cancelPlotBtn');
+        const savePlotBtn = document.getElementById('savePlotBtn');
+        const deletePlotBtn = document.getElementById('deletePlotBtn');
+
+        addPlotBtn.addEventListener('click', () => openPlotModal());
+
+        closePlotModalBtn.addEventListener('click', () => plotModal.classList.add('hidden'));
+        cancelPlotBtn.addEventListener('click', () => plotModal.classList.add('hidden'));
+
+        function openPlotModal(plotToEdit = null) {
+            const ep = getCurrentEpisode();
+            const plots = ep.plots || [];
+
+            if (plotToEdit) {
+                document.getElementById('plotModalTitle').textContent = 'プロットブロックの編集';
+                document.getElementById('editingPlotId').value = plotToEdit.id;
+                document.getElementById('plotCodeInput').value = plotToEdit.code;
+                document.getElementById('plotTargetCharInput').value = plotToEdit.targetChar;
+                document.getElementById('plotContentInput').value = plotToEdit.content;
+                
+                const flagRadio = document.querySelector(`input[name="plotFlag"][value="${plotToEdit.flag || 'normal'}"]`);
+                if (flagRadio) flagRadio.checked = true;
+
+                deletePlotBtn.classList.remove('hidden');
+            } else {
+                document.getElementById('plotModalTitle').textContent = '新規プロットブロック追加';
+                document.getElementById('editingPlotId').value = '';
+                document.getElementById('plotCodeInput').value = `#0${plots.length + 1}`;
+                document.getElementById('plotTargetCharInput').value = Math.round((ep.goal || 1500) * 0.5);
+                document.getElementById('plotContentInput').value = '';
+                document.querySelector('input[name="plotFlag"][value="normal"]').checked = true;
+
+                deletePlotBtn.classList.add('hidden');
+            }
+
+            plotModal.classList.remove('hidden');
+        }
+
+        savePlotBtn.addEventListener('click', () => {
+            const editingId = document.getElementById('editingPlotId').value;
+            const code = document.getElementById('plotCodeInput').value.trim();
+            const targetChar = parseInt(document.getElementById('plotTargetCharInput').value) || 0;
+            const content = document.getElementById('plotContentInput').value.trim();
+            const flag = document.querySelector('input[name="plotFlag"]:checked').value;
+
+            if (!code || !content) {
+                showNotice('No.とプロット内容を入力してください');
+                return;
+            }
+
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+            const chapter = work.chapters.find(c => c.id === work.currentChapterId);
+            const ep = chapter.episodes.find(e => e.id === chapter.currentEpisodeId);
+
+            if (!ep.plots) ep.plots = [];
+
+            if (editingId) {
+                ep.plots = ep.plots.map(p => p.id === editingId ? { ...p, code, targetChar, content, flag } : p);
+                showNotice('プロットブロックを更新しました');
+            } else {
+                const newPlot = {
+                    id: 'plot_' + Date.now(),
+                    code,
+                    targetChar,
+                    content,
+                    flag
+                };
+                ep.plots.push(newPlot);
+                showNotice('新しいプロットブロックを追加しました');
+            }
+
+            // Sort plots by target char position
+            ep.plots.sort((a, b) => a.targetChar - b.targetChar);
+
+            saveDB(db);
+            renderUI();
+            plotModal.classList.add('hidden');
+        });
+
+        deletePlotBtn.addEventListener('click', () => {
+            const editingId = document.getElementById('editingPlotId').value;
+            if (!editingId) return;
+
+            if (!confirm('このプロットブロックを削除しますか？')) return;
+
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+            const chapter = work.chapters.find(c => c.id === work.currentChapterId);
+            const ep = chapter.episodes.find(e => e.id === chapter.currentEpisodeId);
+
+            ep.plots = (ep.plots || []).filter(p => p.id !== editingId);
+
+            saveDB(db);
+            renderUI();
+            plotModal.classList.add('hidden');
+            showNotice('プロットブロックを削除しました');
+        });
+
+        // --- Auto Save & Instant Inputs Binding ---
+        let saveTimeout;
+        mainEditor.addEventListener('input', () => {
+            const text = mainEditor.value;
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+            const chapter = work.chapters.find(c => c.id === work.currentChapterId);
+            const ep = chapter.episodes.find(e => e.id === chapter.currentEpisodeId);
+            ep.content = text;
+
+            saveDB(db);
+            renderUI();
+
+            autoSaveStatus.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> 保存中...`;
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(() => {
+                autoSaveStatus.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> 自動保存完了`;
+            }, 600);
+        });
+
+        document.getElementById('episodeTitleInput').addEventListener('change', (e) => {
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+            const chapter = work.chapters.find(c => c.id === work.currentChapterId);
+            const ep = chapter.episodes.find(e => e.id === chapter.currentEpisodeId);
+            ep.title = e.target.value.trim();
+            saveDB(db);
+            showNotice('話タイトルを更新しました');
+        });
+
+        document.getElementById('episodeSynopsisInput').addEventListener('change', (e) => {
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+            const chapter = work.chapters.find(c => c.id === work.currentChapterId);
+            const ep = chapter.episodes.find(e => e.id === chapter.currentEpisodeId);
+            ep.synopsis = e.target.value.trim();
+            saveDB(db);
+        });
+
+        document.getElementById('chapterTitleInput').addEventListener('change', (e) => {
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+            const chapter = work.chapters.find(c => c.id === work.currentChapterId);
+            chapter.title = e.target.value.trim();
+            saveDB(db);
+            showNotice('章タイトルを更新しました');
+        });
+
+        // --- Episode / Chapter / Work Selector Handlers ---
+        const episodeModal = document.getElementById('episodeModal');
+        const selectEpisodeBtn = document.getElementById('selectEpisodeBtn');
+        const editEpisodeBtn = document.getElementById('editEpisodeBtn');
+        const closeEpisodeModalBtn = document.getElementById('closeEpisodeModalBtn');
+        const tabEpisodeListBtn = document.getElementById('tabEpisodeListBtn');
+        const tabEpisodeNewBtn = document.getElementById('tabEpisodeNewBtn');
+        const episodeListView = document.getElementById('episodeListView');
+        const episodeFormView = document.getElementById('episodeFormView');
+        const episodeModalTabs = document.getElementById('episodeModalTabs');
+        const episodeModalTitle = document.getElementById('episodeModalTitle');
+        const deleteEpisodeBtn = document.getElementById('deleteEpisodeBtn');
+
+        selectEpisodeBtn.addEventListener('click', () => {
+            showEpisodeListView();
+            renderEpisodeList();
+            episodeModal.classList.remove('hidden');
+        });
+
+        editEpisodeBtn.addEventListener('click', () => {
+            const ep = getCurrentEpisode();
+            showEpisodeFormView(ep);
+            episodeModal.classList.remove('hidden');
+        });
+
+        closeEpisodeModalBtn.addEventListener('click', () => episodeModal.classList.add('hidden'));
+        episodeModal.addEventListener('click', (e) => { if (e.target === episodeModal) episodeModal.classList.add('hidden'); });
+
+        tabEpisodeListBtn.addEventListener('click', showEpisodeListView);
+        tabEpisodeNewBtn.addEventListener('click', () => showEpisodeFormView());
+
+        function showEpisodeListView() {
+            tabEpisodeListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition';
+            tabEpisodeNewBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition';
+            episodeListView.classList.remove('hidden');
+            episodeModalTabs.classList.remove('hidden');
+            episodeFormView.classList.add('hidden');
+            episodeModalTitle.innerHTML = `<i class="fa-solid fa-book-open text-slate-400"></i><span>話（エピソード）の切替・管理</span>`;
+            document.getElementById('editingEpisodeId').value = '';
+        }
+
+        function showEpisodeFormView(epToEdit = null) {
+            episodeListView.classList.add('hidden');
+            episodeModalTabs.classList.add('hidden');
+            episodeFormView.classList.remove('hidden');
+
+            if (epToEdit) {
+                episodeModalTitle.innerHTML = `<i class="fa-solid fa-pen text-slate-400"></i><span>話の編集・削除</span>`;
+                document.getElementById('editingEpisodeId').value = epToEdit.id;
+                document.getElementById('formEpisodeNumInput').value = epToEdit.number;
+                document.getElementById('formEpisodeTitleInput').value = epToEdit.title;
+                document.getElementById('formEpisodeSynopsisInput').value = epToEdit.synopsis || '';
+                document.getElementById('formEpisodeGoalInput').value = epToEdit.goal || 1500;
+                deleteEpisodeBtn.classList.remove('hidden');
+            } else {
+                episodeModalTitle.innerHTML = `<i class="fa-solid fa-plus text-slate-400"></i><span>新規話追加</span>`;
+                const chapter = getCurrentChapter();
+                const nextNum = `第${chapter.episodes.length + 1}話`;
+                document.getElementById('editingEpisodeId').value = '';
+                document.getElementById('formEpisodeNumInput').value = nextNum;
+                document.getElementById('formEpisodeTitleInput').value = '';
+                document.getElementById('formEpisodeSynopsisInput').value = '';
+                document.getElementById('formEpisodeGoalInput').value = '1500';
+                deleteEpisodeBtn.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('cancelEpisodeFormBtn').addEventListener('click', showEpisodeListView);
+
+        function renderEpisodeList() {
+            const chapter = getCurrentChapter();
+            episodeListView.innerHTML = '';
+
+            chapter.episodes.forEach(ep => {
+                const isSelected = ep.id === chapter.currentEpisodeId;
+                const charCount = (ep.content || '').length;
+                const plotCount = (ep.plots || []).length;
+
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-lg border flex items-center justify-between transition ${isSelected ? 'bg-dark-700/80 border-slate-500 shadow-sm' : 'bg-dark-900/50 border-dark-700/60 hover:border-slate-600'}`;
+                item.innerHTML = `
+                    <div class="flex flex-col space-y-0.5 overflow-hidden pr-2 flex-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-mono text-[11px] px-1.5 py-0.5 rounded bg-dark-800 text-slate-300 border border-dark-600">${ep.number}</span>
+                            <span class="font-semibold text-slate-200 truncate">${ep.title}</span>
+                            <span class="font-mono text-[10px] text-slate-400 ml-auto">${charCount} chars (${plotCount} plots)</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 truncate mt-1">${ep.synopsis || 'あらすじなし'}</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5 shrink-0 ml-2">
+                        <button class="px-2.5 py-1 rounded bg-dark-600 hover:bg-slate-500 text-slate-100 font-medium transition edit-ep-btn" data-id="${ep.id}">
+                            <i class="fa-solid fa-pen text-[10px]"></i>
+                        </button>
+                        <button class="px-3 py-1 rounded ${isSelected ? 'bg-dark-700 text-slate-400 cursor-default' : 'bg-dark-600 hover:bg-slate-500 text-slate-100'} font-medium transition select-ep-btn" data-id="${ep.id}">
+                            ${isSelected ? '選択中' : '切替'}
+                        </button>
+                    </div>
+                `;
+                episodeListView.appendChild(item);
+            });
+
+            document.querySelectorAll('.select-ep-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const db = getDB();
+                    const work = db.works.find(w => w.id === db.currentWorkId);
+                    const chapter = work.chapters.find(c => c.id === work.currentChapterId);
+                    chapter.currentEpisodeId = id;
+                    saveDB(db);
+                    renderUI();
+                    episodeModal.classList.add('hidden');
+                    showNotice('話を切り替えました');
+                });
+            });
+
+            document.querySelectorAll('.edit-ep-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const chapter = getCurrentChapter();
+                    const ep = chapter.episodes.find(item => item.id === id);
+                    if (ep) showEpisodeFormView(ep);
+                });
+            });
+        }
+
+        document.getElementById('saveEpisodeFormBtn').addEventListener('click', () => {
+            const editingId = document.getElementById('editingEpisodeId').value;
+            const number = document.getElementById('formEpisodeNumInput').value.trim();
+            const title = document.getElementById('formEpisodeTitleInput').value.trim();
+            const synopsis = document.getElementById('formEpisodeSynopsisInput').value.trim();
+            const goal = parseInt(document.getElementById('formEpisodeGoalInput').value) || 1500;
+
+            if (!number || !title) {
+                showNotice('話数とタイトルを入力してください');
+                return;
+            }
+
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+            const chapter = work.chapters.find(c => c.id === work.currentChapterId);
+
+            if (editingId) {
+                chapter.episodes = chapter.episodes.map(e => e.id === editingId ? { ...e, number, title, synopsis, goal } : e);
+                saveDB(db);
+                renderUI();
+                episodeModal.classList.add('hidden');
+                showNotice('話を更新しました');
+            } else {
+                const newId = 'ep_' + Date.now();
+                chapter.episodes.push({ id: newId, number, title, synopsis, goal, content: '', plots: [] });
+                chapter.currentEpisodeId = newId;
+                saveDB(db);
+                renderUI();
+                episodeModal.classList.add('hidden');
+                showNotice('新しい話を追加しました');
+            }
+        });
+
+        deleteEpisodeBtn.addEventListener('click', () => {
+            const editingId = document.getElementById('editingEpisodeId').value;
+            if (!editingId) return;
+
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+            const chapter = work.chapters.find(c => c.id === work.currentChapterId);
+
+            if (chapter.episodes.length <= 1) {
+                showNotice('章内の最後の1話は削除できません');
+                return;
+            }
+
+            if (!confirm('この話を削除しますか？')) return;
+
+            chapter.episodes = chapter.episodes.filter(e => e.id !== editingId);
+            if (chapter.currentEpisodeId === editingId) {
+                chapter.currentEpisodeId = chapter.episodes[0].id;
+            }
+            saveDB(db);
+            renderUI();
+            episodeModal.classList.add('hidden');
+            showNotice('話を削除しました');
+        });
+
+        // --- Chapter Management ---
+        const chapterModal = document.getElementById('chapterModal');
+        const selectChapterBtn = document.getElementById('selectChapterBtn');
+        const editChapterBtn = document.getElementById('editChapterBtn');
+        const closeChapterModalBtn = document.getElementById('closeChapterModalBtn');
+        const tabChapterListBtn = document.getElementById('tabChapterListBtn');
+        const tabChapterNewBtn = document.getElementById('tabChapterNewBtn');
+        const chapterListView = document.getElementById('chapterListView');
+        const chapterFormView = document.getElementById('chapterFormView');
+        const chapterModalTabs = document.getElementById('chapterModalTabs');
+        const chapterModalTitle = document.getElementById('chapterModalTitle');
+        const deleteChapterBtn = document.getElementById('deleteChapterBtn');
+
+        selectChapterBtn.addEventListener('click', () => {
+            showChapterListView();
+            renderChapterList();
+            chapterModal.classList.remove('hidden');
+        });
+
+        editChapterBtn.addEventListener('click', () => {
+            const chapter = getCurrentChapter();
+            showChapterFormView(chapter);
+            chapterModal.classList.remove('hidden');
+        });
+
+        closeChapterModalBtn.addEventListener('click', () => chapterModal.classList.add('hidden'));
+        chapterModal.addEventListener('click', (e) => { if (e.target === chapterModal) chapterModal.classList.add('hidden'); });
+
+        tabChapterListBtn.addEventListener('click', showChapterListView);
+        tabChapterNewBtn.addEventListener('click', () => showChapterFormView());
+
+        function showChapterListView() {
+            tabChapterListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition';
+            tabChapterNewBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition';
+            chapterListView.classList.remove('hidden');
+            chapterModalTabs.classList.remove('hidden');
+            chapterFormView.classList.add('hidden');
+            chapterModalTitle.innerHTML = `<i class="fa-solid fa-bookmark text-slate-400"></i><span>章（チャプター）の切替・管理</span>`;
+            document.getElementById('editingChapterId').value = '';
+        }
+
+        function showChapterFormView(chToEdit = null) {
+            chapterListView.classList.add('hidden');
+            chapterModalTabs.classList.add('hidden');
+            chapterFormView.classList.remove('hidden');
+
+            if (chToEdit) {
+                chapterModalTitle.innerHTML = `<i class="fa-solid fa-pen text-slate-400"></i><span>章の編集・削除</span>`;
+                document.getElementById('editingChapterId').value = chToEdit.id;
+                document.getElementById('formChapterNumInput').value = chToEdit.number;
+                document.getElementById('formChapterTitleInput').value = chToEdit.title;
+                document.getElementById('formChapterSynopsisInput').value = chToEdit.synopsis || '';
+                document.getElementById('formChapterGoalInput').value = chToEdit.goal || 5000;
+                deleteChapterBtn.classList.remove('hidden');
+            } else {
+                chapterModalTitle.innerHTML = `<i class="fa-solid fa-plus text-slate-400"></i><span>新規章作成</span>`;
+                const work = getCurrentWork();
+                const nextNum = `第${work.chapters.length + 1}章`;
+                document.getElementById('editingChapterId').value = '';
+                document.getElementById('formChapterNumInput').value = nextNum;
+                document.getElementById('formChapterTitleInput').value = '';
+                document.getElementById('formChapterSynopsisInput').value = '';
+                document.getElementById('formChapterGoalInput').value = '5000';
+                deleteChapterBtn.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('cancelChapterFormBtn').addEventListener('click', showChapterListView);
+
+        function renderChapterList() {
+            const work = getCurrentWork();
+            chapterListView.innerHTML = '';
+
+            work.chapters.forEach(ch => {
+                const isSelected = ch.id === work.currentChapterId;
+                let chCount = 0;
+                ch.episodes.forEach(e => chCount += (e.content || '').length);
+
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-lg border flex items-center justify-between transition ${isSelected ? 'bg-dark-700/80 border-slate-500 shadow-sm' : 'bg-dark-900/50 border-dark-700/60 hover:border-slate-600'}`;
+                item.innerHTML = `
+                    <div class="flex flex-col space-y-0.5 overflow-hidden pr-2 flex-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-mono text-[11px] px-1.5 py-0.5 rounded bg-dark-800 text-slate-300 border border-dark-600">${ch.number}</span>
+                            <span class="font-semibold text-slate-200 truncate">${ch.title}</span>
+                            <span class="font-mono text-[10px] text-slate-400 ml-auto">${chCount} chars</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 truncate mt-1">${ch.synopsis || 'あらすじなし'}</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5 shrink-0 ml-2">
+                        <button class="px-2.5 py-1 rounded bg-dark-600 hover:bg-slate-500 text-slate-100 font-medium transition edit-ch-btn" data-id="${ch.id}">
+                            <i class="fa-solid fa-pen text-[10px]"></i>
+                        </button>
+                        <button class="px-3 py-1 rounded ${isSelected ? 'bg-dark-700 text-slate-400 cursor-default' : 'bg-dark-600 hover:bg-slate-500 text-slate-100'} font-medium transition select-ch-btn" data-id="${ch.id}">
+                            ${isSelected ? '選択中' : '切替'}
+                        </button>
+                    </div>
+                `;
+                chapterListView.appendChild(item);
+            });
+
+            document.querySelectorAll('.select-ch-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const db = getDB();
+                    const work = db.works.find(w => w.id === db.currentWorkId);
+                    work.currentChapterId = id;
+                    saveDB(db);
+                    renderUI();
+                    chapterModal.classList.add('hidden');
+                    showNotice('章を切り替えました');
+                });
+            });
+
+            document.querySelectorAll('.edit-ch-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const work = getCurrentWork();
+                    const ch = work.chapters.find(item => item.id === id);
+                    if (ch) showChapterFormView(ch);
+                });
+            });
+        }
+
+        document.getElementById('saveChapterFormBtn').addEventListener('click', () => {
+            const editingId = document.getElementById('editingChapterId').value;
+            const number = document.getElementById('formChapterNumInput').value.trim();
+            const title = document.getElementById('formChapterTitleInput').value.trim();
+            const synopsis = document.getElementById('formChapterSynopsisInput').value.trim();
+            const goal = parseInt(document.getElementById('formChapterGoalInput').value) || 5000;
+
+            if (!number || !title) {
+                showNotice('章番号とタイトルを入力してください');
+                return;
+            }
+
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+
+            if (editingId) {
+                work.chapters = work.chapters.map(c => c.id === editingId ? { ...c, number, title, synopsis, goal } : c);
+                saveDB(db);
+                renderUI();
+                chapterModal.classList.add('hidden');
+                showNotice('章を更新しました');
+            } else {
+                const newChId = 'ch_' + Date.now();
+                const newEpId = 'ep_' + Date.now();
+                work.chapters.push({
+                    id: newChId,
+                    number,
+                    title,
+                    synopsis,
+                    goal,
+                    currentEpisodeId: newEpId,
+                    episodes: [{ id: newEpId, number: '第1話', title: '第1話', synopsis: '', goal: 1500, content: '', plots: [] }]
+                });
+                work.currentChapterId = newChId;
+                saveDB(db);
+                renderUI();
+                chapterModal.classList.add('hidden');
+                showNotice('新しい章を追加しました');
+            }
+        });
+
+        deleteChapterBtn.addEventListener('click', () => {
+            const editingId = document.getElementById('editingChapterId').value;
+            if (!editingId) return;
+
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+
+            if (work.chapters.length <= 1) {
+                showNotice('作品内の最後の1章は削除できません');
+                return;
+            }
+
+            if (!confirm('この章を削除しますか？')) return;
+
+            work.chapters = work.chapters.filter(c => c.id !== editingId);
+            if (work.currentChapterId === editingId) {
+                work.currentChapterId = work.chapters[0].id;
+            }
+            saveDB(db);
+            renderUI();
+            chapterModal.classList.add('hidden');
+            showNotice('章を削除しました');
+        });
+
+        // --- Work Selector Modal ---
+        const workSelectorModal = document.getElementById('workSelectorModal');
+        const openWorkSelectorBtn = document.getElementById('openWorkSelectorBtn');
+        const closeWorkSelectorBtn = document.getElementById('closeWorkSelectorBtn');
+        const tabListBtn = document.getElementById('tabListBtn');
+        const tabNewBtn = document.getElementById('tabNewBtn');
+        const tabEditCurrentBtn = document.getElementById('tabEditCurrentBtn');
+        const workListView = document.getElementById('workListView');
+        const workFormView = document.getElementById('workFormView');
+        const workModalTabs = document.getElementById('workModalTabs');
+        const workModalTitle = document.getElementById('workModalTitle');
+        const deleteWorkBtn = document.getElementById('deleteWorkBtn');
+
+        openWorkSelectorBtn.addEventListener('click', () => {
+            showWorkListView();
+            renderWorkList();
+            workSelectorModal.classList.remove('hidden');
+        });
+
+        closeWorkSelectorBtn.addEventListener('click', () => workSelectorModal.classList.add('hidden'));
+        workSelectorModal.addEventListener('click', (e) => { if (e.target === workSelectorModal) workSelectorModal.classList.add('hidden'); });
+
+        tabListBtn.addEventListener('click', showWorkListView);
+        tabNewBtn.addEventListener('click', () => showWorkFormView());
+        tabEditCurrentBtn.addEventListener('click', () => showWorkFormView(getCurrentWork()));
+
+        function showWorkListView() {
+            tabListBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-700 text-slate-100 font-medium transition';
+            tabNewBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition';
+            tabEditCurrentBtn.className = 'px-3 py-1.5 rounded-lg bg-dark-900/60 text-slate-400 hover:text-slate-200 font-medium transition';
+            workListView.classList.remove('hidden');
+            workModalTabs.classList.remove('hidden');
+            workFormView.classList.add('hidden');
+            workModalTitle.innerHTML = `<i class="fa-solid fa-book-bookmark text-slate-400"></i><span>作品の選択・新規登録</span>`;
+            document.getElementById('editingWorkId').value = '';
+        }
+
+        function showWorkFormView(workToEdit = null) {
+            workListView.classList.add('hidden');
+            workModalTabs.classList.add('hidden');
+            workFormView.classList.remove('hidden');
+
+            if (workToEdit) {
+                workModalTitle.innerHTML = `<i class="fa-solid fa-pen text-slate-400"></i><span>作品の編集・削除</span>`;
+                document.getElementById('editingWorkId').value = workToEdit.id;
+                document.getElementById('formTitleInput').value = workToEdit.title;
+                document.getElementById('formSubTitleInput').value = workToEdit.subtitle || '';
+                document.getElementById('formSynopsisInput').value = workToEdit.synopsis || '';
+                document.getElementById('formGoalInput').value = workToEdit.goal || 50000;
+                deleteWorkBtn.classList.remove('hidden');
+            } else {
+                workModalTitle.innerHTML = `<i class="fa-solid fa-plus text-slate-400"></i><span>新規作品登録</span>`;
+                document.getElementById('editingWorkId').value = '';
+                document.getElementById('formTitleInput').value = '';
+                document.getElementById('formSubTitleInput').value = '';
+                document.getElementById('formSynopsisInput').value = '';
+                document.getElementById('formGoalInput').value = '50000';
+                deleteWorkBtn.classList.add('hidden');
+            }
+        }
+
+        document.getElementById('cancelFormBtn').addEventListener('click', showWorkListView);
+
+        function renderWorkList() {
+            const db = getDB();
+            workListView.innerHTML = '';
+
+            db.works.forEach(work => {
+                const isSelected = work.id === db.currentWorkId;
+                let wCount = 0;
+                work.chapters.forEach(c => c.episodes.forEach(e => wCount += (e.content || '').length));
+
+                const item = document.createElement('div');
+                item.className = `p-3 rounded-lg border flex items-center justify-between transition ${isSelected ? 'bg-dark-700/80 border-slate-500 shadow-sm' : 'bg-dark-900/50 border-dark-700/60 hover:border-slate-600'}`;
+                item.innerHTML = `
+                    <div class="flex flex-col space-y-0.5 overflow-hidden pr-2 flex-1">
+                        <div class="flex items-center space-x-2">
+                            <span class="font-semibold text-slate-200 truncate">${work.title}</span>
+                            <span class="font-mono text-[10px] text-slate-400 ml-auto">${wCount} chars</span>
+                        </div>
+                        <span class="text-[10px] text-slate-400 truncate">${work.subtitle || 'サブタイトルなし'}</span>
+                    </div>
+                    <div class="flex items-center space-x-1.5 shrink-0 ml-2">
+                        <button class="px-2.5 py-1 rounded bg-dark-600 hover:bg-slate-500 text-slate-100 font-medium transition edit-work-btn" data-id="${work.id}">
+                            <i class="fa-solid fa-pen text-[10px]"></i>
+                        </button>
+                        <button class="px-3 py-1 rounded ${isSelected ? 'bg-dark-700 text-slate-400 cursor-default' : 'bg-dark-600 hover:bg-slate-500 text-slate-100'} font-medium transition select-work-btn" data-id="${work.id}">
+                            ${isSelected ? '選択中' : '切替'}
+                        </button>
+                    </div>
+                `;
+                workListView.appendChild(item);
+            });
+
+            document.querySelectorAll('.select-work-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const db = getDB();
+                    db.currentWorkId = id;
+                    saveDB(db);
+                    renderUI();
+                    workSelectorModal.classList.add('hidden');
+                    showNotice('作品を切り替えました');
+                });
+            });
+
+            document.querySelectorAll('.edit-work-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = e.currentTarget.getAttribute('data-id');
+                    const db = getDB();
+                    const work = db.works.find(w => w.id === id);
+                    if (work) showWorkFormView(work);
+                });
+            });
+        }
+
+        document.getElementById('saveWorkFormBtn').addEventListener('click', () => {
+            const editingId = document.getElementById('editingWorkId').value;
+            const title = document.getElementById('formTitleInput').value.trim();
+            const subtitle = document.getElementById('formSubTitleInput').value.trim();
+            const synopsis = document.getElementById('formSynopsisInput').value.trim();
+            const goal = parseInt(document.getElementById('formGoalInput').value) || 50000;
+
+            if (!title) {
+                showNotice('作品名を入力してください');
+                return;
+            }
+
+            const db = getDB();
+
+            if (editingId) {
+                db.works = db.works.map(w => w.id === editingId ? { ...w, title, subtitle, synopsis, goal } : w);
+                saveDB(db);
+                renderUI();
+                workSelectorModal.classList.add('hidden');
+                showNotice('作品を更新しました');
+            } else {
+                const newWorkId = 'work_' + Date.now();
+                const newChId = 'ch_' + Date.now();
+                const newEpId = 'ep_' + Date.now();
+                db.works.push({
+                    id: newWorkId,
+                    title,
+                    subtitle,
+                    synopsis,
+                    goal,
+                    currentChapterId: newChId,
+                    chapters: [{
+                        id: newChId,
+                        number: '第1章',
+                        title: '第1章',
+                        synopsis: '',
+                        goal: 5000,
+                        currentEpisodeId: newEpId,
+                        episodes: [{ id: newEpId, number: '第1話', title: '第1話', synopsis: '', goal: 1500, content: '', plots: [] }]
+                    }]
+                });
+                db.currentWorkId = newWorkId;
+                saveDB(db);
+                renderUI();
+                workSelectorModal.classList.add('hidden');
+                showNotice('新しい作品を登録しました');
+            }
+        });
+
+        deleteWorkBtn.addEventListener('click', () => {
+            const editingId = document.getElementById('editingWorkId').value;
+            if (!editingId) return;
+
+            const db = getDB();
+            if (db.works.length <= 1) {
+                showNotice('最後の作品は削除できません');
+                return;
+            }
+
+            if (!confirm('この作品を本当に削除しますか？')) return;
+
+            db.works = db.works.filter(w => w.id !== editingId);
+            if (db.currentWorkId === editingId) {
+                db.currentWorkId = db.works[0].id;
+            }
+            saveDB(db);
+            renderUI();
+            workSelectorModal.classList.add('hidden');
+            showNotice('作品を削除しました');
+        });
+
+        // --- Chapter Synopsis Modal ---
+        const chapterSynopsisModal = document.getElementById('chapterSynopsisModal');
+        const openChapterSynopsisModalBtn = document.getElementById('openChapterSynopsisModalBtn');
+        const closeChapterSynopsisModalBtn = document.getElementById('closeChapterSynopsisModalBtn');
+        const savePopupSynopsisBtn = document.getElementById('savePopupSynopsisBtn');
+        const popupChapterSynopsisInput = document.getElementById('popupChapterSynopsisInput');
+
+        openChapterSynopsisModalBtn.addEventListener('click', () => {
+            const ch = getCurrentChapter();
+            document.getElementById('synopsisModalChapterTitle').textContent = `${ch.number}「${ch.title}」のあらすじ`;
+            popupChapterSynopsisInput.value = ch.synopsis || '';
+            chapterSynopsisModal.classList.remove('hidden');
+        });
+
+        closeChapterSynopsisModalBtn.addEventListener('click', () => chapterSynopsisModal.classList.add('hidden'));
+        savePopupSynopsisBtn.addEventListener('click', () => {
+            const db = getDB();
+            const work = db.works.find(w => w.id === db.currentWorkId);
+            const ch = work.chapters.find(c => c.id === work.currentChapterId);
+            ch.synopsis = popupChapterSynopsisInput.value.trim();
+            saveDB(db);
+            chapterSynopsisModal.classList.add('hidden');
+            showNotice('章のあらすじを更新しました');
+        });
+
+        // --- Settings Modal ---
+        const settingsModal = document.getElementById('settingsModal');
+        const closeSettingsBtn = document.getElementById('closeSettingsBtn');
+        const saveSettingsBtn = document.getElementById('saveSettingsBtn');
+        const chkLockToolBtn = document.getElementById('chkLockToolBtn');
+        const chkLockRubyBtn = document.getElementById('chkLockRubyBtn');
+        const toolBtnContainer = document.getElementById('toolBtnContainer');
+        const rubyBtnContainer = document.getElementById('rubyBtnContainer');
+
+        function loadSettings() {
+            const isToolLocked = localStorage.getItem('tool_btn_locked') === 'true';
+            const isRubyLocked = localStorage.getItem('ruby_btn_locked') === 'true';
+            chkLockToolBtn.checked = isToolLocked;
+            chkLockRubyBtn.checked = isRubyLocked;
+            applyToolLock(isToolLocked);
+            applyRubyLock(isRubyLocked);
+        }
+
+        let isToolLockedCurrent = false;
+        function applyToolLock(locked) {
+            isToolLockedCurrent = locked;
+            if (locked) toolBtnContainer.classList.add('locked');
+            else toolBtnContainer.classList.remove('locked');
+        }
+
+        let isRubyLockedCurrent = false;
+        function applyRubyLock(locked) {
+            isRubyLockedCurrent = locked;
+            if (locked) rubyBtnContainer.classList.add('locked');
+            else rubyBtnContainer.classList.remove('locked');
+        }
+
+        document.getElementById('toolBtn').addEventListener('click', (e) => {
+            if (!e.defaultPrevented) settingsModal.classList.remove('hidden');
+        });
+        closeSettingsBtn.addEventListener('click', () => settingsModal.classList.add('hidden'));
+        
+        saveSettingsBtn.addEventListener('click', () => {
+            localStorage.setItem('tool_btn_locked', chkLockToolBtn.checked);
+            localStorage.setItem('ruby_btn_locked', chkLockRubyBtn.checked);
+            applyToolLock(chkLockToolBtn.checked);
+            applyRubyLock(chkLockRubyBtn.checked);
+            settingsModal.classList.add('hidden');
+            showNotice('設定を保存しました');
+        });
+
+        loadSettings();
+
+        // Initial Boot Render
+        renderUI();
+    </script>
+</body>
+</html>
