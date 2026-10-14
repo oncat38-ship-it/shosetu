@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chic Novelist Studio - UI Mockup V1.7</title>
+    <title>Chic Novelist Studio - UI Mockup V1.8</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -195,49 +195,44 @@
 
         </div>
 
-        <!-- Editor Section with Tailored Vertical Counter & Plot Gauge -->
+        <!-- Editor Section with Minimal Number-Only Gauge Left Column -->
         <div class="flex-1 grid grid-cols-12 gap-3 items-stretch">
             
-            <!-- Vertical Gauge & Plot Marker Left Column -->
-            <div class="col-span-2 md:col-span-2 bg-dark-800/50 border border-dark-700/60 rounded-xl p-2.5 flex flex-col items-center justify-between shadow-inner relative">
+            <!-- Ultra Minimal Gauge & Plot Column (Numbers Only, Labels Removed) -->
+            <div class="col-span-1 md:col-span-1 bg-dark-800/50 border border-dark-700/60 rounded-xl p-2 flex flex-col items-center justify-between shadow-inner relative">
                 
-                <!-- 1. 現文字数 (Current Character Count - Top) -->
-                <div class="flex flex-col items-center space-y-0.5 w-full border-b border-dark-700/50 pb-2">
-                    <span class="text-[9px] text-slate-400 font-medium">現文字数</span>
-                    <div class="flex items-baseline space-x-0.5 font-mono">
-                        <span id="sideEpCurrentText" class="text-sm font-bold text-slate-100">0</span>
-                        <span class="text-[10px] text-slate-400">字</span>
-                    </div>
+                <!-- 1. 現文字数 (Current Count Number Only - Top) -->
+                <div class="flex flex-col items-center w-full border-b border-dark-700/50 pb-1.5">
+                    <span id="sideEpCurrentText" class="font-mono text-sm font-bold text-slate-100">0</span>
                 </div>
 
-                <!-- 2. ゲージ (Gauge Bar: Top=0, Bottom=Goal, Progress Top -> Down) & ゲージの上にプロットNo. -->
-                <div class="relative w-full flex-1 my-3 flex justify-center items-stretch min-h-[220px]">
+                <!-- 2. ゲージ (Gauge Bar: Top=0, Bottom=Goal) & プロットNo.バッジ -->
+                <div class="relative w-full flex-1 my-2 flex justify-center items-stretch min-h-[220px]">
                     <!-- Main Gauge Track (Starts from top = 0) -->
                     <div class="w-2.5 bg-dark-900/90 rounded-full relative overflow-hidden border border-dark-700/60 flex flex-col justify-start">
                         <!-- Progress fill going downward -->
                         <div id="sideEpBar" class="w-full bg-gradient-to-b from-slate-200 via-slate-400 to-slate-600 transition-all duration-300 rounded-full" style="height: 0%;"></div>
                     </div>
 
-                    <!-- Overlay Plot No. Markers (Positioned from Top % matching Goal) -->
+                    <!-- Dynamic Overlay Plot No. Markers -->
                     <div id="plotMarkersContainer" class="absolute inset-0 pointer-events-none">
-                        <!-- Dynamic plot badges injected via JS -->
+                        <!-- Injected via JS -->
                     </div>
                 </div>
 
-                <!-- 3. 目標文字数 (Goal Count - Below Gauge) -->
-                <div class="flex flex-col items-center space-y-0.5 w-full pt-1 border-t border-dark-700/50">
-                    <span class="text-[9px] text-slate-400 font-medium">目標文字数</span>
-                    <span id="sideEpGoalText" class="font-mono text-xs font-semibold text-slate-300">1,500字</span>
+                <!-- 3. 目標文字数 (Goal Count Number Only - Below Gauge) -->
+                <div class="flex flex-col items-center w-full pt-1 border-t border-dark-700/50">
+                    <span id="sideEpGoalText" class="font-mono text-[11px] font-semibold text-slate-400">1,500</span>
                 </div>
 
-                <!-- 4. プロット追加枠 (Plus Button Only - Bottom) -->
-                <button id="addPlotBtn" title="プロットを追加" class="mt-2.5 w-8 h-8 rounded-full bg-dark-700/80 hover:bg-dark-600 text-slate-300 hover:text-white transition flex items-center justify-center border border-dark-600 shadow active:scale-95">
-                    <i class="fa-solid fa-plus text-xs"></i>
+                <!-- 4. プロット追加ボタン (Plus Button Only - Bottom) -->
+                <button id="addPlotBtn" title="プロットを追加" class="mt-2 w-7 h-7 rounded-full bg-dark-700/80 hover:bg-dark-600 text-slate-300 hover:text-white transition flex items-center justify-center border border-dark-600/70 shadow active:scale-95 shrink-0">
+                    <i class="fa-solid fa-plus text-[11px]"></i>
                 </button>
             </div>
 
             <!-- Main Body Writing Field -->
-            <div class="col-span-10 md:col-span-10 bg-dark-800/50 border border-dark-700/70 rounded-xl p-3.5 flex flex-col shadow-inner relative">
+            <div class="col-span-11 md:col-span-11 bg-dark-800/50 border border-dark-700/70 rounded-xl p-3.5 flex flex-col shadow-inner relative">
                 <div class="flex justify-between items-center mb-2 text-xs text-slate-400 border-b border-dark-700/50 pb-1.5">
                     <div class="flex items-center space-x-1.5">
                         <i class="fa-solid fa-pen-nib"></i>
@@ -257,7 +252,7 @@
 
     <!-- Version Footer -->
     <footer class="py-3 text-center border-t border-dark-800 text-[11px] text-slate-500 font-mono tracking-wider">
-        Chic Novelist Studio &mdash; V1.7
+        Chic Novelist Studio &mdash; V1.8
     </footer>
 
     <!-- Chapter Synopsis Modal (Minimized Popup View) -->
@@ -624,9 +619,9 @@
             const epPercent = Math.min(100, Math.round((count / epGoal) * 100));
             episodeBar.style.width = epPercent + '%';
 
-            // Vertical Side Gauge Updates (Top -> Down Fill)
+            // Vertical Side Gauge Updates (Numbers Only)
             sideEpCurrentText.textContent = count.toLocaleString();
-            sideEpGoalText.textContent = epGoal.toLocaleString() + '字';
+            sideEpGoalText.textContent = epGoal.toLocaleString();
             sideEpBar.style.height = epPercent + '%';
 
             renderPlotMarkersOnGauge(epGoal);
