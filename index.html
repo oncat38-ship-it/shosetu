@@ -142,10 +142,10 @@
                 <!-- Chapter / Episode Title Input -->
                 <input type="text" id="chapterTitleInput" value="雨音のプロムナード" class="bg-transparent border-b border-dark-600/60 focus:border-slate-400 outline-none text-sm md:text-base font-semibold text-slate-100 py-0.5 transition w-full" placeholder="話・サブタイトルを入力...">
             </div>
-            <!-- Synopsis Field -->
+            <!-- Synopsis Field（あらすじ領域を拡大：rows="4"） -->
             <div class="relative pt-1">
-                <span class="absolute top-0 left-2.5 px-1 bg-dark-800 text-[9px] text-slate-400 font-medium uppercase tracking-wider border border-dark-700 rounded">あらすじ</span>
-                <textarea id="synopsisInput" rows="2" class="w-full bg-dark-900/60 border border-dark-700 rounded-lg px-2.5 py-2 text-xs text-slate-300 focus:outline-none focus:border-slate-500 transition resize-none leading-relaxed" placeholder="章のあらすじやプロットの指針を記入...">主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。</textarea>
+                <span class="absolute top-0 left-2.5 px-1 bg-dark-800 text-[9px] text-slate-400 font-medium uppercase tracking-wider border border-dark-700 rounded z-10">あらすじ</span>
+                <textarea id="synopsisInput" rows="4" class="w-full bg-dark-900/60 border border-dark-700 rounded-lg px-2.5 py-2 text-xs text-slate-300 focus:outline-none focus:border-slate-500 transition resize-y leading-relaxed" placeholder="章のあらすじやプロットの指針を記入...">主人公がネオン街の裏路地で情報屋と接触し、過去の記憶の手がかりとなる古いデータチップを受け取る。</textarea>
             </div>
         </div>
 
@@ -199,7 +199,7 @@
     </footer>
 
     <!-- Settings Modal -->
-    <div id="settingsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div id="settingsModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-dark-800 border border-dark-700 rounded-xl max-w-md w-full p-5 shadow-2xl flex flex-col space-y-4">
             <div class="flex items-center justify-between border-b border-dark-700 pb-3">
                 <div class="flex items-center space-x-2 text-slate-100 font-semibold text-sm">
@@ -279,7 +279,7 @@
                 </div>
                 <div class="flex flex-col space-y-1">
                     <label class="text-slate-400 font-medium">あらすじ</label>
-                    <textarea id="formSynopsisInput" rows="2" class="w-full bg-dark-900 border border-dark-700 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-slate-500 resize-none leading-relaxed" placeholder="作品全体のあらすじ..."></textarea>
+                    <textarea id="formSynopsisInput" rows="4" class="w-full bg-dark-900 border border-dark-700 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-slate-500 resize-y leading-relaxed" placeholder="作品全体のあらすじ..."></textarea>
                 </div>
                 <div class="flex flex-col space-y-1">
                     <label class="text-slate-400 font-medium">目標文字数</label>
@@ -322,7 +322,7 @@
                 </div>
                 <div class="flex flex-col space-y-1">
                     <label class="text-slate-400 font-medium">あらすじ</label>
-                    <textarea id="formChapterSynopsisInput" rows="2" class="w-full bg-dark-900 border border-dark-700 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-slate-500 resize-none leading-relaxed" placeholder="章のあらすじやプロット指針..."></textarea>
+                    <textarea id="formChapterSynopsisInput" rows="4" class="w-full bg-dark-900 border border-dark-700 rounded px-3 py-2 text-slate-200 focus:outline-none focus:border-slate-500 resize-y leading-relaxed" placeholder="章のあらすじやプロット指針..."></textarea>
                 </div>
                 <div class="flex flex-col space-y-1">
                     <label class="text-slate-400 font-medium">目標文字数</label>
@@ -523,22 +523,22 @@
             const workModalTitle = document.getElementById('workModalTitle');
             const deleteWorkBtn = document.getElementById('deleteWorkBtn');
 
-            openWorkSelectorBtn.addEventListener('click', () => {
+            function openWorkModal() {
                 showWorkListView();
                 renderWorkList();
                 workSelectorModal.classList.remove('hidden');
                 workSelectorModal.classList.add('flex');
-            });
+            }
 
-            closeWorkSelectorBtn.addEventListener('click', () => {
+            function closeWorkModal() {
                 workSelectorModal.classList.add('hidden');
                 workSelectorModal.classList.remove('flex');
-            });
+            }
+
+            openWorkSelectorBtn.addEventListener('click', openWorkModal);
+            closeWorkSelectorBtn.addEventListener('click', closeWorkModal);
             workSelectorModal.addEventListener('click', (e) => { 
-                if (e.target === workSelectorModal) {
-                    workSelectorModal.classList.add('hidden');
-                    workSelectorModal.classList.remove('flex');
-                }
+                if (e.target === workSelectorModal) closeWorkModal();
             });
 
             tabListBtn.addEventListener('click', showWorkListView);
@@ -588,9 +588,9 @@
                 works.forEach(work => {
                     const isSelected = work.id === currentId;
                     const item = document.createElement('div');
-                    item.className = `p-3 rounded-lg border flex items-center justify-between transition ${isSelected ? 'bg-dark-700/80 border-slate-500 shadow-sm' : 'bg-dark-900/50 border-dark-700/60 hover:border-slate-600'}`;
+                    item.className = `p-3 rounded-lg border flex items-center justify-between transition cursor-pointer ${isSelected ? 'bg-dark-700/80 border-slate-500 shadow-sm' : 'bg-dark-900/50 border-dark-700/60 hover:border-slate-600'}`;
                     item.innerHTML = `
-                        <div class="flex flex-col space-y-0.5 overflow-hidden pr-2 flex-1">
+                        <div class="flex flex-col space-y-0.5 overflow-hidden pr-2 flex-1 work-item-click" data-id="${work.id}">
                             <span class="font-semibold text-slate-200 truncate">${work.title}</span>
                             <span class="text-[10px] text-slate-400 truncate">${work.subtitle || 'サブタイトルなし'}</span>
                         </div>
@@ -606,20 +606,21 @@
                     workListView.appendChild(item);
                 });
 
-                workListView.querySelectorAll('.select-work-btn').forEach(btn => {
+                // タッチ/クリックで作品選択できるように全体リスナーを付与
+                workListView.querySelectorAll('.work-item-click, .select-work-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const id = e.currentTarget.getAttribute('data-id');
                         if (id === getCurrentWorkId()) return;
                         localStorage.setItem('novelist_current_work_id', id);
                         loadCurrentWorkData();
-                        workSelectorModal.classList.add('hidden');
-                        workSelectorModal.classList.remove('flex');
+                        closeWorkModal();
                         showNotice('作品を切り替えました');
                     });
                 });
 
                 workListView.querySelectorAll('.edit-work-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         const id = e.currentTarget.getAttribute('data-id');
                         const works = getStoredWorks();
                         const work = works.find(w => w.id === id);
@@ -645,8 +646,7 @@
                     works = works.map(w => w.id === editingId ? { ...w, title, subtitle, synopsis, goal } : w);
                     localStorage.setItem('novelist_works_list', JSON.stringify(works));
                     loadCurrentWorkData();
-                    workSelectorModal.classList.add('hidden');
-                    workSelectorModal.classList.remove('flex');
+                    closeWorkModal();
                     showNotice('作品情報を更新しました');
                 } else {
                     const newId = 'work_' + Date.now();
@@ -663,8 +663,7 @@
                     localStorage.setItem('novelist_current_work_id', newId);
                     localStorage.setItem('novelist_current_chapter_id_' + newId, newWork.chapters[0].id);
                     loadCurrentWorkData();
-                    workSelectorModal.classList.add('hidden');
-                    workSelectorModal.classList.remove('flex');
+                    closeWorkModal();
                     showNotice('新しい作品を登録しました');
                 }
             });
@@ -682,8 +681,7 @@
                     localStorage.setItem('novelist_current_work_id', works[0].id);
                 }
                 loadCurrentWorkData();
-                workSelectorModal.classList.add('hidden');
-                workSelectorModal.classList.remove('flex');
+                closeWorkModal();
                 showNotice('作品を削除しました');
             });
 
@@ -699,22 +697,22 @@
             const chapterModalTitle = document.getElementById('chapterModalTitle');
             const deleteChapterBtn = document.getElementById('deleteChapterBtn');
 
-            openChapterSelectorBtn.addEventListener('click', () => {
+            function openChapterModal() {
                 showChapterListView();
                 renderChapterList();
                 chapterSelectorModal.classList.remove('hidden');
                 chapterSelectorModal.classList.add('flex');
-            });
+            }
 
-            closeChapterSelectorBtn.addEventListener('click', () => {
+            function closeChapterModal() {
                 chapterSelectorModal.classList.add('hidden');
                 chapterSelectorModal.classList.remove('flex');
-            });
+            }
+
+            openChapterSelectorBtn.addEventListener('click', openChapterModal);
+            closeChapterSelectorBtn.addEventListener('click', closeChapterModal);
             chapterSelectorModal.addEventListener('click', (e) => { 
-                if (e.target === chapterSelectorModal) {
-                    chapterSelectorModal.classList.add('hidden');
-                    chapterSelectorModal.classList.remove('flex');
-                }
+                if (e.target === chapterSelectorModal) closeChapterModal();
             });
 
             tabChapterListBtn.addEventListener('click', showChapterListView);
@@ -763,9 +761,9 @@
                 (work.chapters || []).forEach(chap => {
                     const isSelected = chap.id === currentChapId || (!currentChapId && chap === work.chapters[0]);
                     const item = document.createElement('div');
-                    item.className = `p-3 rounded-lg border flex items-center justify-between transition ${isSelected ? 'bg-dark-700/80 border-slate-500 shadow-sm' : 'bg-dark-900/50 border-dark-700/60 hover:border-slate-600'}`;
+                    item.className = `p-3 rounded-lg border flex items-center justify-between transition cursor-pointer ${isSelected ? 'bg-dark-700/80 border-slate-500 shadow-sm' : 'bg-dark-900/50 border-dark-700/60 hover:border-slate-600'}`;
                     item.innerHTML = `
-                        <div class="flex flex-col space-y-0.5 overflow-hidden pr-2 flex-1">
+                        <div class="flex flex-col space-y-0.5 overflow-hidden pr-2 flex-1 chap-item-click" data-id="${chap.id}">
                             <span class="font-semibold text-slate-200 truncate">${chap.title}</span>
                             <span class="text-[10px] text-slate-400 truncate">あらすじ: ${chap.synopsis || 'なし'}</span>
                         </div>
@@ -781,19 +779,20 @@
                     chapterListView.appendChild(item);
                 });
 
-                chapterListView.querySelectorAll('.select-chap-btn').forEach(btn => {
+                // タッチ/クリックで章切り替えができるように全体リスナーを付与
+                chapterListView.querySelectorAll('.chap-item-click, .select-chap-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         const id = e.currentTarget.getAttribute('data-id');
                         localStorage.setItem('novelist_current_chapter_id_' + work.id, id);
                         loadCurrentWorkData();
-                        chapterSelectorModal.classList.add('hidden');
-                        chapterSelectorModal.classList.remove('flex');
+                        closeChapterModal();
                         showNotice('章を切り替えました');
                     });
                 });
 
                 chapterListView.querySelectorAll('.edit-chap-btn').forEach(btn => {
                     btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
                         const id = e.currentTarget.getAttribute('data-id');
                         const chap = work.chapters.find(c => c.id === id);
                         if (chap) showChapterFormView(chap);
@@ -819,8 +818,7 @@
                     work.chapters = work.chapters.map(c => c.id === editingId ? { ...c, title, synopsis, goal } : c);
                     localStorage.setItem('novelist_works_list', JSON.stringify(works));
                     loadCurrentWorkData();
-                    chapterSelectorModal.classList.add('hidden');
-                    chapterSelectorModal.classList.remove('flex');
+                    closeChapterModal();
                     showNotice('章情報を更新しました');
                 } else {
                     const newChapId = 'chap_' + Date.now();
@@ -830,8 +828,7 @@
                     localStorage.setItem('novelist_works_list', JSON.stringify(works));
                     localStorage.setItem('novelist_current_chapter_id_' + work.id, newChapId);
                     loadCurrentWorkData();
-                    chapterSelectorModal.classList.add('hidden');
-                    chapterSelectorModal.classList.remove('flex');
+                    closeChapterModal();
                     showNotice('新しい章を登録しました');
                 }
             });
@@ -851,8 +848,7 @@
                 localStorage.setItem('novelist_current_chapter_id_' + work.id, work.chapters[0].id);
 
                 loadCurrentWorkData();
-                chapterSelectorModal.classList.add('hidden');
-                chapterSelectorModal.classList.remove('flex');
+                closeChapterModal();
                 showNotice('章を削除しました');
             });
 
@@ -868,6 +864,16 @@
             const goalOverall = document.getElementById('goalOverall');
             const goalChapter = document.getElementById('goalChapter');
             const goalEpisode = document.getElementById('goalEpisode');
+
+            function openSettingsModal() {
+                settingsModal.classList.remove('hidden');
+                settingsModal.classList.add('flex');
+            }
+
+            function closeSettingsModal() {
+                settingsModal.classList.add('hidden');
+                settingsModal.classList.remove('flex');
+            }
 
             function loadSettings() {
                 const overallVisible = localStorage.getItem('goal_overall_visible') !== 'false';
@@ -922,19 +928,10 @@
 
             loadSettings();
 
-            document.getElementById('toolBtn').addEventListener('click', () => { 
-                settingsModal.classList.remove('hidden'); 
-                settingsModal.classList.add('flex'); 
-            });
-            closeSettingsBtn.addEventListener('click', () => {
-                settingsModal.classList.add('hidden');
-                settingsModal.classList.remove('flex');
-            });
+            document.getElementById('toolBtn').addEventListener('click', openSettingsModal);
+            closeSettingsBtn.addEventListener('click', closeSettingsModal);
             settingsModal.addEventListener('click', (e) => { 
-                if (e.target === settingsModal) {
-                    settingsModal.classList.add('hidden');
-                    settingsModal.classList.remove('flex');
-                }
+                if (e.target === settingsModal) closeSettingsModal();
             });
 
             saveSettingsBtn.addEventListener('click', () => {
@@ -948,8 +945,7 @@
                 applyToolLock(chkLockToolBtn.checked);
                 applyRubyLock(chkLockRubyBtn.checked);
 
-                settingsModal.classList.add('hidden');
-                settingsModal.classList.remove('flex');
+                closeSettingsModal();
                 showNotice('設定を保存しました');
             });
 
@@ -1007,7 +1003,7 @@
                 elm.addEventListener('mousedown', dragStart);
                 elm.addEventListener('touchstart', dragStart, { passive: false });
 
-                // Prevent click event firing if the element was actually dragged
+                // ドラッグ移動した場合はボタンクリックイベントを発動させない処理
                 elm.addEventListener('click', (e) => {
                     if (hasMoved) {
                         e.stopImmediatePropagation();
