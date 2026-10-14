@@ -64,6 +64,11 @@
             visibility: hidden;
             pointer-events: none;
         }
+        /* Vertical Text Style */
+        .vertical-text {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
     </style>
 </head>
 <body class="bg-dark-900 text-slate-200 min-h-screen flex flex-col antialiased selection:bg-slate-700 selection:text-white">
@@ -190,10 +195,10 @@
 
         </div>
 
-        <!-- Editor Section with Plot Column on the Left -->
+        <!-- Editor Section with Plot Column & Vertical Counter on the Left -->
         <div class="flex-1 grid grid-cols-12 gap-3 items-stretch">
             
-            <!-- Plot No. Vertical Column (Left Side) -->
+            <!-- 1. Plot No. Vertical Column (Left Side) -->
             <div class="col-span-3 md:col-span-2 bg-dark-800/40 border border-dark-700/60 rounded-xl p-2.5 flex flex-col space-y-2.5">
                 <div class="flex items-center justify-between border-b border-dark-700 pb-1.5">
                     <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">プロットNo.</span>
@@ -218,8 +223,28 @@
                 </div>
             </div>
 
-            <!-- Main Body Writing Field -->
-            <div class="col-span-9 md:col-span-10 bg-dark-800/50 border border-dark-700/70 rounded-xl p-3.5 flex flex-col shadow-inner relative">
+            <!-- 2. Vertical Episode Character Counter & Progress Bar (Next to Editor) -->
+            <div class="col-span-1 bg-dark-800/50 border border-dark-700/60 rounded-xl p-2 flex flex-col items-center justify-between shadow-inner relative">
+                <!-- Current Count Badge Top -->
+                <div class="flex flex-col items-center space-y-1">
+                    <span class="text-[9px] text-slate-400 font-medium vertical-text tracking-widest">現在の文字数</span>
+                    <span id="sideEpCurrentText" class="font-mono text-xs font-bold text-slate-100">0</span>
+                </div>
+
+                <!-- Vertical Progress Bar -->
+                <div class="w-2 flex-1 bg-dark-900/90 rounded-full my-2 relative overflow-hidden border border-dark-700/50 flex flex-col justify-end">
+                    <div id="sideEpBar" class="w-full bg-gradient-to-t from-slate-500 to-slate-300 transition-all duration-300 rounded-full" style="height: 0%;"></div>
+                </div>
+
+                <!-- Goal Count Badge Bottom -->
+                <div class="flex flex-col items-center space-y-1">
+                    <span id="sideEpGoalText" class="font-mono text-[10px] text-slate-400">1,500</span>
+                    <span class="text-[9px] text-slate-400 font-medium vertical-text tracking-widest">目標文字数</span>
+                </div>
+            </div>
+
+            <!-- 3. Main Body Writing Field -->
+            <div class="col-span-8 md:col-span-9 bg-dark-800/50 border border-dark-700/70 rounded-xl p-3.5 flex flex-col shadow-inner relative">
                 <div class="flex justify-between items-center mb-2 text-xs text-slate-400 border-b border-dark-700/50 pb-1.5">
                     <div class="flex items-center space-x-1.5">
                         <i class="fa-solid fa-pen-nib"></i>
@@ -529,6 +554,11 @@
         const episodeCurrentText = document.getElementById('episodeCurrentText');
         const episodeGoalText = document.getElementById('episodeGoalText');
         const episodeBar = document.getElementById('episodeBar');
+
+        // Vertical Side Counter Elements
+        const sideEpCurrentText = document.getElementById('sideEpCurrentText');
+        const sideEpGoalText = document.getElementById('sideEpGoalText');
+        const sideEpBar = document.getElementById('sideEpBar');
         
         const overallCurrentText = document.getElementById('overallCurrentText');
         const overallGoalText = document.getElementById('overallGoalText');
@@ -551,6 +581,11 @@
             episodeGoalText.textContent = epGoal.toLocaleString() + '字';
             const epPercent = Math.min(100, Math.round((count / epGoal) * 100));
             episodeBar.style.width = epPercent + '%';
+
+            // Vertical Counter Update
+            sideEpCurrentText.textContent = count.toLocaleString();
+            sideEpGoalText.textContent = epGoal.toLocaleString();
+            sideEpBar.style.height = epPercent + '%';
 
             // Chapter Count logic
             const currentChapter = getCurrentChapter();
