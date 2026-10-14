@@ -136,28 +136,27 @@
         <!-- Navigation Stack Container -->
         <div class="flex flex-col space-y-2">
             
-            <!-- 1. Chapter Banner (No Border, Centered Title, Actions at Right Edge) -->
-            <div class="relative flex items-center justify-center w-full py-1">
-                <!-- Chapter Selector & Title (Center-aligned) -->
-                <div class="flex items-center space-x-2">
-                    <button id="selectChapterBtn" class="flex items-center space-x-1 bg-dark-700/90 hover:bg-dark-700 border border-dark-600 rounded px-2 py-0.5 shrink-0 text-slate-200 transition text-[11px]" title="章の切替・一覧">
-                        <i class="fa-solid fa-bookmark text-[9px] text-slate-400"></i>
-                        <span id="currentChapterNumDisplay" class="font-semibold">第3章</span>
-                        <i class="fa-solid fa-chevron-down text-[8px] text-slate-400"></i>
-                    </button>
-                    
-                    <input type="text" id="chapterTitleInput" value="雨音のプロムナード" class="bg-transparent border-b border-transparent hover:border-dark-600 focus:border-slate-400 outline-none text-xs font-semibold text-slate-300 py-0.5 transition w-36 sm:w-48 text-center truncate" placeholder="章タイトル...">
+            <!-- 1. Chapter Banner (Left: Compact Badge / Center: Large Title / Right: Minimal Buttons) -->
+            <div class="relative flex items-center justify-center w-full py-1 min-h-[36px]">
+                <!-- Chapter Selector Badge (Fixed to Left Edge) -->
+                <button id="selectChapterBtn" class="absolute left-0 flex items-center space-x-1 bg-dark-800/90 hover:bg-dark-700 border border-dark-700 hover:border-dark-600 rounded px-2 py-0.5 shrink-0 text-slate-300 transition text-[10px]" title="章の切替・一覧">
+                    <i class="fa-solid fa-bookmark text-[8px] text-slate-400"></i>
+                    <span id="currentChapterNumDisplay" class="font-semibold">第3章</span>
+                    <i class="fa-solid fa-chevron-down text-[7px] text-slate-400"></i>
+                </button>
+                
+                <!-- Chapter Title (Centered & Large) -->
+                <div class="flex justify-center w-full max-w-md px-16">
+                    <input type="text" id="chapterTitleInput" value="雨音のプロムナード" class="bg-transparent border-b border-transparent hover:border-dark-600 focus:border-slate-400 outline-none text-sm md:text-base font-bold text-slate-200 py-0.5 transition w-full text-center truncate" placeholder="章タイトル...">
                 </div>
 
-                <!-- Minimized Chapter Actions (Fixed to Right Edge) -->
+                <!-- Minimized Chapter Actions (Fixed to Right Edge, Extra Small) -->
                 <div class="absolute right-0 flex items-center space-x-1 shrink-0">
-                    <button id="openChapterSynopsisModalBtn" class="px-1.5 py-0.5 rounded bg-dark-700/50 hover:bg-dark-700 text-slate-400 hover:text-slate-200 text-[10px] transition border border-dark-600/40 flex items-center space-x-1" title="章のあらすじ">
-                        <i class="fa-solid fa-file-lines"></i>
-                        <span class="hidden sm:inline">章あらすじ</span>
+                    <button id="openChapterSynopsisModalBtn" class="p-1 px-1.5 rounded bg-dark-800/80 hover:bg-dark-700 text-slate-400 hover:text-slate-200 text-[10px] transition border border-dark-700" title="章のあらすじ">
+                        <i class="fa-solid fa-file-lines text-[10px]"></i>
                     </button>
-                    <button id="editChapterBtn" class="px-1.5 py-0.5 rounded bg-dark-700/50 hover:bg-dark-700 text-slate-400 hover:text-slate-200 text-[10px] transition border border-dark-600/40 flex items-center space-x-1" title="章の編集">
-                        <i class="fa-solid fa-pen"></i>
-                        <span class="hidden sm:inline">章編集</span>
+                    <button id="editChapterBtn" class="p-1 px-1.5 rounded bg-dark-800/80 hover:bg-dark-700 text-slate-400 hover:text-slate-200 text-[10px] transition border border-dark-700" title="章の編集">
+                        <i class="fa-solid fa-pen text-[10px]"></i>
                     </button>
                 </div>
             </div>
