@@ -133,56 +133,56 @@
     <!-- Main Content Area -->
     <main class="flex-1 max-w-6xl w-full mx-auto p-4 md:p-6 flex flex-col space-y-3">
 
-        <!-- Chapter & Episode Navigation Stack -->
-        <div class="bg-dark-800/60 border border-dark-700/70 rounded-xl p-3 shadow-sm flex flex-col space-y-2.5">
+        <!-- Navigation Stack Container -->
+        <div class="flex flex-col space-y-2">
             
-            <!-- Chapter Header (Minimized Synopsis) -->
-            <div class="flex items-center justify-between pb-2 border-b border-dark-700/50">
-                <div class="flex items-center space-x-2 flex-1 mr-2">
-                    <button id="selectChapterBtn" class="flex items-center space-x-1.5 bg-dark-700/90 hover:bg-dark-700 border border-dark-600 rounded px-2.5 py-1 shrink-0 text-slate-200 transition" title="章の切替・一覧">
-                        <i class="fa-solid fa-bookmark text-[10px] text-slate-400"></i>
-                        <span id="currentChapterNumDisplay" class="text-xs font-semibold">第3章</span>
-                        <i class="fa-solid fa-chevron-down text-[9px] text-slate-400"></i>
-                    </button>
-                    <input type="text" id="chapterTitleInput" value="雨音のプロムナード" class="bg-transparent border-b border-transparent hover:border-dark-600 focus:border-slate-400 outline-none text-xs md:text-sm font-semibold text-slate-200 py-0.5 transition w-full" placeholder="章タイトル...">
-                </div>
+            <!-- 1. Chapter Banner (Compact, Left-aligned) -->
+            <div class="flex items-center justify-start space-x-2 bg-dark-800/40 border border-dark-700/50 rounded-lg px-2.5 py-1.5 w-fit max-w-md shadow-sm">
+                <!-- Chapter Selector Badge Button -->
+                <button id="selectChapterBtn" class="flex items-center space-x-1 bg-dark-700/90 hover:bg-dark-700 border border-dark-600 rounded px-2 py-0.5 shrink-0 text-slate-200 transition text-[11px]" title="章の切替・一覧">
+                    <i class="fa-solid fa-bookmark text-[9px] text-slate-400"></i>
+                    <span id="currentChapterNumDisplay" class="font-semibold">第3章</span>
+                    <i class="fa-solid fa-chevron-down text-[8px] text-slate-400"></i>
+                </button>
+                
+                <!-- Chapter Title -->
+                <input type="text" id="chapterTitleInput" value="雨音のプロムナード" class="bg-transparent border-b border-transparent hover:border-dark-600 focus:border-slate-400 outline-none text-xs font-semibold text-slate-300 py-0.5 transition w-36 sm:w-48 truncate" placeholder="章タイトル...">
 
-                <div class="flex items-center space-x-1.5 shrink-0">
-                    <!-- Chapter Synopsis Popup Trigger -->
-                    <button id="openChapterSynopsisModalBtn" class="px-2 py-1 rounded bg-dark-700/60 hover:bg-dark-700 text-slate-300 text-[11px] transition border border-dark-600/50 flex items-center space-x-1" title="章のあらすじを見る">
-                        <i class="fa-solid fa-file-lines text-[10px]"></i>
-                        <span class="hidden sm:inline">章あらすじ</span>
+                <!-- Minimized Chapter Actions -->
+                <div class="flex items-center space-x-1 shrink-0">
+                    <button id="openChapterSynopsisModalBtn" class="px-1.5 py-0.5 rounded bg-dark-700/50 hover:bg-dark-700 text-slate-400 hover:text-slate-200 text-[10px] transition border border-dark-600/40" title="章のあらすじ">
+                        <i class="fa-solid fa-file-lines"></i>
                     </button>
-                    <button id="editChapterBtn" class="px-2 py-1 rounded bg-dark-700/60 hover:bg-dark-700 text-slate-300 text-[11px] transition border border-dark-600/50" title="章の編集">
-                        <i class="fa-solid fa-pen text-[10px]"></i>
+                    <button id="editChapterBtn" class="px-1.5 py-0.5 rounded bg-dark-700/50 hover:bg-dark-700 text-slate-400 hover:text-slate-200 text-[10px] transition border border-dark-600/40" title="章の編集">
+                        <i class="fa-solid fa-pen"></i>
                     </button>
                 </div>
             </div>
 
-            <!-- Episode (話) Block -->
-            <div class="flex flex-col space-y-1.5 pt-0.5">
+            <!-- 2. Episode (話) Banner (Prominent, Center-oriented & Larger) -->
+            <div class="w-full max-w-2xl mx-auto bg-dark-800/80 border border-dark-700 rounded-xl p-3.5 shadow-md flex flex-col space-y-2.5">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2 flex-1 mr-2">
-                        <!-- Episode Selector Badge Button -->
-                        <button id="selectEpisodeBtn" class="flex items-center space-x-1.5 bg-slate-700 hover:bg-slate-600 text-white rounded px-2.5 py-1 shrink-0 transition shadow-sm" title="話の切替・一覧">
-                            <i class="fa-solid fa-book-open text-[10px] text-slate-300"></i>
-                            <span id="currentEpisodeNumDisplay" class="text-xs font-bold">第12話</span>
-                            <i class="fa-solid fa-chevron-down text-[9px] text-slate-300"></i>
+                    <div class="flex items-center space-x-2.5 flex-1 mr-2">
+                        <!-- Larger Episode Selector Badge Button -->
+                        <button id="selectEpisodeBtn" class="flex items-center space-x-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg px-3 py-1.5 shrink-0 transition shadow text-xs md:text-sm font-bold" title="話の切替・一覧">
+                            <i class="fa-solid fa-book-open text-xs text-slate-300"></i>
+                            <span id="currentEpisodeNumDisplay">第12話</span>
+                            <i class="fa-solid fa-chevron-down text-[10px] text-slate-300"></i>
                         </button>
                         <!-- Episode Title Input -->
-                        <input type="text" id="episodeTitleInput" value="裏路地の情報屋" class="bg-transparent border-b border-dark-600/60 focus:border-slate-400 outline-none text-sm md:text-base font-semibold text-slate-100 py-0.5 transition w-full" placeholder="話タイトルを入力...">
+                        <input type="text" id="episodeTitleInput" value="裏路地の情報屋" class="bg-transparent border-b border-dark-600 focus:border-slate-300 outline-none text-base md:text-lg font-bold text-slate-100 py-0.5 transition w-full" placeholder="話タイトルを入力...">
                     </div>
 
-                    <button id="editEpisodeBtn" class="p-1.5 rounded bg-dark-700/60 hover:bg-dark-700 text-slate-300 hover:text-white transition text-xs flex items-center space-x-1 border border-dark-600/50 shrink-0" title="話の編集・削除">
-                        <i class="fa-solid fa-pen text-[10px]"></i>
+                    <button id="editEpisodeBtn" class="px-2.5 py-1.5 rounded-lg bg-dark-700 hover:bg-dark-600 text-slate-200 transition text-xs flex items-center space-x-1.5 border border-dark-600 shrink-0 font-medium" title="話の編集・削除">
+                        <i class="fa-solid fa-pen text-[11px]"></i>
                         <span class="hidden sm:inline">話の編集</span>
                     </button>
                 </div>
 
-                <!-- Episode Synopsis Field -->
+                <!-- Episode Synopsis Field (Minimum 2-lines visible) -->
                 <div class="relative mt-1">
                     <span class="absolute -top-2 left-2.5 px-1 bg-dark-800 text-[9px] text-slate-400 font-medium uppercase tracking-wider border border-dark-700 rounded">話のあらすじ</span>
-                    <textarea id="episodeSynopsisInput" rows="1" class="w-full bg-dark-900/60 border border-dark-700 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-slate-500 transition resize-none" placeholder="話のあらすじや構成ノート...">ネオン街の裏路地で情報屋と接触。記憶の手がかりを入手するシーン。</textarea>
+                    <textarea id="episodeSynopsisInput" rows="2" class="w-full bg-dark-900/80 border border-dark-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-slate-500 transition resize-y leading-relaxed min-h-[3.2rem]" placeholder="話のあらすじや構成ノート（最低2行分表示）...">ネオン街の裏路地で情報屋と接触。過去の記憶の手がかりとなるデータチップを入手するメインシーケンス。</textarea>
                 </div>
             </div>
 
@@ -595,7 +595,7 @@
         const defaultEpisodes = {
             ch_1_3: [
                 { id: 'ep_1_3_11', number: '第11話', title: '路地裏の静寂', synopsis: '雨が強まる中、目的地へ向かう。', goal: 1500 },
-                { id: 'ep_1_3_12', number: '第12話', title: '裏路地の情報屋', synopsis: 'ネオン街の裏路地で情報屋と接触。記憶の手がかりを入手するシーン。', goal: 1500 },
+                { id: 'ep_1_3_12', number: '第12話', title: '裏路地の情報屋', synopsis: 'ネオン街の裏路地で情報屋と接触。過去の記憶の手がかりとなるデータチップを入手するメインシーケンス。', goal: 1500 },
                 { id: 'ep_1_3_13', number: '第13話', title: '残響のデータ', synopsis: 'チップを解析し衝撃の真実を知る。', goal: 2000 }
             ]
         };
@@ -634,7 +634,6 @@
             return chapters.find(c => c.id === currentId) || chapters[0];
         }
 
-        // --- Episode Data Helpers ---
         function getStoredEpisodes(chapterId = getCurrentChapterId()) {
             const stored = localStorage.getItem(`novelist_episodes_${chapterId}`);
             if (!stored) {
@@ -832,7 +831,7 @@
             });
         }
 
-        // Save Episode Form (Create / Edit)
+        // Save Episode Form
         document.getElementById('saveEpisodeFormBtn').addEventListener('click', () => {
             const editingId = document.getElementById('editingEpisodeId').value;
             const number = document.getElementById('formEpisodeNumInput').value.trim();
@@ -892,7 +891,7 @@
             showNotice('話を削除しました');
         });
 
-        // Save Episode title & synopsis directly on change
+        // Save Episode title & synopsis on change
         document.getElementById('episodeTitleInput').addEventListener('change', (e) => {
             const ep = getCurrentEpisode();
             ep.title = e.target.value.trim();
